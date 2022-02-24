@@ -1,0 +1,659 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Playbook: Ransomware</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="4c3531c5-462a-408f-adfa-8291cfdedf17" class="page sans"><header><h1 class="page-title">Playbook: Ransomware</h1><table class="properties"><tbody><tr class="property-row property-row-text"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>Comments</th><td></td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-pink">Notes</span><span class="selected-value select-value-color-orange">Playbooks</span></td></tr><tr class="property-row property-row-url"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesUrl"><path d="M3.73333,3.86667 L7.46667,3.86667 C8.49613,3.86667 9.33333,4.70387 9.33333,5.73333 C9.33333,6.7628 8.49613,7.6 7.46667,7.6 L6.53333,7.6 C6.01813,7.6 5.6,8.0186 5.6,8.53333 C5.6,9.04807 6.01813,9.46667 6.53333,9.46667 L7.46667,9.46667 C9.5284,9.46667 11.2,7.79507 11.2,5.73333 C11.2,3.6716 9.5284,2 7.46667,2 L3.73333,2 C1.6716,2 0,3.6716 0,5.73333 C0,7.124 0.762067,8.33453 1.88953,8.97713 C1.87553,8.83107 1.86667,8.6836 1.86667,8.53333 C1.86667,7.92013 1.98753,7.33447 2.2036,6.7978 C1.99267,6.4954 1.86667,6.12953 1.86667,5.73333 C1.86667,4.70387 2.70387,3.86667 3.73333,3.86667 Z M12.1095,5.28907 C12.1231,5.4356 12.1333,5.58307 12.1333,5.73333 C12.1333,6.34607 12.0101,6.9294 11.7931,7.46513 C12.0059,7.768 12.1333,8.13573 12.1333,8.53333 C12.1333,9.5628 11.2961,10.4 10.2667,10.4 L6.53333,10.4 C5.50387,10.4 4.66667,9.5628 4.66667,8.53333 C4.66667,7.50387 5.50387,6.66667 6.53333,6.66667 L7.46667,6.66667 C7.98187,6.66667 8.4,6.24807 8.4,5.73333 C8.4,5.2186 7.98187,4.8 7.46667,4.8 L6.53333,4.8 C4.4716,4.8 2.8,6.4716 2.8,8.53333 C2.8,10.59507 4.4716,12.2667 6.53333,12.2667 L10.2667,12.2667 C12.3284,12.2667 14,10.59507 14,8.53333 C14,7.14267 13.2375,5.93167 12.1095,5.28907 Z"></path></svg></span>URL</th><td><a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md" class="url-value">https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md</a></td></tr></tbody></table></header><div class="page-body"><h2 id="a66c0743-e382-4bbe-8cc9-40adbb94ef2c" class=""><strong>Playbook: Ransomware</strong></h2><hr id="d2c81179-9196-4a47-8693-d0f94b9f16e5"/><p id="847b22d8-533e-4135-bb73-b60a828dcc90" class=""><strong>Investigate, remediate (contain, eradicate), and communicate in parallel! Containment is critical in ransomware incidents, prioritize accordingly.</strong></p><p id="2aeb3d2d-6ce2-4824-88a3-f3109cab42ed" class="">Assign steps to individuals or teams to work concurrently, when possible; this playbook is not purely sequential. Use your best judgment.</p><h3 id="1bea1b30-273e-432b-8c7b-db41920c28a5" class=""><strong>Investigate</strong></h3><hr id="b5347b2c-0f0b-4d44-a359-0d3d8aec4826"/><p id="4fb31867-acab-4033-8e34-14ad3bf88e50" class=""><code>TODO: Expand investigation steps, including key questions and strategies, for ransomware.</code></p><ol type="1" id="438f438a-bbf2-424b-805d-5353f4a48271" class="numbered-list" start="1"><li><strong>Determine the type</strong> of ransomware (<em>i.e.,</em> what is the family, variant, or flavor?)<a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#ransomware-playbook-ref-1">[1]</a><ol type="a" id="4133204c-6e67-43d6-a3d7-fef5157789bf" class="numbered-list" start="1"><li>Find any related messages. Check:<ul id="7c34159b-d40d-4d8d-8996-ceaa4747ad32" class="bulleted-list"><li style="list-style-type:disc">graphical user interfaces (GUIs) for the malware itself</li></ul><ul id="e7a6410a-d0c0-491e-adfe-e3814b248a56" class="bulleted-list"><li style="list-style-type:disc">text or html files, sometimes opened automatically after encryption</li></ul><ul id="9a656498-e41d-4380-bfd4-a90b87e4347e" class="bulleted-list"><li style="list-style-type:disc">image files, often as wallpaper on infected systems</li></ul><ul id="31c38f27-7315-40d2-949e-228b027765da" class="bulleted-list"><li style="list-style-type:disc">contact emails in encrypted file extensions</li></ul><ul id="a464bb65-8480-4245-8d75-fae53afdb673" class="bulleted-list"><li style="list-style-type:disc">pop-ups after trying to open an encrypted file</li></ul><ul id="0ea1abb7-9746-4af7-b487-9f6053cb4ff5" class="bulleted-list"><li style="list-style-type:disc">voice messages</li></ul></li></ol><ol type="a" id="a97f2ba5-2098-43a4-87d3-32b484e8009b" class="numbered-list" start="2"><li>Analyze the messages looking for clues to the ransomware type:<ul id="c88b4884-03a9-41bc-9436-46af2bfe2577" class="bulleted-list"><li style="list-style-type:disc">ransomware name</li></ul><ul id="369e185c-9bb5-4926-9277-d2e1fd3f892d" class="bulleted-list"><li style="list-style-type:disc">language, structure, phrases, artwork</li></ul><ul id="390f138d-e922-4e27-8bee-9fda37db1418" class="bulleted-list"><li style="list-style-type:disc">contact email</li></ul><ul id="d4811d0d-06d9-402b-a6a1-85a557dfc6a1" class="bulleted-list"><li style="list-style-type:disc">format of the user id</li></ul><ul id="7bdf1a1b-c665-4116-949d-03d21a674337" class="bulleted-list"><li style="list-style-type:disc">ransom demand specifics (<em>e.g.</em>, digital currency, gift cards)</li></ul><ul id="08327036-68e7-4a51-bec7-c2d91dd0226c" class="bulleted-list"><li style="list-style-type:disc">payment address in case of digital currency</li></ul><ul id="61f3350b-09ab-410f-959f-13a4e47aa668" class="bulleted-list"><li style="list-style-type:disc">support chat or support page</li></ul></li></ol><ol type="a" id="b87786c8-04d5-46ad-b405-a35d62ed052f" class="numbered-list" start="3"><li>Analyze affected and/or new files. Check:<ul id="5a654144-ea3f-44ca-aef0-6df4f745783c" class="bulleted-list"><li style="list-style-type:disc">file renaming scheme of encrypted files including extension (<em>e.g.</em>, <code>.crypt</code>, <code>.cry</code>, <code>.locked</code>) and base name</li></ul><ul id="370d2786-ff89-416e-a6bf-e28d9be88422" class="bulleted-list"><li style="list-style-type:disc">file corruption vs encryption</li></ul><ul id="a184ed23-54cd-4336-a010-2fa2e9ce1e3b" class="bulleted-list"><li style="list-style-type:disc">targeted file types and locations</li></ul><ul id="64b03e5e-f709-4b99-9a41-1d02d0b0be4d" class="bulleted-list"><li style="list-style-type:disc">owning user/group of affected files</li></ul><ul id="4bd1b148-539c-4891-988a-7062990d0e3a" class="bulleted-list"><li style="list-style-type:disc">icon for encrypted files</li></ul><ul id="4b775407-3f3f-4168-8aa8-ef057d7add36" class="bulleted-list"><li style="list-style-type:disc">file markers</li></ul><ul id="8b8ee28f-290b-4e06-8a3b-f4cd2f6bdade" class="bulleted-list"><li style="list-style-type:disc">existence of file listings, key files or other data files</li></ul></li></ol><ol type="a" id="fe2462e6-e680-4d08-8a39-881d9a785616" class="numbered-list" start="4"><li>Analyze affected software or system types. Some ransomware variants only affect certain tools (<em>e.g.</em>, <a href="https://www.bleepingcomputer.com/news/security/mongodb-apocalypse-professional-ransomware-group-gets-involved-infections-reach-28k-servers/">databases</a>) or platforms (<em>e.g.</em>, <a href="https://forum.synology.com/enu/viewtopic.php?f=3&amp;t=88716">NAS products</a>)</li></ol><ol type="a" id="4f453029-12f9-4f58-9c81-070027f7d297" class="numbered-list" start="5"><li>Upload indicators to automated categorization services like <a href="https://www.nomoreransom.org/crypto-sheriff.php">Crypto Sheriff</a>, <a href="https://id-ransomware.malwarehunterteam.com/">ID Ransomware</a>, or similar.</li></ol><hr id="fac2a344-b5c7-43e5-98c4-5bc589a9de79"/><p id="d428caa8-e38d-43f9-8579-eebef94f7d8e" class="">
+</p></li></ol><ol type="1" id="dea4a34a-037e-454d-a857-bafe112390cd" class="numbered-list" start="2"><li><strong>Determine the scope:</strong><ol type="a" id="3db2123b-2914-41b8-9754-3bc854503fde" class="numbered-list" start="1"><li>Which systems are affected? <code>TODO: Specify tool(s) and procedure</code><ul id="c739a1be-38f1-41a5-a7c9-c0d92d042da9" class="bulleted-list"><li style="list-style-type:disc">Scan for concrete indicators of compromise (IOCs) such as files/hashes, processes, network connections, etc. Use <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">endpoint protection/EDR</a>, <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">endpoint telemetry</a>, <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">system logs</a>, etc.</li></ul><ul id="d08cb888-a5bb-425c-bc28-781acad6f00b" class="bulleted-list"><li style="list-style-type:disc">Check similar systems for infection (<em>e.g.</em>, similar users, groups, data, tools, department,configuration, patch status): check <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">IAM tools</a>, <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">permissions management tools</a>, <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">directory services</a>, <em>etc.</em></li></ul><ul id="0fe9def6-bad1-4367-99bd-09b2f8ebd550" class="bulleted-list"><li style="list-style-type:disc">Find external command and control (C2), if present, and find other systems connecting to it: check <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">firewall or IDS logs</a>, <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">system logs/EDR</a>, <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">DNS logs</a>, <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">netflow or router logs</a>, <em>etc.</em></li></ul></li></ol><ol type="a" id="36179fef-b5bf-49e6-bfe7-6abe2a5b952d" class="numbered-list" start="2"><li>What data is affected? (<em>e.g.</em>, file types, department or group, affected software) <code>TODO: Specify tool(s) and procedure</code><ul id="95519112-52ae-464c-84c0-01489826ec32" class="bulleted-list"><li style="list-style-type:disc">Find anomalous changes to file metadata such as mass changes to creation or modification times. Check <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">file metadata search tools</a></li></ul><ul id="a7a8afb9-808e-46c9-81d8-61fe115bd200" class="bulleted-list"><li style="list-style-type:disc">Find changes to normally-stable or critical data files. Check <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">file integrity monitoring</a> tools</li></ul></li></ol></li></ol><p id="ce2471b1-a43e-4f66-9900-3d9572bc6355" class="">
+</p><ol type="1" id="15c9571b-e9bc-4c2f-a3e5-3dbb59545c9c" class="numbered-list" start="1"><li><strong>Assess the impact</strong> to prioritize and motivate resources<ol type="a" id="5764a7f7-c4c0-4cc2-a48e-8d1111b86284" class="numbered-list" start="1"><li>Assess functional impact: impact to business or mission.<ul id="3dcd3065-7317-4413-bc75-c49e535dfe16" class="bulleted-list"><li style="list-style-type:disc">How much money is lost or at risk?</li></ul><ul id="125bc709-e10d-4775-872b-7ec6785585e6" class="bulleted-list"><li style="list-style-type:disc">How many (and which) missions are degraded or at risk?</li></ul></li></ol><ol type="a" id="d2ed6a12-8be7-4b64-a346-eced83295567" class="numbered-list" start="2"><li>Assess information impact: impact to confidentiality, integrity, and availability of data.<ul id="df39a24e-a609-446f-b901-21ea3089abb0" class="bulleted-list"><li style="list-style-type:disc">How critical is the data to the business/mission?</li></ul><ul id="a7a91d7d-cb6f-4b69-8b77-2a55a8c8b3f9" class="bulleted-list"><li style="list-style-type:disc">How sensitive is the data? (<em>e.g.</em>, trade secrets)</li></ul><ul id="e4a9c692-781d-4caa-b87d-f6971ee98604" class="bulleted-list"><li style="list-style-type:disc">What is the regulatory status of data (<em>e.g.</em>, PII, PHI)</li></ul></li></ol></li></ol><ol type="1" id="051b5d46-a6fb-447b-8643-c09000b23b0d" class="numbered-list" start="2"><li><strong>Find the infection vector.</strong> Check the tactics captured in the <a href="https://attack.mitre.org/tactics/TA0001/">Initial Access tactic</a> of MITRE ATT&amp;CK<a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#ransomware-playbook-ref-4">[4]</a>. Common specifics and data sources include:<ul id="4f2cdeb2-6f50-4407-a37f-d1e641bea752" class="bulleted-list"><li style="list-style-type:disc">email attachment: check <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">email logs</a>, <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">email security appliances and services</a>, <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">e-discovery tools</a>, <em>etc.</em></li></ul><ul id="c9628fa5-1231-4c8c-910b-e6e31e5aad4c" class="bulleted-list"><li style="list-style-type:disc">insecure remote desktop protocol (RDP): check <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">vulnerability scanning results</a>, <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">firewall configurations</a>, <em>etc.</em></li></ul><ul id="7b9d330e-8f56-461c-8b98-36da3b531f8f" class="bulleted-list"><li style="list-style-type:disc">self-propagation (worm or virus) (check <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">host telemetry/EDR</a>, <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">system logs</a>, <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">forensic analysis</a>, <em>etc.</em>)</li></ul><ul id="cc1d84df-bca2-42c4-910d-21d6ee9f1d05" class="bulleted-list"><li style="list-style-type:disc">infection via removable drives (worm or virus)</li></ul><ul id="c5110392-fe50-4ff1-8cd7-9bde773fbb92" class="bulleted-list"><li style="list-style-type:disc">delivered by other malware or attacker tool: expand investigation to include additional attacker tools or malware</li></ul></li></ol><h3 id="458ef63f-754f-4e20-a136-bf7f70aa818d" class=""><strong>Remediate</strong></h3><ul id="05ebf5fc-8ca9-4663-8d0e-1c3bb95a59ec" class="bulleted-list"><li style="list-style-type:disc"><strong>Plan remediation events</strong> where these steps are launched together (or in coordinated fashion), with appropriate teams ready to respond to any disruption.</li></ul><ul id="1f6140d5-b730-487a-b3d7-4a269d82da0e" class="bulleted-list"><li style="list-style-type:disc"><strong>Consider the timing and tradeoffs</strong> of remediation actions: your response has consequences.</li></ul><h3 id="0505a510-6b4e-44c9-8b20-75a88a7eb870" class=""><strong>Contain</strong></h3><p id="004d5cbe-11cd-40a9-8b1f-697877cec9a1" class=""><code>TODO: Customize containment steps, tactical and strategic, for ransomware.</code></p><p id="438eba2b-0f47-4680-a27e-bbc74eab1800" class=""><code>TODO: Specify tools and procedures for each step, below.</code></p><p id="fa8a1ad9-e6d6-4e70-b997-115e1d83126a" class=""><strong>In ransomware situations, containment is critical. Inform containment measures with facts from the investigation. Prioritize quarantines and other containment measures higher than during a typical response.</strong></p><p id="3012c7bb-820e-426c-be95-c83d8b9daaee" class="">Quarantines (logical, physical, or both) prevent spread <em>from</em> infected systems and prevent spread <em>to</em> critical systems and data. Quarantines should be comprehensive: include cloud/SaaS access, single-sign-on, system access such as to ERP or other business tools, <em>etc.</em></p><ul id="b9267276-a338-4c7a-bed0-f72d08cd7036" class="bulleted-list"><li style="list-style-type:disc">Quarantine infected systems</li></ul><ul id="03214fe2-d34b-4bc1-89be-9aaa004befba" class="bulleted-list"><li style="list-style-type:disc">Quarantine affected users and groups.</li></ul><ul id="ceb34711-38ba-49b6-933a-045c40422034" class="bulleted-list"><li style="list-style-type:disc">Quarantine file shares (not just known-infected shares; protect uninfected shares too)</li></ul><ul id="3cefec07-45e3-4b5f-bbb8-549c2d98253c" class="bulleted-list"><li style="list-style-type:disc">Quarantine shared databases (not just known-infected servers; protect uninfected databases too)</li></ul><ul id="b27b2238-a97b-4fab-abb5-695c831bbd4c" class="bulleted-list"><li style="list-style-type:disc">Quarantine backups, if not already secured</li></ul><ul id="9686c921-8ecb-44a8-90b7-1bc8ce3a4dd3" class="bulleted-list"><li style="list-style-type:disc">Block command and control domains and addresses</li></ul><ul id="79012a38-0021-4148-9bb6-72d19cc419dc" class="bulleted-list"><li style="list-style-type:disc">Remove vector emails from inboxes</li></ul><ul id="cbf4471b-cb1f-4ff2-b74c-386b5fc0be79" class="bulleted-list"><li style="list-style-type:disc">Confirm endpoint protection (AV, NGAV, EDR, <em>etc.</em>) is up-to-date and enabled on all systems.</li></ul><ul id="40ab481f-015f-4ba9-96de-8d7044764c49" class="bulleted-list"><li style="list-style-type:disc">Confirm patches are deployed on all systems (prioritizing targeted systems, OSes, software, <em>etc.</em>).</li></ul><ul id="f99d1c20-4787-4810-943d-5d11a0b4e943" class="bulleted-list"><li style="list-style-type:disc">Deploy custom signatures to endpoint protection and network security tools based on discovered IOCs</li></ul><p id="a0343966-bb6a-4b98-a514-20515c83649f" class=""><code>TODO: Consider automating containment measures using orchestration tools.</code></p><h3 id="1b9cc22b-d0a7-416c-910e-04cd9a260d06" class=""><strong>Eradicate</strong></h3><p id="c6ca3235-4879-4cb9-8a5c-ee761b693e7d" class=""><code>TODO: Customize eradication steps, tactical and strategic, for ransomware.</code></p><p id="14709b28-0cc3-4e45-a690-14a0c40bde08" class=""><code>TODO: Specify tools and procedures for each step, below.</code></p><ul id="4813775b-e169-47f1-867c-02830db5159b" class="bulleted-list"><li style="list-style-type:disc">Rebuild infected systems from known-good media</li></ul><ul id="3611aaa4-0ec6-40ff-95fa-56be6fb304fe" class="bulleted-list"><li style="list-style-type:disc">Restore from known-clean backups</li></ul><ul id="c16901b8-dc3f-46a5-be80-87f462be4b8a" class="bulleted-list"><li style="list-style-type:disc">Confirm endpoint protection (AV, NGAV, EDR, <em>etc.</em>) is up-to-date and enabled on all systems.</li></ul><ul id="54614083-5f58-4cdb-a48b-d064e6e2d7c7" class="bulleted-list"><li style="list-style-type:disc">Confirm patches are deployed on all systems (prioritizing targeted systems, OSes, software, <em>etc.</em>).</li></ul><ul id="a1508dc5-5361-4753-b7b5-2ebbd302f5cf" class="bulleted-list"><li style="list-style-type:disc">Deploy custom signatures to endpoint protection and network security tools based on discovered IOCs</li></ul><ul id="af0bba66-a856-41e7-a02c-6d52da9e192e" class="bulleted-list"><li style="list-style-type:disc"><strong>Watch for re-infection:</strong> consider increased priority for alarms/alerts related to this incident.</li></ul><h3 id="f6136db5-3e55-46ee-96a8-ade85f6c22c0" class=""><strong>Reference: Remediation Resources</strong></h3><p id="989e622b-8a49-4bc1-8146-f150d99bcc44" class=""><code>TODO: Specify financial, personnel, and logistical resources to accomplish remediation.</code></p><h3 id="51db600b-edf1-496c-ab0e-61d256820f20" class=""><strong>Communicate</strong></h3><p id="2ac00db5-c29d-4c86-bfa3-dd85d35162fe" class=""><code>TODO: Customize communication steps for ransomware</code></p><p id="5ad19274-751b-461e-8b81-5424c5bcfa0b" class=""><code>TODO: Specify tools and procedures (including who must be involved) for each step, below, or refer to overall plan.</code></p><ol type="1" id="dc44bbde-8193-4170-9053-1f0afbeb4257" class="numbered-list" start="1"><li>Escalate incident and communicate with leadership per procedure</li></ol><ol type="1" id="11e6fa7f-7c0b-47f9-a3fb-965d2b6d84b1" class="numbered-list" start="2"><li>Document incident per procedure</li></ol><ol type="1" id="8fefe19c-2f48-40f0-acb7-8a2bddb5c14e" class="numbered-list" start="3"><li>Communicate with internal and external legal counsel per procedure, including discussions of compliance, risk exposure, liability, law enforcement contact, <em>etc.</em></li></ol><ol type="1" id="6fd8e32f-1c96-46d1-a3d1-a9a79f6fafe4" class="numbered-list" start="4"><li>Communicate with users (internal)<ol type="a" id="27b12faa-7a81-4817-a346-4dd4e74d9362" class="numbered-list" start="1"><li>Communicate incident response updates per procedure</li></ol><ol type="a" id="96cdb158-94eb-4a8f-96e4-0cbcbcc1faa3" class="numbered-list" start="2"><li>Communicate impact of incident <strong>and</strong> incident response actions (e.g., containment: &quot;why is the file share down?&quot;), which can be more intrusive/disruptive during ransomware incidents</li></ol><ol type="a" id="21d1bcf0-64d9-49f4-97f2-2f65a91ca1f1" class="numbered-list" start="3"><li>Communicate requirements: &quot;what should users do and not do?&quot; See &quot;Reference: User Actions for Suspected Ransomware,&quot; below</li></ol></li></ol><ol type="1" id="29524ac2-9127-43b8-9435-b0a60fb2493c" class="numbered-list" start="5"><li>Communicate with customers<ol type="a" id="5e8a9270-bc47-4bb1-9d40-f214ce0a394c" class="numbered-list" start="1"><li>Focus particularly on those whose data was affected</li></ol><ol type="a" id="41baa5ae-ae82-4cc2-b65a-54a3ca748c54" class="numbered-list" start="2"><li>Generate required notifications based on applicable regulations (particularly those that may consider ransomware a data breach or otherwise requires notifications (<em>e.g.</em>, <a href="https://www.hhs.gov/sites/default/files/RansomwareFactSheet.pdf">HHS/HIPAA</a>)) <code>TODO: Expand notification requirements and procedures for applicable regulations</code></li></ol></li></ol><ol type="1" id="6ff19515-808e-4d33-b5f4-1e28d87448c5" class="numbered-list" start="6"><li>Contact insurance provider(s)<ol type="a" id="cbf594a0-6684-4b8b-b2e5-e8901e85f6af" class="numbered-list" start="1"><li>Discuss what resources they can make available, what tools and vendors they support and will pay for, <em>etc.</em></li></ol><ol type="a" id="e684e567-055d-4308-a282-631b08c1e5bd" class="numbered-list" start="2"><li>Comply with reporting and claims requirements to protect eligibility</li></ol></li></ol><ol type="1" id="28689291-5ef7-4bf4-9eb8-3d936efbe398" class="numbered-list" start="7"><li>Communicate with regulators, including a discussion of what resources they can make available (not just boilerplate notification: many can actively assist)</li></ol><ol type="1" id="0a9b8d06-48ed-406c-b0d3-eb1ced80806e" class="numbered-list" start="8"><li>Consider notifying and involving <a href="https://www.nomoreransom.org/en/report-a-crime.html">law enforcement</a><ol type="a" id="1d3a346b-d31f-46d9-a416-a32abf33472f" class="numbered-list" start="1"><li><a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">Local law enforcement</a></li></ol><ol type="a" id="c28d2860-e09d-478f-9694-26911312c54c" class="numbered-list" start="2"><li><a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">State or regional law enforcement</a></li></ol><ol type="a" id="2debd461-f869-4be4-9d20-495d9c16ffe0" class="numbered-list" start="3"><li><a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">Federal or national law enforcement</a></li></ol></li></ol><ol type="1" id="f4107bcc-0514-4aca-8b57-7247d9d0a241" class="numbered-list" start="9"><li>Communicate with security and IT vendors<ol type="a" id="fa36a89e-9df7-4894-a04c-b87122b56e29" class="numbered-list" start="1"><li>Notify and collaborate with <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">managed providers</a> per procedure</li></ol><ol type="a" id="cf67418f-4454-4771-bc34-36f7b67c570f" class="numbered-list" start="2"><li>Notify and collaborate with <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">incident response consultants</a> per procedure</li></ol></li></ol><h3 id="975479cc-f701-4e4c-8877-672e47a36094" class=""><strong>Recover</strong></h3><p id="a4f09489-8b21-4704-a0a8-58808a0fa349" class=""><code>TODO: Customize recovery steps for ransomware.</code></p><p id="985dca1b-e6c7-4a66-bff4-1aceed16dc6b" class=""><code>TODO: Specify tools and procedures for each step, below.</code></p><blockquote id="5c272780-ed9f-4cdd-97d4-caba1aa2cef7" class="">We do not recommend paying the ransom: it does not guarantee a solution to the problem. It can go wrong (e.g., bugs could make data unrecoverable even with the key). Also, paying proves ransomware works and could increase attacks against you or other groups.[2, paraphrased]</blockquote><ol type="1" id="f38b6c61-9d0a-4480-b974-8b68aa6dfd0b" class="numbered-list" start="1"><li>Launch business continuity/disaster recovery plan(s): <em>e.g.</em>, consider migration to alternate operating locations, fail-over sites, backup systems.</li></ol><ol type="1" id="8e64e20a-4c59-4f7d-b5d3-580ca811e118" class="numbered-list" start="2"><li>Recover data from known-clean backups to known-clean, patched, monitored systems (post-eradication), in accordance with our <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">well-tested backup strategy</a>.<ul id="9cf40ba9-1d76-4173-9426-5f288b166bef" class="bulleted-list"><li style="list-style-type:disc">Check backups for indicators of compromise</li></ul><ul id="7acbb8e1-fa49-43af-8927-05214840bb62" class="bulleted-list"><li style="list-style-type:disc">Consider partial recovery and backup integrity testing</li></ul></li></ol><ol type="1" id="ce19a3ba-f670-471b-b01d-c0ffad0e0f5c" class="numbered-list" start="3"><li>Find and try known decryptors for the variant(s) discovered using resources like the No More Ransom! Project&#x27;s <a href="https://www.nomoreransom.org/en/decryption-tools.html">Decryption Tools page</a>.</li></ol><ol type="1" id="515c1e50-e1ee-49ac-9c61-aa6a9b7fc17a" class="numbered-list" start="4"><li>Consider paying the ransom for irrecoverable critical assets/data, in accordance with policy <code>TODO: Expand and socialize this decision matrix</code><ul id="93c3b2b6-b8ba-4778-9144-2248ec236fe1" class="bulleted-list"><li style="list-style-type:disc">Consider ramifications with appropriate stakeholders</li></ul><ul id="646754a2-69ca-4a87-b205-17bab218503b" class="bulleted-list"><li style="list-style-type:disc">Understand finance implications and budget</li></ul><ul id="7f706b88-97dc-4995-997c-4f992dba9703" class="bulleted-list"><li style="list-style-type:disc">Understand legal, regulatory, and insurance implications</li></ul><ul id="09fc25de-c43c-4ab7-9322-681c9fffeec1" class="bulleted-list"><li style="list-style-type:disc">Understand mechanisms (<em>e.g.</em>, technologies, platforms, intermediate vendors/go-betweens)</li></ul></li></ol><h3 id="770defb8-4d0d-423e-a29f-ce88c1266cd3" class=""><strong>Resources</strong></h3><h3 id="73d472ba-c542-40a1-8092-9feb0ecab762" class=""><strong>Reference: User Actions for Suspected Ransomware</strong></h3><p id="ea1cf4e1-cadd-4f88-89c3-3eaf19d01137" class=""><code>TODO: Customize steps for users dealing with suspected ransomware</code></p><ol type="1" id="614eacea-d8b5-49c8-a8be-0bb1769b2ff6" class="numbered-list" start="1"><li>Stay calm, take a deep breath.</li></ol><ol type="1" id="0f9624db-b966-4958-bdeb-45846a54c332" class="numbered-list" start="2"><li>Disconnect your system from the network <code>TODO: include detailed steps with screenshots, a pre-installed tool or script to make this easy (&quot;break in case of emergency&quot;), consider hardware network cut-off switches</code></li></ol><ol type="1" id="903aa22a-f2c9-49a3-a034-17e1c5c4d40b" class="numbered-list" start="3"><li>Take pictures of your screen using your smartphone showing the things you noticed: ransom messages, encrypted files, system error messages, <em>etc.</em></li></ol><ol type="1" id="4cd96828-cc3f-4bdf-999f-542bc88f930f" class="numbered-list" start="4"><li>Take notes about the problem(s) using the voice memo app on your smartphone or pen-and-paper. Every little bit helps! Document the following:<ol type="a" id="b1c54b09-09d7-42a8-a3a1-b8f1f7812d18" class="numbered-list" start="1"><li>What did you notice?</li></ol><ol type="a" id="5dbd8974-a6ac-49f8-806b-ff686f4b3158" class="numbered-list" start="2"><li>Why did you think it was a problem?</li></ol><ol type="a" id="4901e782-5e14-41c6-8728-4ae274f77c0c" class="numbered-list" start="3"><li>What were you doing at the time you detected it?</li></ol><ol type="a" id="525f66df-ec43-45b3-8c12-3518b9f51198" class="numbered-list" start="4"><li>When did it first occur, and how often since?</li></ol><ol type="a" id="6bcd90f9-284d-4ff9-b4f1-b833e9f3d2b7" class="numbered-list" start="5"><li>Where were you when it happened, and on what network? (office/home/shop, wired/wireless, with/without VPN, <em>etc.</em>)</li></ol><ol type="a" id="456df8d5-0f41-4f6e-a615-957bb1fc243e" class="numbered-list" start="6"><li>What systems are you using? (operating system, hostname, <em>etc.</em>)</li></ol><ol type="a" id="21dd1bb3-6266-488e-88d0-14121ab0138c" class="numbered-list" start="7"><li>What account were you using?</li></ol><ol type="a" id="206b83d1-f34a-43f9-b3f8-d79ee859708a" class="numbered-list" start="8"><li>What data do you typically access?</li></ol><ol type="a" id="c9f8c370-7035-4825-b1ea-5c1e02d95c37" class="numbered-list" start="9"><li>Who else have you contacted about this incident, and what did you tell them?</li></ol></li></ol><ol type="1" id="5e49f553-4125-4057-8c36-c4f3794e3ae5" class="numbered-list" start="5"><li>Contact the <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">help desk</a> and be as helpful as possible</li></ol><ol type="1" id="2f93f52f-06fd-4211-bc64-cd863078a275" class="numbered-list" start="6"><li>Be patient: the response may be disruptive, but you are protecting your team and the organization! <strong>Thank you.</strong></li></ol><h3 id="67ad1318-d55d-4950-bf84-4fc240dfeaa4" class=""><strong>Reference: Help Desk Actions for Suspected Ransomware</strong></h3><p id="16cb6fa2-759c-41bd-84c6-d39c6e62bb3d" class=""><code>TODO: Customize steps for help desk personnel dealing with suspected ransomware</code></p><ol type="1" id="b3171160-84de-4143-adbb-e2fec7746dd1" class="numbered-list" start="1"><li>Stay calm, take a deep breath.</li></ol><ol type="1" id="3e2111de-f399-4c29-9e72-23a47f81eecf" class="numbered-list" start="2"><li>Open a ticket to document the incident, per procedure <code>TODO: Customize template with key questions (see below) and follow-on workflow</code></li></ol><ol type="1" id="b64c0c12-775c-48d8-a4df-718eb2fa3c7f" class="numbered-list" start="3"><li>Ask the user to take pictures of their screen using their smartphone showing the things they noticed: ransom messages, encrypted files, system error messages, <em>etc.</em> If this is something you noticed directly, do the same yourself.</li></ol><ol type="1" id="4f7a253a-f34a-4f5d-8613-5ff7ce74cfae" class="numbered-list" start="4"><li>Take notes about the problem(s) using the voice memo app on your smartphone or pen-and-paper. If this is a user report, ask detailed questions, including:<ol type="a" id="e06ef188-812e-4123-9555-6caf84f41d07" class="numbered-list" start="1"><li>What did you notice?</li></ol><ol type="a" id="fefdae94-4146-406d-a48b-b23d1d52530a" class="numbered-list" start="2"><li>Why did you think it was a problem?</li></ol><ol type="a" id="53af3ac1-44aa-480e-ae7c-adf357c56288" class="numbered-list" start="3"><li>What were you doing at the time you detected it?</li></ol><ol type="a" id="57d5cd31-cb66-4944-9433-7b4c16c60d8c" class="numbered-list" start="4"><li>When did it first occur, and how often since?</li></ol><ol type="a" id="997f99d9-da9f-42e3-be8d-37077c155242" class="numbered-list" start="5"><li>What networks are involved? (office/home/shop, wired/wireless, with/without VPN, <em>etc.</em>)</li></ol><ol type="a" id="f5984fda-a5e4-4396-bda1-4aea16f191c5" class="numbered-list" start="6"><li>What systems are involved? (operating system, hostname, <em>etc.</em>)</li></ol><ol type="a" id="5c14f249-b7c6-4701-b6f8-42f0be821769" class="numbered-list" start="7"><li>What data is involved? (paths, file types, file shares, databases, software, <em>etc.</em>)</li></ol><ol type="a" id="21ccc387-7878-418d-8502-cb977224707c" class="numbered-list" start="8"><li>What users and accounts are involved? (active directory, SaaS, SSO, service accounts, <em>etc.</em>)</li></ol><ol type="a" id="ba3e56f6-1baa-4bf0-856f-581e6a90a3b7" class="numbered-list" start="9"><li>What data do the involved users typically access?</li></ol><ol type="a" id="4b4104fa-6fbe-47d1-86aa-0aa9fd6e2c5a" class="numbered-list" start="10"><li>Who else have you contacted about this incident, and what did you tell them?</li></ol></li></ol><ol type="1" id="23f237e7-8cab-4d95-9fd1-0baae0c6f5f7" class="numbered-list" start="5"><li>Ask follow-up questions as necessary. <strong>You are an incident responder, we are counting on you.</strong></li></ol><ol type="1" id="5268bd0c-1adf-48a0-b384-b05d129508f5" class="numbered-list" start="6"><li>Get detailed contact information from the user (home, office, mobile), if applicable</li></ol><ol type="1" id="d97f7615-a1f0-4f52-8c33-a7b594dda038" class="numbered-list" start="7"><li>Record all information in the ticket, including hand-written and voice notes</li></ol><ol type="1" id="c4e17421-b0fe-4ce0-a5d1-a9669404c72a" class="numbered-list" start="8"><li>Quarantine affected users and systems <code>TODO: Customize containment steps, automate as much as possible</code></li></ol><ol type="1" id="b5965ba7-094d-4437-ae1c-3cded10609d9" class="numbered-list" start="9"><li>Contact the <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-ransomware.md#TODO-link-to-actual-resource">security team</a> and stand by to participate in the response as directed: investigation, remediation, communication, and recovery</li></ol><h3 id="72a2a9e1-3d8b-473a-b2d1-a06e547344ba" class=""><strong>Additional Information</strong></h3><ol type="1" id="349b36d0-4b1b-4136-b564-41b38b5a4061" class="numbered-list" start="1"><li><a href="https://www.gdatasoftware.com/blog/2019/06/31666-ransomware-identification-for-the-judicious-analyst">&quot;Ransomware Identification for the Judicious Analyst&quot;</a>, Hahn (12 Jun 2019)</li></ol><ol type="1" id="0d5a4519-b5aa-49a5-9ac0-52a34d552627" class="numbered-list" start="2"><li><a href="https://www.nomoreransom.org/">No More Ransom!</a> Project, including their <a href="https://www.nomoreransom.org/crypto-sheriff.php?lang=en">Crypto Sheriff</a> service and their <a href="https://www.nomoreransom.org/en/ransomware-qa.html">Q&amp;A</a></li></ol><ol type="1" id="47190ae0-22c9-413a-acf6-1c128735d383" class="numbered-list" start="3"><li><a href="https://id-ransomware.malwarehunterteam.com/">ID Ransomware</a> service</li></ol><ol type="1" id="13607c89-a8f5-4df0-b626-04f656dfa417" class="numbered-list" start="4"><li><a href="https://attack.mitre.org/">MITRE ATT&amp;CK Matrix</a>, including the <a href="https://attack.mitre.org/tactics/TA0001/">Initial Access</a> and <a href="https://attack.mitre.org/tactics/TA0040/">Impact</a> tactics</li></ol></div></article></body></html>

@@ -1,0 +1,665 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Responding to IT Security Incidents</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="4ed8a907-0276-4ca9-ba8c-7597523f84d6" class="page sans"><header><h1 class="page-title">Responding to IT Security Incidents</h1><table class="properties"><tbody><tr class="property-row property-row-text"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>Comments</th><td></td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-brown">IT-incidents</span><span class="selected-value select-value-color-gray">Website</span></td></tr><tr class="property-row property-row-url"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesUrl"><path d="M3.73333,3.86667 L7.46667,3.86667 C8.49613,3.86667 9.33333,4.70387 9.33333,5.73333 C9.33333,6.7628 8.49613,7.6 7.46667,7.6 L6.53333,7.6 C6.01813,7.6 5.6,8.0186 5.6,8.53333 C5.6,9.04807 6.01813,9.46667 6.53333,9.46667 L7.46667,9.46667 C9.5284,9.46667 11.2,7.79507 11.2,5.73333 C11.2,3.6716 9.5284,2 7.46667,2 L3.73333,2 C1.6716,2 0,3.6716 0,5.73333 C0,7.124 0.762067,8.33453 1.88953,8.97713 C1.87553,8.83107 1.86667,8.6836 1.86667,8.53333 C1.86667,7.92013 1.98753,7.33447 2.2036,6.7978 C1.99267,6.4954 1.86667,6.12953 1.86667,5.73333 C1.86667,4.70387 2.70387,3.86667 3.73333,3.86667 Z M12.1095,5.28907 C12.1231,5.4356 12.1333,5.58307 12.1333,5.73333 C12.1333,6.34607 12.0101,6.9294 11.7931,7.46513 C12.0059,7.768 12.1333,8.13573 12.1333,8.53333 C12.1333,9.5628 11.2961,10.4 10.2667,10.4 L6.53333,10.4 C5.50387,10.4 4.66667,9.5628 4.66667,8.53333 C4.66667,7.50387 5.50387,6.66667 6.53333,6.66667 L7.46667,6.66667 C7.98187,6.66667 8.4,6.24807 8.4,5.73333 C8.4,5.2186 7.98187,4.8 7.46667,4.8 L6.53333,4.8 C4.4716,4.8 2.8,6.4716 2.8,8.53333 C2.8,10.59507 4.4716,12.2667 6.53333,12.2667 L10.2667,12.2667 C12.3284,12.2667 14,10.59507 14,8.53333 C14,7.14267 13.2375,5.93167 12.1095,5.28907 Z"></path></svg></span>URL</th><td><a href="https://docs.microsoft.com/en-us/previous-versions/tn-archive/cc700825(v=technet.10)?redirectedfrom=MSDN" class="url-value">https://docs.microsoft.com/en-us/previous-versions/tn-archive/cc700825(v=technet.10)?redirectedfrom=MSDN</a></td></tr></tbody></table></header><div class="page-body"><figure id="44f616bc-4ab8-4169-84ad-ca38bfc00f1e"><a href="https://docs.microsoft.com/en-us/previous-versions/tn-archive/cc700825(v=technet.10)?redirectedfrom=MSDN" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Responding to IT Security Incidents</div><div class="bookmark-description">On This Page Introduction Before You Begin Minimizing the Number and Severity of Security Incidents Assembling the Core Computer Security Incident Response Team Defining an Incident Response Plan Containing the Damage and Minimizing the Risks Related Information How prepared is your information technology (IT) department or administrator to handle security incidents?</div></div><div class="bookmark-href"><img src="https://docs.microsoft.com/favicon.ico" class="icon bookmark-icon"/>https://docs.microsoft.com/en-us/previous-versions/tn-archive/cc700825(v=technet.10)?redirectedfrom=MSDN</div></div></a></figure><p id="a12eb4d8-c05c-46f1-a664-7c1a9a74b224" class="">
+</p><h1 id="a5b1d283-730d-49ee-b2a6-429b9fb82abb" class=""><strong>Responding to IT Security Incidents</strong></h1><h3 id="83ee83f6-77b6-4141-8ea7-fa452f32d978" class=""><strong>On This Page</strong></h3><p id="91d17a87-67b1-4b9d-9ba0-51d06f0fa422" class="">IntroductionBefore You BeginMinimizing the Number and Severity of Security IncidentsAssembling the Core Computer Security Incident Response TeamDefining an Incident Response PlanContaining the Damage and Minimizing the RisksRelated Information</p><h3 id="2ceb7dd0-a4cf-4cce-a0c7-3d53b39f5e41" class=""><strong>Introduction</strong></h3><p id="e557c1a5-bf5a-427f-9fa4-32adcb5d24c9" class="">How prepared is your information technology (IT) department or administrator to handle security incidents? Many organizations learn how to respond to security incidents only after suffering attacks. By this time, incidents often become much more costly than needed. Proper incident response should be an integral part of your overall security policy and risk mitigation strategy.</p><p id="d885b024-0b93-4f72-8451-ab5378a84b0c" class="">There are clearly direct benefits in responding to security incidents. However, there might also be indirect financial benefits. For example, your insurance company might offer discounts if you can demonstrate that your organization is able to quickly and cost-effectively handle attacks. Or, if you are a service provider, a formal incident response plan might help win business, because it shows that you take seriously the process of good information security.</p><p id="39b3a378-5e6a-4772-bfd8-1b616e71698c" class="">This document will provide you with a recommended process and procedures to use when responding to intrusions identified in a small- to medium-based (SMB) network environment. The value of forming a security incident response team with explicit team member roles is explained, as well as how to define a security incident response plan.</p><p id="14838a99-a228-42de-a98a-948ede1075a7" class="">To successfully respond to incidents, you need to:</p><ul id="d83dcdf6-f7a3-4a38-8d05-6b9695cef4e9" class="bulleted-list"><li style="list-style-type:disc">Minimize the number and severity of security incidents.</li></ul><ul id="fb681c9e-4526-445e-ae3b-29ae297d956b" class="bulleted-list"><li style="list-style-type:disc">Assemble the core Computer Security Incident Response Team (CSIRT).</li></ul><ul id="a92da6bb-108e-494e-ac36-20ddbf483578" class="bulleted-list"><li style="list-style-type:disc">Define an incident response plan.</li></ul><ul id="fb38cddd-f49e-416b-aa12-20b2bc7fdd4b" class="bulleted-list"><li style="list-style-type:disc">Contain the damage and minimize risks.</li></ul><h3 id="9de115c8-4f5e-4084-8d02-afebbe178a3d" class=""><strong>Before You Begin</strong></h3><p id="2e12afab-e0ad-435e-80e3-82e5b5946ac9" class="">System administrators spend a lot of time with network environments, and are very familiar with networks. They document the environments and have backups in place. There should be an auditing process already in place to monitor performance and utilization. There should be a level of awareness already achieved prior to implementing an incident response team.</p><p id="28295ecf-6b96-4306-8299-2c98e1803e4b" class="">No matter how much detail you know about the network environment, the risk of being attacked remains. Any sensible security strategy must include details on how to respond to different types of attacks.</p><h3 id="d266393a-c3be-4d4c-8408-d3f48105b5ad" class=""><strong>Minimizing the Number and Severity of Security Incidents</strong></h3><p id="5f05187a-f12c-4fd4-9591-f640056b021f" class="">In most areas of life, prevention is better than cure, and security is no exception. Wherever possible, you will want to prevent security incidents from happening in the first place. However, it is impossible to prevent all security incidents. When a security incident does happen, you will need to ensure that its impact is minimized. To minimize the number and impact of security incidents, you should:</p><ul id="2926e3cb-78b6-4e83-9b94-694cf9622ff5" class="bulleted-list"><li style="list-style-type:disc">Clearly establish and enforce all policies and procedures. Many security incidents are accidentally created by IT personnel who have not followed or not understood change management procedures or have improperly configured security devices, such as firewalls and authentication systems. Your policies and procedures should be thoroughly tested to ensure that they are practical and clear and provide the appropriate level of security.</li></ul><ul id="6a7e1f91-7a0d-492e-9999-d04dc8ffb7a2" class="bulleted-list"><li style="list-style-type:disc">Gain management support for security policies and incident handling.</li></ul><ul id="92e8f6a8-de74-4aac-8533-69586c6cf4e0" class="bulleted-list"><li style="list-style-type:disc">Routinely assess vulnerabilities in your environment. Assessments should be done by a security specialist with the appropriate clearance to perform these actions i.e. (bondable and given administrator rights to the systems).</li></ul><ul id="39334442-5908-4408-9db6-da4d22555041" class="bulleted-list"><li style="list-style-type:disc">Routinely check all computer systems and network devices to ensure that they have all of the latest patches installed.</li></ul><ul id="f7a9296d-785c-4958-bbac-f81cfd5769d1" class="bulleted-list"><li style="list-style-type:disc">Establish security training programs for both IT staff and end users. The largest vulnerability in any system is the inexperienced user ? the ILOVEYOU worm effectively exploited that vulnerability among IT staff and end users.</li></ul><ul id="0c36c8bc-a5b9-4f78-9c58-72301ab8cdae" class="bulleted-list"><li style="list-style-type:disc">Post security banners that remind users of their responsibilities and restrictions, along with a warning of potential prosecution for violation. These banners make it easier to collect evidence and prosecute attackers. You should obtain legal advice to ensure that the wording of your security banners is appropriate.</li></ul><ul id="a7f107eb-7252-49f7-a1d1-15f6dd4f40de" class="bulleted-list"><li style="list-style-type:disc">Develop, implement, and enforce a policy requiring strong passwords. You can learn more about passwords in &quot;Enforcing Strong Password Usage Throughout Your Organization&quot; in the Security Guidance Kit.</li></ul><ul id="ac0ba85d-b845-4ff1-83fb-0595b9992a05" class="bulleted-list"><li style="list-style-type:disc">Routinely monitor and analyze network traffic and system performance.</li></ul><ul id="d615d639-fe16-4254-8d02-8a7028cffea4" class="bulleted-list"><li style="list-style-type:disc">Routinely check all logs and logging mechanisms, including operating system event logs, application specific logs and intrusion detection system logs.</li></ul><ul id="93750bf7-bccf-4682-858e-26b1302a2a3d" class="bulleted-list"><li style="list-style-type:disc">Verify your back-up and restore procedures. You should be aware of where backups are maintained, who can access them, and your procedures for data restoration and system recovery. Make sure that you regularly verify backups and media by selectively restoring data.</li></ul><ul id="9d2d6c40-2779-46d2-8371-ac194597b7a5" class="bulleted-list"><li style="list-style-type:disc">Create a Computer Security Incident Response Team (CSIRT) to deal with security incidents. You can learn more about CSIRT in the following section of this document.</li></ul><h3 id="7a4732f0-8754-499b-b240-48fb14d55c3e" class=""><strong>Assembling the Core Computer Security Incident Response Team</strong></h3><p id="679cb971-c159-474d-9d21-e4bfb96cb067" class="">The CSIRT is the focal point for dealing with computer security incidents in your environment. Your team should consist of a group of people with responsibilities for dealing with any security incident. Team members should have clearly defined duties to ensure that no area of your response is left uncovered.</p><p id="dcfa72ea-c820-4492-bada-34c1a77d76e8" class="">Assembling a team before an incident occurs is very important to your organization and will positively influence how incidents are handled. A successful team will:</p><ul id="6f954694-d480-4d20-a0e0-cd7b1b93b03f" class="bulleted-list"><li style="list-style-type:disc">Monitor systems for security breaches.</li></ul><ul id="e6a26070-04f0-4f84-9b73-2e30116cba36" class="bulleted-list"><li style="list-style-type:disc">Serve as a central communication point, both to receive reports of security incidents and to disseminate vital information to appropriate entities about the incident.</li></ul><ul id="6cea6d72-f80d-434e-9699-e9725bee5dc9" class="bulleted-list"><li style="list-style-type:disc">Document and catalog security incidents.</li></ul><ul id="42f4ff47-a606-4956-a395-1a8284d5868e" class="bulleted-list"><li style="list-style-type:disc">Promote security awareness within the company to help prevent incidents from occurring in your organization.</li></ul><ul id="d028012f-4ca3-4a0f-99b2-4489d27ba562" class="bulleted-list"><li style="list-style-type:disc">Support system and network auditing through processes such as vulnerability assessment and penetration testing.</li></ul><ul id="c7e4a6a2-87e0-4aaf-b355-994938b4637a" class="bulleted-list"><li style="list-style-type:disc">Learn about new vulnerabilities and attack strategies employed by attackers.</li></ul><ul id="e65051c3-239c-4b6d-a00f-cb5d8f82340d" class="bulleted-list"><li style="list-style-type:disc">Research new software patches.</li></ul><ul id="6aec5490-5d9a-499c-a21b-2aad002a4ba1" class="bulleted-list"><li style="list-style-type:disc">Analyze and develop new technologies for minimizing security vulnerabilities and risks.</li></ul><ul id="7496272c-7104-4a28-80c4-f6b772c5928f" class="bulleted-list"><li style="list-style-type:disc">Provide security consulting services.</li></ul><ul id="1be3c805-993a-4a0b-a1ff-a88c3f525fe8" class="bulleted-list"><li style="list-style-type:disc">Continually hone and update current systems and procedures.</li></ul><p id="318dd97b-8093-46f7-8cfc-87355b0c8c92" class="">When you create a CSIRT, prepare the team so they are equipped to handle incidents. To prepare the team, you should:</p><ul id="3278b816-f42e-415a-b473-d03ce3eeaa34" class="bulleted-list"><li style="list-style-type:disc">Train them on the proper use and location of critical security tools. You should also consider providing portable computers that are preconfigured with these tools to ensure that no time is wasted installing and configuring tools so they can respond to an incident. These systems and the associated tools must be properly protected when not in use.</li></ul><ul id="6e379330-bf89-42ca-abc4-257fc77c7112" class="bulleted-list"><li style="list-style-type:disc">Assemble all relevant communication information. You should ensure that you have contact names and phone numbers for people within your organization who need to be notified (including members of the CSIRT, those responsible for supporting all of your systems, and those in charge of media relations). You will also need details for your Internet service provider (ISP) and local and national law enforcement agencies. Discuss with your legal counsel about contacting local law enforcement before an incident happens. This will help you to ensure that you understand proper procedures for communicating incidents and collecting evidence. Legal counsel should be informed of any contacts with law enforcement.</li></ul><ul id="563bd81e-62cb-41ff-982c-01f1f8ee8e85" class="bulleted-list"><li style="list-style-type:disc">Place all emergency system information in a central, offline location, such as a physical binder or an offline computer. This emergency information includes passwords to systems, Internet Protocol (IP) addresses, router configuration information, firewall rule set lists, copies of certification authority keys, contact names and phone numbers, escalation procedures, and so on. This information must both be readily available and be kept extremely physically secure. One method of securing and making this information readily available is to encrypt it on a dedicated security portable computer that is placed in a secure vault and limit access to the vault to authorized individuals such as the CSIRT leader and the CIO or CTO.</li></ul><p id="c1f496d2-37eb-4aac-99df-b1288eecdf7e" class="">The ideal CSIRT membership and structure depends on the type of your organization and your risk management strategy. However, the CSIRT should generally form part or all of your organization&#x27;s security team. Inside the core team are security professionals responsible for coordinating a response to any incident. The number of members in the CSIRT will typically depend on the size and complexity of your organization. However, you should ensure that there are enough members to adequately cover all of the duties of the team at any time.</p><h3 id="aa3b4c8e-5489-45dc-a6be-3a60736cc747" class=""><strong>Establishing Team Roles</strong></h3><p id="74101457-b0e7-4749-abb5-4a4514595402" class="">A successful CSIRT team consists of several key members.</p><p id="95c2fe60-9ad3-4815-88ef-2925406e4c30" class=""><strong>CSIRT Team Leader.</strong> The CSIRT must have an individual in charge of its activities. The CSIRT Team Leader will generally be responsible for the activities of the CSIRT and will coordinate reviews of its actions. This might lead to changes in polices and procedures for dealing with future incidents.</p><p id="cc4b162d-98b1-4343-a5a3-e82501c87287" class=""><strong>CSIRT Incident Lead.</strong> In the event of an incident, you should designate one individual responsible for coordinating the response. The CSIRT Incident Lead has ownership of the particular incident or set of related security incidents. All communication about the event is coordinated through the Incident Lead, and when speaking with those outside the CSIRT, he or she represents the entire CSIRT. The Incident Lead might vary depending on the nature of the incident, and is often a different person than the CSIRT Team Leader.</p><p id="190e9f4b-76c7-4e4d-9d88-4d9d2cdada78" class=""><strong>CSIRT Associate Members.</strong> Besides the core CSIRT team, you should have a number of specific individuals who handle and respond to particular incidents. Associate members will come from a variety of different departments in your organization. They should specialize in areas that are affected by security incidents but that are not dealt with directly by the core CSIRT. Associate members can either be directly involved in an incident or serve as entry points to delegate responsibility to a more appropriate individual within their departments. The following table shows some suggested associate members and their roles.</p><p id="5e0203b7-9fec-40e7-8afd-10bc573d82fe" class="">
+</p><div id="e6110cf7-294b-4512-a4bd-1106b9dc61c2" class="collection-content"><h4 class="collection-title">CSIRT Associate Members</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>Associate Member</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>Role Description</th></tr></thead><tbody><tr id="5c75446f-c606-47da-a260-e9156debd785"><td class="cell-title"><a href="Responding%204ed8a/CSIRT%20Asso%20e6110/IT%20Contact%205c754.html">IT Contact</a></td><td class="cell-hmYM">This member is primarily responsible for coordinating communication between the CSIRT Incident Lead and the rest of the IT group. The IT Contact might not have the particular technical expertise to respond to the particular incident; however, he or she will be primarily responsible for finding people in the IT group to handle particular security events.</td></tr><tr id="b9062bf0-a357-4d3f-b20e-1bcdc657a2cc"><td class="cell-title"><a href="Responding%204ed8a/CSIRT%20Asso%20e6110/Legal%20Repr%20b9062.html">Legal Representative</a></td><td class="cell-hmYM">This member is a lawyer who is very familiar with established incident response policies. The Legal Representative determines how to proceed during an incident with minimal legal liability and maximum ability to prosecute offenders.
+Before an incident occurs, the Legal Representative should have input on monitoring and response policies to ensure that the organization is not being put at legal risk during a cleanup or containment operation. It is very important to consider the legal implications of shutting down a system and potentially violating service level agreements or membership agreements with your customers, or not shutting down a comprised system and being liable for damages caused by attacks launched from that system.
+Any communication to outside law enforcement or external investigative agencies should also be coordinated with the Legal Representative.</td></tr><tr id="4ad50bf4-f534-4cdd-9855-47d9e65d2bf2"><td class="cell-title"><a href="Responding%204ed8a/CSIRT%20Asso%20e6110/Public%20Rel%204ad50.html">Public Relations Officer</a></td><td class="cell-hmYM">Generally, this member is part of the public relations department and is responsible for protecting and promoting the image of the organization.
+This individual might not be the actual face to the media and customers, but he or she is responsible for crafting the message (the content and objective of the message is generally the responsibility of management). All media inquiries should be directed to Public Relations.</td></tr><tr id="4248beeb-6e5e-4e5c-8a41-dd5a38c008d0"><td class="cell-title"><a href="Responding%204ed8a/CSIRT%20Asso%20e6110/Management%204248b.html">Management</a></td><td class="cell-hmYM">Depending on the particular incident, you might involve only departmental managers, or you might involve managers across the entire organization. The appropriate management individual will vary according to the impact, location, severity, and type of incident.
+If you have a managerial point of contact, you can quickly identify the most appropriate individual for the specific circumstances. Management is responsible for approving and directing security policy.
+Management is also responsible for determining the total impact (both financial and otherwise) of the incident on the organization. Management directs the Communications Officer regarding which information should be disclosed to the media and determines the level of interaction between the Legal Representative and law enforcement agencies.</td></tr></tbody></table></div><h3 id="c7320b5a-6d8a-4955-bd9c-7b24105d0113" class=""><strong>Responding to an Incident</strong></h3><p id="50e723dd-d18d-4789-bc56-2e75dfaa7ba8" class="">In the event of an incident, the CSIRT will coordinate a response from the core CSIRT and will communicate with the associate members of the CSIRT. The following table shows the responsibilities of these individuals during the incident response process.</p><p id="9068e838-6437-4b9b-bcbe-0b26396b91b9" class="">
+</p><div id="9013fe0c-3f10-471b-94d7-067a29a7274f" class="collection-content"><h4 class="collection-title">Responsibilities of CSIRT During the Incident Response Process</h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>Activity</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>Role</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>Property</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span> 1</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span> 2</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span> 3</th></tr></thead><tbody><tr id="a284338f-b201-40a1-934a-a9940c7c3527"><td class="cell-title"><a href="Responding%204ed8a/Responsibi%209013f/Untitled%20a2843.html">Untitled</a></td><td class="cell-=dKl"><strong>CSIRT Incident Lead</strong></td><td class="cell-hj;O"><strong>IT Contact</strong></td><td class="cell-rqSI"><strong>Legal Representative</strong></td><td class="cell-UMRa"><strong>Communications Officer</strong></td><td class="cell-cWQ^"><strong>Management</strong></td></tr><tr id="c70ee953-5f37-4eea-ba9e-f7d426f1903b"><td class="cell-title"><a href="Responding%204ed8a/Responsibi%209013f/Initial%20As%20c70ee.html">Initial Assessment</a></td><td class="cell-=dKl">Owner</td><td class="cell-hj;O">Advises</td><td class="cell-rqSI">None</td><td class="cell-UMRa">None</td><td class="cell-cWQ^">None</td></tr><tr id="4bbb33af-bb7b-4d5c-a871-e2f470d02335"><td class="cell-title"><a href="Responding%204ed8a/Responsibi%209013f/Initial%20Re%204bbb3.html">Initial Response</a></td><td class="cell-=dKl">Owner</td><td class="cell-hj;O">Implements</td><td class="cell-rqSI">Updates</td><td class="cell-UMRa">Updates</td><td class="cell-cWQ^">Updates</td></tr><tr id="e986ac5a-16c9-4452-bba2-90f5362c391d"><td class="cell-title"><a href="Responding%204ed8a/Responsibi%209013f/Collects%20F%20e986a.html">Collects Forensic Evidence</a></td><td class="cell-=dKl">Implements</td><td class="cell-hj;O">Advises</td><td class="cell-rqSI">Owner</td><td class="cell-UMRa">None</td><td class="cell-cWQ^">None</td></tr><tr id="5cad44bc-2568-442a-8a59-27753837db63"><td class="cell-title"><a href="Responding%204ed8a/Responsibi%209013f/Implements%205cad4.html">Implements Temporary Fix</a></td><td class="cell-=dKl">Owner</td><td class="cell-hj;O">Implements</td><td class="cell-rqSI">Updates</td><td class="cell-UMRa">Updates</td><td class="cell-cWQ^">Advises</td></tr><tr id="4b96a03d-0b2c-47b6-88c1-d74b8c1443f4"><td class="cell-title"><a href="Responding%204ed8a/Responsibi%209013f/Sends%20Comm%204b96a.html">Sends Communication</a></td><td class="cell-=dKl">Advises</td><td class="cell-hj;O">Advises</td><td class="cell-rqSI">Advises</td><td class="cell-UMRa">Implements</td><td class="cell-cWQ^">Owner</td></tr><tr id="d0d8b522-2a6b-474d-86d5-2c4d2a96c144"><td class="cell-title"><a href="Responding%204ed8a/Responsibi%209013f/Check%20with%20d0d8b.html">Check with Local Law Enforcement</a></td><td class="cell-=dKl">Updates</td><td class="cell-hj;O">Updates</td><td class="cell-rqSI">Implements</td><td class="cell-UMRa">Updates</td><td class="cell-cWQ^">Owner</td></tr><tr id="bd8f3ab9-d49d-449f-a0ab-888d92d2b2db"><td class="cell-title"><a href="Responding%204ed8a/Responsibi%209013f/Implements%20bd8f3.html">Implements Permanent Fix</a></td><td class="cell-=dKl">Owner</td><td class="cell-hj;O">Implements</td><td class="cell-rqSI">Updates</td><td class="cell-UMRa">Updates</td><td class="cell-cWQ^">Updates</td></tr><tr id="61e4c3f3-66ba-4e76-89ce-d8dd514a410d"><td class="cell-title"><a href="Responding%204ed8a/Responsibi%209013f/Determines%2061e4c.html">Determines Financial Impact on Business</a></td><td class="cell-=dKl">Updates</td><td class="cell-hj;O">Updates</td><td class="cell-rqSI">Advises</td><td class="cell-UMRa">Updates</td><td class="cell-cWQ^">Owner</td></tr></tbody></table></div><h3 id="a0424377-c5f9-4505-b59c-8ec6de99bff9" class=""><strong>Defining an Incident Response Plan</strong></h3><p id="03ff8b91-f249-46b2-864d-e164c2bb0953" class="">All members of your IT environment should be aware of what to do in the event of an incident. The CSIRT will perform most actions in response to an incident, but all levels of your IT staff should be aware of how to report incidents internally. End users should report suspicious activity to the IT staff directly or through a help desk rather than directly to the CSIRT.</p><p id="2b73c3a5-b753-45d7-a124-b99137911466" class="">Every team member should review the incidence response plan in detail. Having the plan easily accessible to all IT staff will help to ensure that when an incident does occur, the right procedures are followed.</p><p id="0ddfd943-2e78-4d8e-8ffa-df4ebbecfcd8" class="">To instigate a successful incident response plan, you should:</p><ul id="251f640e-d786-4990-9691-61601a82dd24" class="bulleted-list"><li style="list-style-type:disc">Make an initial assessment.</li></ul><ul id="87bd62fc-d8a9-4089-8730-e39c9c8aec75" class="bulleted-list"><li style="list-style-type:disc">Communicate the incident.</li></ul><ul id="a39d8e49-c8c0-4d49-8c73-6003e0cd8949" class="bulleted-list"><li style="list-style-type:disc">Contain the damage and minimize the risk.</li></ul><ul id="d52ea116-994f-4ca7-b86d-e47f3222494e" class="bulleted-list"><li style="list-style-type:disc">Identify the type and severity of the compromise.</li></ul><ul id="f89fa682-b24c-47b0-b785-a370d7d451a8" class="bulleted-list"><li style="list-style-type:disc">Protect evidence.</li></ul><ul id="5a9d6588-d1df-42d4-bfac-14f86f278a24" class="bulleted-list"><li style="list-style-type:disc">Notify external agencies if appropriate.</li></ul><ul id="0ef83230-2463-4cc3-af3f-8c09fb10e95e" class="bulleted-list"><li style="list-style-type:disc">Recover systems.</li></ul><ul id="4f329325-62ab-48c3-a073-845fbdafd3dc" class="bulleted-list"><li style="list-style-type:disc">Compile and organize incident documentation.</li></ul><ul id="c7d23c3a-103d-4ed9-83a2-7d75ad5a4232" class="bulleted-list"><li style="list-style-type:disc">Assess incident damage and cost.</li></ul><ul id="e5c4a952-1a78-497d-a48e-fdadf4e37d3b" class="bulleted-list"><li style="list-style-type:disc">Review the response and update policies.</li></ul><p id="66d55bd2-0d1d-4c15-92e1-1a76a1b48c48" class="">These steps are not purely sequential. Rather, they happen throughout the incident. For example, documentation starts at the very beginning and continues throughout the entire life cycle of the incident; communication also happens throughout the entire incident.</p><p id="0476425c-4abc-4c54-b54c-6d7d6cd79d4b" class="">Other aspects of the process will work alongside each other. For example, as part of your initial assessment, you will gain an idea of the general nature of the attack. It is important to use this information to contain the damage and minimize risk as soon as possible. If you act quickly, you can help to save time and money, and your organization&#x27;s reputation.</p><p id="aa4c3796-197c-4091-a4eb-2cb8a5ea58f1" class="">However, until you understand the type and severity of the compromise in more detail, you will not be able to be truly effective in containing the damage and minimizing the risk. An overzealous response could even cause more damage than the initial attack. By working these steps alongside each other, you will get the best compromise between swift and effective action.</p><p id="7d3d53f1-f63d-4742-8de9-71e00eadef86" class=""><strong>Note:</strong> It is very important that you thoroughly test your incident response process before an incident occurs. Without thorough testing, you cannot be confident that the measures that you have in place will be effective in responding to incidents.</p><h3 id="b1f05faf-2845-475f-ae04-9f1d2839b3a4" class=""><strong>Making an Initial Assessment</strong></h3><p id="65e89b96-f244-41ae-9114-415f3c9019f4" class="">Many activities could indicate a possible attack on your organization. For example, a network administrator performing legitimate system maintenance might appear similar to someone launching some form of attack. In other cases, a badly configured system might lead to a number of false positives in an intrusion detection system, which could make it more difficult to spot genuine incidents.</p><p id="5a4c03e1-b429-42d8-85dc-2051eb81e407" class="">As part of your initial assessment, you should:</p><ul id="0b9e73c6-7293-48bc-a71e-388b985a32d0" class="bulleted-list"><li style="list-style-type:disc">Take steps to determine whether you are dealing with an actual incident or a false positive.</li></ul><ul id="b7f3f90b-2c9b-4ddc-8a46-19daed55f919" class="bulleted-list"><li style="list-style-type:disc">Gain a general idea of the type and severity of attack. You should gather at least enough information to begin communicating it for further research and to begin containing the damage and minimizing the risk.</li></ul><ul id="fb8b4211-d577-42ad-bc29-e85272756170" class="bulleted-list"><li style="list-style-type:disc">Record your actions thoroughly. These records will later be used for documenting the incident (whether actual or false).</li></ul><p id="ea6b9a41-70ea-4989-a287-08af13e98816" class=""><strong>Note:</strong> You should avoid false positives whenever possible; however, it is always better to act on a false positive than fail to act on a genuine incident. Your initial assessment should, therefore, be as brief as possible, yet still eliminate obvious false positives.</p><h3 id="f9a9b701-b760-43e0-a0c6-8c4cf788c54c" class=""><strong>Communicating the Incident</strong></h3><p id="97e0736f-09e9-4375-91e6-3acb6aab9e58" class="">Once you suspect that there is a security incident, you should quickly communicate the breach to the rest of the core CSIRT. The incident lead, along with the rest of the team, should quickly identify who needs to be contacted outside of the core CSIRT. This will help to ensure that appropriate control and incident coordination can be maintained, while minimizing the extent of the damage.</p><p id="602aa376-826b-4b95-aa54-b0333246b01a" class="">Be aware that damage can come in many forms, and that a headline in the newspaper describing a security breach can be much more destructive than many system intrusions. For this reason, and to prevent an attacker from being tipped off, only those playing a role in the incident response should be informed until the incident is properly controlled. Based on the unique situation, your team will later determine who needs to be informed of the incident. This could be anyone from specific individuals up to the entire company and external customers. Communication externally should be coordinated with the Legal Representative.</p><h3 id="93fadf62-b3df-4aca-9612-d2a656e79cf3" class=""><strong>Containing the Damage and Minimizing the Risks</strong></h3><p id="f6d81f47-3334-4002-963c-659f671fb33f" class="">By acting quickly to reduce the actual and potential effects of an attack, you can make the difference between a minor and a major one. The exact response will depend on your organization and the nature of the attack that you face. However, the following priorities are suggested as a starting point:</p><ol type="1" id="0a5da9d7-1219-4a4e-ac52-f9103a145096" class="numbered-list" start="1"><li><strong>Protect human life and people&#x27;s safety.</strong> This should, of course, always be your first priority.</li></ol><ol type="1" id="ee04da12-528b-475b-b489-3133411379e8" class="numbered-list" start="2"><li><strong>Protect classified and sensitive data.</strong> As part of your planning for incident response, you should clearly define which data is classified and which is sensitive. This will enable you to prioritize your responses in protecting the data.</li></ol><ol type="1" id="46c2fad4-850c-45cf-9766-f7f69d8305a7" class="numbered-list" start="3"><li><strong>Protect other data, including proprietary, scientific, and managerial data.</strong> Other data in your environment might still be of great value. You should act to protect the most valuable data first before moving on to other, less useful, data.</li></ol><ol type="1" id="f9cb6df6-12b7-4510-8de2-d5f957b4e33d" class="numbered-list" start="4"><li><strong>Protect hardware and software against attack.</strong> This includes protecting against loss or alteration of system files and physical damage to hardware. Damage to systems can result in costly downtime.</li></ol><ol type="1" id="b0bce1c0-29c1-4ad7-9431-9c8ce684343c" class="numbered-list" start="5"><li><strong>Minimize disruption of computing resources (including processes).</strong> Although uptime is very important in most environments, keeping systems up during an attack might result in greater problems later on. For this reason, minimizing disruption of computing resources should generally be a relatively low priority.</li></ol><p id="f9572d21-9183-42d9-8112-f3e436e87ec9" class="">There are a number of measures that you can take to contain the damage and minimize the risk to your environment. At a minimum, you should:</p><ul id="5052f5d4-f071-445e-a00b-c8db1a5ec839" class="bulleted-list"><li style="list-style-type:disc">Try to avoid letting attackers know that you are aware of their activities. This can be difficult, because some essential responses might alert attackers. For example, if there is an emergency meeting of the CSIRT, or you require an immediate change of all passwords, any internal attackers might know that you are aware of an incident.</li></ul><ul id="9dd24ee7-74ad-47ee-90df-35c100438a73" class="bulleted-list"><li style="list-style-type:disc">Compare the cost of taking the compromised and related systems offline against the risk of continuing operations. In the vast majority of cases, you should immediately take the system off the network. However, you might have service agreements in place that require keeping systems available even with the possibility of further damage occurring. Under these circumstances, you can choose to keep a system online with limited connectivity in order to gather additional evidence during an ongoing attack.In some cases, the damage and scope of an incident might be so extensive that you might have to take action that invokes the penalty clauses specified in your service level agreements. In any case, it is very important that the actions that you will take in the event of an incident are discussed in advance and outlined in your response plan so that immediate action can be taken when an attack occurs.</li></ul><ul id="12971e06-2872-4650-b9d3-d39ad632a5d7" class="bulleted-list"><li style="list-style-type:disc">Determine the access point(s) used by the attacker and implement measures to prevent future access. Measures might include disabling a modem, adding access control entries to a router or firewall, or increasing physical security measures.</li></ul><ul id="4b819c0c-2430-41ca-b663-304bbcc47d2d" class="bulleted-list"><li style="list-style-type:disc">Consider rebuilding a fresh system with new hard disks (the existing hard disks should be removed and put in storage as these can be used as evidence if you decide to prosecute attackers). Ensure that you change any local passwords. You should also change administrative and service account passwords elsewhere in your environment.</li></ul><h3 id="879051dc-f1b0-485c-a880-604f8270552e" class=""><strong>Identifying the Severity of the Compromise</strong></h3><p id="8d089588-f4f2-45e8-a246-4bff87e877db" class="">To be able to recover effectively from an attack, you need to determine how seriously your systems have been compromised. This will determine how to further contain and minimize the risk, how to recover, how quickly and to whom you communicate the incident, and whether to seek legal redress.</p><p id="2f3dcfab-5e31-492a-8744-981dc29f81b9" class="">You should attempt to:</p><ul id="aa27e195-1408-4a94-bb8a-9d380e0f6fe7" class="bulleted-list"><li style="list-style-type:disc">Determine the nature of the attack (this might be different than the initial assessment suggests).</li></ul><ul id="76123a49-e21c-4b3f-991c-a15a19cacafd" class="bulleted-list"><li style="list-style-type:disc">Determine the attack point of origin.</li></ul><ul id="c2f646c8-38c5-4dbf-99e8-5fd05c28125f" class="bulleted-list"><li style="list-style-type:disc">Determine the intent of the attack. Was the attack specifically directed at your organization to acquire specific information, or was it random?</li></ul><ul id="ea6dbfd3-a77b-4c19-bb1c-23edf69492ca" class="bulleted-list"><li style="list-style-type:disc">Identify the systems that have been compromised.</li></ul><ul id="84b582f7-c904-4662-ab3a-701d4b0e3419" class="bulleted-list"><li style="list-style-type:disc">Identify the files that have been accessed and determine the sensitivity of those files.</li></ul><p id="13b059f8-c394-4324-8b42-7cab0eea8ad5" class="">By performing these actions, you will be able to determine the appropriate responses for your environment. A good incident response plan will outline specific procedures to follow as you learn more about the attack. Generally, the nature of the attack symptoms will determine the order in which you follow the procedures defined in your plan. Since time is crucial, less time-consuming procedures should generally be carried out before more lengthy ones. To help determine the severity of the compromise, you should:</p><ul id="a23d3141-24c6-4690-8a54-17352447ad65" class="bulleted-list"><li style="list-style-type:disc">Contact other members of the response team to inform them of your findings, have them verify your results, determine whether they are aware of related or other potential attack activity, and help identify whether the incident is a false positive. In some cases, what might appear to be a genuine incident on initial assessment will prove to be a false positive.</li></ul><ul id="8dcda1ad-a6a0-43e9-9003-d41dc0c31655" class="bulleted-list"><li style="list-style-type:disc">Determine whether unauthorized hardware has been attached to the network or whether there are any signs of unauthorized access through the compromise of physical security controls.</li></ul><ul id="5d4ec7fc-3de2-4b57-bbc1-7f583845ef73" class="bulleted-list"><li style="list-style-type:disc">Examine key groups (domain administrators, administrators, and so on) for unauthorized entries.</li></ul><ul id="5f64d844-9941-41ff-abeb-8c0a1d5152c8" class="bulleted-list"><li style="list-style-type:disc">Search for security assessment or exploitation software. Cracking utilities are often found on compromised systems during evidence gathering.</li></ul><ul id="8dcc8721-4ec3-4298-bceb-0e29c69fe54c" class="bulleted-list"><li style="list-style-type:disc">Look for unauthorized processes or applications currently running or set to run using the startup folders or registry entries.</li></ul><ul id="298797c0-6e1e-4beb-a199-7e3bfbeba6b0" class="bulleted-list"><li style="list-style-type:disc">Search for gaps in, or the absence of, system logs.</li></ul><ul id="f2930b8e-06d5-4aa8-91f8-86221b69d5f9" class="bulleted-list"><li style="list-style-type:disc">Review intrusion detection system logs for signs of intrusion, which systems might have been affected, methods of attack, time and length of attack, and the overall extent of potential damage.</li></ul><ul id="faf8d0b3-ba67-4dc7-9354-37c0598a71d1" class="bulleted-list"><li style="list-style-type:disc">Examine other log files for unusual connections; security audit failures; unusual security audit successes; failed logon attempts; attempts to log on to default accounts; activity during nonworking hours; file, directory, and share permission changes; and elevated or changed user permissions.</li></ul><ul id="43871135-8270-4a65-93dc-9f48767bd423" class="bulleted-list"><li style="list-style-type:disc">Compare systems to previously conducted file/system integrity checks. This enables you to identify additions, deletions, modifications, and permission and control modifications to the file system and registry. You can save a lot of time when responding to incidents if you identify exactly what has been compromised and what areas need to be recovered.</li></ul><ul id="72058aa6-b525-4b70-845d-957d574e5cf2" class="bulleted-list"><li style="list-style-type:disc">Search for sensitive data, such as credit card numbers and employee or customer data, that might have been moved or hidden for future retrieval or modifications. You might also have to check systems for non-business data, illegal copies of software, and e-mail or other records that might assist in an investigation. If there is a possibility of violating privacy or other laws by searching on a system for investigative purposes, you should contact your legal department before you proceed.</li></ul><ul id="19582092-b88e-4300-aede-72c879273b0c" class="bulleted-list"><li style="list-style-type:disc">Match the performance of suspected systems against their baseline performance levels. This of course presupposes that baselines have been created and properly updated.</li></ul><p id="83ca7426-0d57-4cb3-8671-ed75063f0022" class="">When determining which systems have been compromised and how, you will generally be comparing your systems against a previously recorded baseline of the same system before it was compromised. Assuming that a recent system shadow copy is sufficient for comparison might put you in a difficult situation if the previous shadow copy comes from a system that has already been attacked.</p><p id="ba3f7aaa-9415-46ed-aeb4-371317bbf077" class=""><strong>Note:</strong> Tools such as EventCombMT, DumpEL, and Microsoft Operations Manager (MOM) can help you determine how much a system has been attacked. Third-party intrusion detection systems give advance warning of attacks, and other tools will show file changes on your systems.</p><h3 id="e12f249a-b36e-4b71-9f94-8cd6f16d8929" class=""><strong>Protecting Evidence</strong></h3><p id="46774dba-925c-450e-9854-a1148ac05276" class="">In many cases, if your environment has been deliberately attacked, you may want to take legal action against the perpetrators. In order to preserve this option, you should gather evidence that can be used against them, even if a decision is ultimately made not to pursue such action. It is extremely important to back up the compromised systems as soon as possible. Back up the systems prior to performing any actions that could affect data integrity on the original media.</p><p id="db06d05a-94d4-48d3-b8df-655a247064e0" class="">Someone skilled in computer forensics should make at least two complete bit-for-bit backups of the entire system using new, never-before-used media. At least one backup should be on a write-once, read-many media such as a CD-R or DVD-R. This backup should be used only for prosecution of the offender and should be physically secured until needed.</p><p id="349370af-1871-4dff-bd78-4462fe406f5b" class="">The other backup can be used for data recovery. These backups should not be accessed except for legal purposes, so you should physically secure them. You will also need to document information about the backups, such as who backed up the systems, at what time, how they were secured, and who had access to them.</p><p id="5c4f0aa9-cdba-4873-befe-ef21e0c3fedf" class="">Once the backups are performed, you should remove the original hard disks and store them in a physically secure location. These disks can be used as forensic evidence in the event of a prosecution. New hard disks should be used to restore the system.</p><p id="3909ff15-4ad7-4f6d-ac75-a76386f2c97c" class="">In some cases, the benefit of preserving data might not equal the cost of delaying the response and recovery of the system. The costs and benefits of preserving data should be compared to those of faster recovery for each event.</p><p id="a7efcb11-2377-404d-ad8d-c10d5c200153" class="">For extremely large systems, comprehensive backups of all compromised systems might not be feasible. Instead, you should back up all logs and selected, breached portions of the system.</p><p id="a43baac5-8374-46b5-99ee-1aad81472519" class="">If possible, back up system state data, as well. It can take months or years until prosecution takes place, so it is important to have as much detail of the incident archived for future use.</p><p id="fa97401c-0711-49e7-a342-402205939533" class="">Often the most difficult legal aspect of prosecuting a cyber crime is collecting evidence in a manner acceptable to the particular jurisdiction&#x27;s laws of evidence submission. Hence, the most critical component to the forensic process is detailed and complete documentation of how systems were handled, by whom, and when, in order to demonstrate reliable evidence. Sign and date every page of the documentation.</p><p id="514f923a-081c-4559-8ae5-7dcc69002fc8" class="">Once you have working, verified backups, you can wipe the infected systems and rebuild them. This will enable you to begin running your operation again. The backups provide the critical, untainted evidence required for prosecution. A different backup than the forensic backup should be used to restore data.</p><h3 id="ce030781-b33e-48b3-a4fc-e5b75aeaf93e" class=""><strong>Notifying External Agencies</strong></h3><p id="fe68afd0-6acf-40ca-921d-2bf84c56fd36" class="">After the incident has been contained and data preserved for potential prosecution, you should consider whether you need to start notifying appropriate external entities. All external disclosures should be coordinated with your Legal Representative. Potential agencies include local and national law enforcement, external security agencies, and virus experts. External agencies can provide technical assistance, offer faster resolution and provide information learned from similar incidents to help you fully recover from the incident and prevent it from occurring in the future.</p><p id="ac8cb3c2-d70f-47bd-96fd-2852b798e10f" class="">For particular industries and types of breaches, you might have to notify customers and the general public, particularly if customers might be affected directly by the incident.</p><p id="3b20250e-64a2-4c9d-979e-cf860f90e2a2" class="">If the event caused substantial financial impact, you might want to report the incident to law enforcement agencies.</p><p id="9aac9289-788e-42a2-8969-d89e8b4fe013" class="">For higher profile companies and incidents, the media might be involved. Media attention to a security incident is rarely desirable, but it is often unavoidable. Media attention can enable your organization to take a proactive stance in communicating the incident. At a minimum, the incident response procedures should clearly define the individuals authorized to speak to media representatives.</p><p id="f3087de6-847b-42e1-85e5-b0e9bc4a2357" class="">Normally the public relations department within your organization will speak to the media. You should not attempt to deny to the media that an incident has occurred, because doing so is likely to damage your reputation more than proactive admission and visible responses ever will. This does not mean that you need to notify the media for each and every incident regardless of its nature or severity. You should assess the appropriate media response on a case-by-case basis.</p><h3 id="6e31f22f-2e48-4531-9eb4-9ed5692c4c08" class=""><strong>Recovering Systems</strong></h3><p id="0d89097a-6018-4247-9b37-cb924a03ab3d" class="">How you recover your system will generally depend on the extent of the security breach. You will need to determine whether you can restore the existing system while leaving intact as much as possible, or if it is necessary to completely rebuild the system.</p><p id="1268f5f1-a472-4fe5-af14-fe4f1931b1f6" class="">Restoring data presumes, of course, that you have clean backups ? backups made before the incident occurred. File integrity software can help pinpoint the first occurrence of damage. If the software alerts you to a changed file, then you know that the backup you made before the alert is a good one and should be preserved for use when rebuilding the compromised system.</p><p id="c398eb72-77bf-43ee-ad39-e48fdf7459ac" class="">An incident could potentially corrupt data for many months prior to discovery. It is, therefore, very important that as part of your incident response process, you determine the duration of the incident. (File/system integrity software and intrusion detection systems can assist you in this.) In some cases, the latest or even several prior backups might not be long enough to get to a clean state, so you should regularly archive data backups in a secure off-site location.</p><h3 id="b5d50186-abd6-4634-bd1f-4bb260cc9fe4" class=""><strong>Compiling and Organizing Incident Evidence</strong></h3><p id="6fd78cf4-a5e9-456a-aa7c-adbc1681143f" class="">The CSIRT should thoroughly document all processes when dealing with any incident. This should include a description of the breach and details of each action taken (who took the action, when they took it, and the reasoning behind it). All people involved with access must be noted throughout the response process.</p><p id="cfca9787-0988-465a-a462-098b3b7b2b7d" class="">Afterward, the documentation should be chronologically organized, checked for completeness, and signed and reviewed with management and legal representatives. You will also need to safeguard the evidence collected in the protect evidence phase. You should consider having two people present during all phases who can sign off on each step. This will help reduce the likelihood of evidence being inadmissible and the possibility of evidence being modified afterward.</p><p id="896a1d8c-1ce4-4d6b-b23f-27faf6a0a5d9" class="">Remember that the offender might be an employee, contractor, temporary employee, or other insider within your organization. Without thorough, detailed documentation, identifying an inside offender will be very difficult. Proper documentation also gives you the best chance of prosecuting offenders.</p><h3 id="221c5095-399b-4617-879a-7932d0c2d10d" class=""><strong>Assessing Incident Damage and Cost</strong></h3><p id="ad2660ab-5c36-496b-80b2-0ac23c0b392b" class="">When determining the damage to your organization, you should consider both direct and indirect costs. Incident damage and costs will be important evidence needed if you decide to pursue any legal action. These could include:</p><ul id="924f74d2-3d84-4a8e-ad67-4ef7415e6e54" class="bulleted-list"><li style="list-style-type:disc">Costs due to the loss of competitive edge from the release of proprietary or sensitive information.</li></ul><ul id="134decf6-bb49-4ff7-9666-b271b773b7c4" class="bulleted-list"><li style="list-style-type:disc">Legal costs.</li></ul><ul id="a2d84f3f-9658-450f-a741-34b07355063b" class="bulleted-list"><li style="list-style-type:disc">Labor costs to analyze the breaches, reinstall software, and recover data.</li></ul><ul id="3825b79d-4e97-40af-870c-496e46b35a09" class="bulleted-list"><li style="list-style-type:disc">Costs relating to system downtime (for example, lost employee productivity, lost sales, replacement of hardware, software, and other property).</li></ul><ul id="426d122b-f068-4ff1-9e0b-b9fbc8bc61d4" class="bulleted-list"><li style="list-style-type:disc">Costs relating to repairing and possibly updating damaged or ineffective physical security measures (locks, walls, cages, and so on).</li></ul><ul id="cd6b5e95-34f8-40dd-81d9-2f998c218c8b" class="bulleted-list"><li style="list-style-type:disc">Other consequential damages such as loss of reputation or customer trust.</li></ul><h3 id="7cfe350b-82ce-4141-9222-0f44005d3b54" class=""><strong>Reviewing Response and Updating Policies</strong></h3><p id="607362f8-17f8-42a6-bd79-6f91b1c6b36c" class="">Once the documentation and recovery phases are complete, you should review the process thoroughly. Determine with your team which steps were executed successfully and which mistakes were made. In almost all cases, you will find some processes that need to be modified so you can better handle future incidents.</p><p id="dd78537d-ca86-45ff-a045-e1ced7b71087" class="">You will find weaknesses in your incident response plan; the point of this post-mortem exercise ? you are looking for opportunities for improvement, which should initiate a whole new round of the incident response planning process.</p></div></article></body></html>

@@ -1,0 +1,657 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Understanding the Threat Model</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="a156b163-83f2-4ba0-83d6-dd07ab141524" class="page sans"><header><h1 class="page-title">Understanding the Threat Model</h1><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-blue">notes</span></td></tr></tbody></table></header><div class="page-body"><p id="322a4d92-fc8c-46ff-b448-9706a53589d9" class="">We have released the <strong>ThreatModel™</strong><strong> for Amazon S3, free and open source</strong>. You can download it via <a href="https://github.com/trustoncloud/threatmodel-for-aws-s3">GitHub</a>.</p><p id="3419e44f-edcb-42d1-b3e2-af1809281416" class="">The Shared Responsibility Model is an easy-to-understand diagram by Cloud Providers. The reality is that: 1) the Shared Responsibility Model is the responsibility of the customer, and 2) it is difficult to execute as the line between responsibilities is not clearly mapped out.</p><figure id="110489c9-1993-4287-a70c-8e993c77245b" class="image"><a href="https://www.trustoncloud.com/wp-content/uploads/2021/08/shared_responsability_model_vs_reality-1.png"><img src="https://www.trustoncloud.com/wp-content/uploads/2021/08/shared_responsability_model_vs_reality-1.png"/></a></figure><p id="2d48370f-a6c6-469e-9e61-0c2d5d242941" class="">TrustOnCloud helps customers make sense of the shared responsibility model, and accelerates secure adoption of each Cloud Service. We use threat modeling to ensure that <strong>Security Architects, DevOps, and Security Governance teams are able to make good and bias-free security decisions</strong>.</p><p id="ffebcdd3-1aa7-41c7-9131-9051ece75925" class="">With 70+ ThreatModels published for our customers, we decided to release the ThreatModel for Amazon S3 to all, in order to <strong>clearly define customer responsibilities </strong>and<strong> reduce security bad days for the AWS community, now and in the future</strong>.</p><p id="cbc6f958-45ad-4ea5-bced-f2e994dcb564" class="">We will use this blog post to walk you through how you can use this ThreatModel effectively.</p><h3 id="6afdbe4c-ff27-4ab3-b905-070ab29e318c" class=""><strong>How to use the ThreatModel for Amazon S3</strong></h3><p id="53919b24-0ef5-4c74-b026-23c969f8ce43" class="">To get started, the document might feel overwhelming with its 160+ pages. With its 32 distinct features, Amazon S3, the Simple Storage Service, is no longer “Simple”, but I digress. All pages of the ThreatModel are relevant for at least a use case; your use case might not need all the pages.</p><p id="87207360-1a77-4d29-a749-81cad53aa2f8" class="">Common use cases we see from our customers are:</p><ol type="1" id="d5403090-da5d-4532-8bcf-c015c5c7e6de" class="numbered-list" start="1"><li><strong>Covering the “best practices” (e.g. best security/effort ratio)</strong></li></ol><ol type="1" id="27844fba-21b8-4b79-9aa9-730e21c6f130" class="numbered-list" start="2"><li><strong>Reviewing the service depending on your application(s), and implementing the controls based on your risk tolerance</strong></li></ol><ol type="1" id="8c5a9da9-cef5-410f-8b15-44c1ee0187fd" class="numbered-list" start="3"><li><strong>Technology onboarding for large enterprises/agencies</strong></li></ol><ol type="1" id="e99e5854-d299-4f67-81ab-af75c1b33888" class="numbered-list" start="4"><li><strong>Compliance mapping to demonstrate a risk-based approach and formulate an action plan</strong></li></ol><p id="698b2902-d44d-4ea8-9cb5-c9460add2cb9" class="">For each use case, you will find below where to look, what to do, and for whom it typically makes sense.</p><p id="cfe7fffc-0b6d-4fba-887e-4df1c16ebc7b" class=""><strong>1. Covering the “best practices” (e.g. best security/effort ratio)</strong></p><p id="cc848caa-e782-419e-8f21-75c6dde5c164" class="">Where to look in the ThreatModel: Go to page 139 [<em>Appendix 1 – Prioritized list for control implementation</em>]. You will have a list of all the controls ordered by priority. It is risk-based, without the hassle to go through all the risks. We built this priority using our list of threats, the impact of the controls on the threats, and the effort it takes to implement the controls.</p><figure id="e0fea458-912f-43c3-a8eb-d69cab3ff47a" class="image"><a href="https://www.trustoncloud.com/wp-content/uploads/2021/08/s3_best_practices-1024x586.png"><img src="https://www.trustoncloud.com/wp-content/uploads/2021/08/s3_best_practices-1024x586.png"/></a></figure><p id="f2dfe0e0-8e8e-4b0b-af04-b33b542c914c" class="">What to do: review that you implemented the controls starting with the “Very High” priority (using the implementation column). Test your controls actually work (using the testing column). Note that some controls might not be relevant for your usage of the service, feel free to skip them.</p><p id="9fc4915b-d76f-416a-b11a-31d3e21739fd" class="">Typically for: DevOps team, and/or not-too-sensitive workloads (or what I like to call it “if it gets owned, we will get a bad week, not a bad year”)</p><p id="ea915dfd-3929-4272-8d03-a925a68492fd" class=""><strong>2. Reviewing the service depending on your </strong><strong>application</strong><strong>(s), and implementing the controls based on your risk tolerance (e.g. high security but ad hoc)</strong></p><p id="62123a68-88f6-4219-aafb-ef4fd4cdd331" class="">Where to look in the ThreatModel: Go to page 5 [<em>Feature Classes</em>]. We call feature classes, the portion of the service you can enable (exposing you to risk on those APIs) while being able to disable the rest. You can then go deeper with each feature class page with its Data Flow Diagram, and its associated threats and controls.</p><figure id="782fd289-2448-4f1c-a73d-a5c5cd0ef56f" class="image"><a href="https://www.trustoncloud.com/wp-content/uploads/2021/08/S3FC-1024x564.png"><img src="https://www.trustoncloud.com/wp-content/uploads/2021/08/S3FC-1024x564.png"/></a></figure><p id="64ce8067-2468-465f-ab60-79bc98700cc4" class="">What to do: Identify the feature classes you intend to use during a threat modeling session with the DevOps team. Review each threat (at least Medium and above) and their mitigating controls. Decide what controls (or levels of mitigation impact) is required for each threat to satisfy your risk tolerance.</p><p id="9162d46e-0cd4-4767-84d7-f544c4198592" class="">Typically for: Security Architect, and/or for sensitive workloads (typically having reputational risks or regulatory risks)</p><p id="116bad66-8ec7-43b9-b58e-bcdad2d3defc" class=""><strong>3. Technology onboarding for large enterprises/agencies (if you are required to dive deep – or enjoying – like as if it were the Mariana Trench)</strong></p><p id="ecba0c91-d263-457b-85bb-0a44505c49c1" class="">Where to look in the ThreatModel: Everywhere. Typically at this point, there is a decision from the enterprise/agency to use the service or not. We typically walk our customers through the relevant sections with our Cloud Threat Researchers.</p><figure id="53aed326-e842-4fd3-9669-6a2cd47b37c2" class="image"><a href="https://www.trustoncloud.com/wp-content/uploads/2021/08/S3T-1024x760.png"><img src="https://www.trustoncloud.com/wp-content/uploads/2021/08/S3T-1024x760.png"/></a></figure><p id="a672eb7d-428f-4c77-ac46-8387a157353c" class="">What to do: Once the whole document is reviewed, some of our customers decided not to use a service for the highest application criticality or block certain features (looking at you Torrent S3 Object); or to take an exception-based approach. For other cases, the service can progress to their internal next steps. For example, building infrastructure-as-code templates that application owners must use, or defining the use cases to configure as IOC events and in your CSPM (e.g. Config Rules).</p><p id="f21cb425-9320-454e-85d7-be372b3c13d1" class="">Typically for: Cloud Enterprise Security and GRC, for mass adoption of Cloud Services</p><p id="bb763726-8328-4a78-ba14-f926fbcd0717" class=""><strong>4. Compliance mapping to demonstrate a risk-based approach, gap analysis and formulating an action plan (where compliance comes in handy)</strong></p><p id="1b796a66-15c6-4fb8-b605-fdbbe36443db" class="">Where to look in the ThreatModel: Go to page 132 [<em>Compliance Mapping</em>]. You will find a mapping from S3 controls to PCI DSS v3.2. The document supports over 100 Compliance frameworks and standards using the <a href="https://www.securecontrolsframework.com/secure-controls-framework">Secure Control Framework</a>. Our mappings are based on compliance requirements mapped to security objectives and their underlying security activities. The activities are prioritized using our risk-based approach anchored in identifying threats on the service.</p><figure id="93ed9afc-1585-46c5-abdf-0db90e5e53e2" class="image"><a href="https://www.trustoncloud.com/wp-content/uploads/2021/08/S3CM-1024x570.png"><img src="https://www.trustoncloud.com/wp-content/uploads/2021/08/S3CM-1024x570.png"/></a></figure><p id="bdffc439-fa55-4b18-aa37-022f771480a1" class="">What to do: Review how you address the compliance requirements that you are subject to. Request evidence of the implementation and testing of the controls. Track the completion of any gaps.</p><p id="8c054b62-3268-428a-9009-3128fb194629" class="">Typically for: Compliance specialists, auditors, regulators</p><h3 id="5d6e9e6a-96ae-4d41-94fc-5ca3cba47e61" class="">Conclusion</h3><p id="1c3cc04d-9e0c-4fba-a378-6b279d9d7e4e" class="">To be <strong>the last S3 security document we’ll ever need</strong>, there is a caveat: it needs to be updated (very) regularly, due to AWS rapid pace of innovation.</p><figure id="4b4dae28-731a-47bf-afec-864be5bd1e54" class="image"><a href="https://www.trustoncloud.com/wp-content/uploads/2021/08/aws_pace_of_innovation.png"><img src="https://www.trustoncloud.com/wp-content/uploads/2021/08/aws_pace_of_innovation.png"/></a></figure><p id="b5be8678-7be9-4822-8960-2335b08a8ce8" class="">In the last year alone, we tracked and analyzed over 3,500 events from new features, changes, bugs, etc. New attack techniques are discovered regularly by our researchers, our customers or the community. For that reason, we will keep updating this <a href="https://github.com/trustoncloud/threatmodel-for-aws-s3/">ThreatModel for Amazon S3</a> on a regular basis, and welcome any <a href="https://github.com/trustoncloud/threatmodel-for-aws-s3">contribution</a> from the community.</p></div></article></body></html>

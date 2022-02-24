@@ -1,0 +1,756 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Azure WAF Log Resource</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="f1a0035e-db49-47bd-939d-284049dd9044" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">⚙️</span></div><h1 class="page-title">Azure WAF Log <strong>Resource</strong></h1><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-pink">Azure</span><span class="selected-value select-value-color-purple">Notes</span></td></tr><tr class="property-row property-row-url"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesUrl"><path d="M3.73333,3.86667 L7.46667,3.86667 C8.49613,3.86667 9.33333,4.70387 9.33333,5.73333 C9.33333,6.7628 8.49613,7.6 7.46667,7.6 L6.53333,7.6 C6.01813,7.6 5.6,8.0186 5.6,8.53333 C5.6,9.04807 6.01813,9.46667 6.53333,9.46667 L7.46667,9.46667 C9.5284,9.46667 11.2,7.79507 11.2,5.73333 C11.2,3.6716 9.5284,2 7.46667,2 L3.73333,2 C1.6716,2 0,3.6716 0,5.73333 C0,7.124 0.762067,8.33453 1.88953,8.97713 C1.87553,8.83107 1.86667,8.6836 1.86667,8.53333 C1.86667,7.92013 1.98753,7.33447 2.2036,6.7978 C1.99267,6.4954 1.86667,6.12953 1.86667,5.73333 C1.86667,4.70387 2.70387,3.86667 3.73333,3.86667 Z M12.1095,5.28907 C12.1231,5.4356 12.1333,5.58307 12.1333,5.73333 C12.1333,6.34607 12.0101,6.9294 11.7931,7.46513 C12.0059,7.768 12.1333,8.13573 12.1333,8.53333 C12.1333,9.5628 11.2961,10.4 10.2667,10.4 L6.53333,10.4 C5.50387,10.4 4.66667,9.5628 4.66667,8.53333 C4.66667,7.50387 5.50387,6.66667 6.53333,6.66667 L7.46667,6.66667 C7.98187,6.66667 8.4,6.24807 8.4,5.73333 C8.4,5.2186 7.98187,4.8 7.46667,4.8 L6.53333,4.8 C4.4716,4.8 2.8,6.4716 2.8,8.53333 C2.8,10.59507 4.4716,12.2667 6.53333,12.2667 L10.2667,12.2667 C12.3284,12.2667 14,10.59507 14,8.53333 C14,7.14267 13.2375,5.93167 12.1095,5.28907 Z"></path></svg></span>URL</th><td><a href="https://docs.microsoft.com/en-us/azure/web-application-firewall/ag/web-application-firewall-logs" class="url-value">https://docs.microsoft.com/en-us/azure/web-application-firewall/ag/web-application-firewall-logs</a></td></tr></tbody></table></header><div class="page-body"><h1 id="6e038226-a96e-4b39-8e09-e066913f1caa" class=""><strong>Resource logs for Azure Web Application Firewall</strong></h1><p id="0103f3a5-76f4-4e1b-99a3-98c4ecb3dcd0" class="">
+</p><h2 id="38842ab4-c2b8-4fd1-8f65-78d0d1387f3d" class=""><strong>Diagnostic logs</strong></h2><p id="85983e85-c3ed-4c12-9c6d-f35e584c5a72" class="">You can use different types of logs in Azure to manage and troubleshoot application gateways. You can access some of these logs through the portal. All logs can be extracted from Azure Blob storage and viewed in different tools, such as <a href="https://docs.microsoft.com/en-us/azure/azure-monitor/insights/azure-networking-analytics">Azure Monitor logs</a>, Excel, and Power BI. You can learn more about the different types of logs from the following list:</p><ul id="74658730-53b8-4697-82f5-e43c8965d98c" class="bulleted-list"><li style="list-style-type:disc"><strong>Activity log</strong>: You can use <a href="https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/activity-log">Azure activity logs</a> to view all operations that are submitted to your Azure subscription, and their status. Activity log entries are collected by default, and you can view them in the Azure portal.</li></ul><ul id="23c7cdda-4a1e-475d-8200-4770661fceee" class="bulleted-list"><li style="list-style-type:disc"><strong>Access Resource log</strong>: You can use this log to view Application Gateway access patterns and analyze important information. This includes the caller&#x27;s IP, requested URL, response latency, return code, and bytes in and out. An access log is collected every 300 seconds. This log contains one record per instance of Application Gateway. The Application Gateway instance is identified by the instanceId property.</li></ul><ul id="96b5c0a9-8b05-484a-93af-c2bd952207bb" class="bulleted-list"><li style="list-style-type:disc"><strong>Performance Resource log</strong>: You can use this log to view how Application Gateway instances are performing. This log captures performance information for each instance, including total requests served, throughput in bytes, total requests served, failed request count, and healthy and unhealthy back-end instance count. A performance log is collected every 60 seconds. The Performance log is available only for the v1 SKU. For the v2 SKU, use <a href="https://docs.microsoft.com/en-us/azure/application-gateway/application-gateway-metrics">Metrics</a> for performance data.</li></ul><ul id="5492f1c1-70e1-42c8-b442-7527a942e987" class="bulleted-list"><li style="list-style-type:disc"><strong>Firewall Resource log</strong>: You can use this log to view the requests that are logged through either detection or prevention mode of an application gateway that is configured with the web application firewall.</li></ul><p id="2e9b0617-907e-4f16-aac9-9b8e38f05211" class=""><strong>Note</strong></p><p id="1b3bfc5f-9e3c-4537-ab48-088a7acec2bd" class="">Logs are available only for resources deployed in the Azure Resource Manager deployment model. You cannot use logs for resources in the classic deployment model. For a better understanding of the two models, see the <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/deployment-models"><strong>Understanding Resource Manager deployment and classic deployment</strong></a> article.</p><p id="22a00b24-5921-4731-a24d-a45afc1eb82f" class="">You have three options for storing your logs:</p><ul id="c3d20a79-a9c0-49ea-8a28-7cd89cd9a8af" class="bulleted-list"><li style="list-style-type:disc"><strong>Storage account</strong>: Storage accounts are best used for logs when logs are stored for a longer duration and reviewed when needed.</li></ul><ul id="e04359e3-b7f9-4b50-8581-99ea5dd1e55d" class="bulleted-list"><li style="list-style-type:disc"><strong>Event hubs</strong>: Event hubs are a great option for integrating with other security information and event management (SIEM) tools to get alerts on your resources.</li></ul><ul id="34873aef-756d-4b7c-8b7d-22779548e38c" class="bulleted-list"><li style="list-style-type:disc"><strong>Azure Monitor logs</strong>: Azure Monitor logs is best used for general real-time monitoring of your application or looking at trends.</li></ul><h3 id="94c07176-f334-4127-b6b9-473beb6ae089" class=""><strong>Enable logging through PowerShell</strong></h3><p id="40189d8e-5b67-450f-90f5-42c5cbd6ed99" class="">Activity logging is automatically enabled for every Resource Manager resource. You must enable access and performance logging to start collecting the data available through those logs. To enable logging, use the following steps:</p><ol type="1" id="924116af-b736-45e4-a827-23911bd2a4c1" class="numbered-list" start="1"><li>Note your storage account&#x27;s resource ID, where the log data is stored. This value is of the form: /subscriptions/&lt;subscriptionId&gt;/resourceGroups/&lt;resource group name&gt;/providers/Microsoft.Storage/storageAccounts/&lt;storage account name&gt;. You can use any storage account in your subscription. You can use the Azure portal to find this information.<figure id="20d55edc-b247-45d9-af42-c39d432f6fe8" class="image"><a href="https://docs.microsoft.com/en-us/azure/web-application-firewall/media/web-application-firewall-logs/diagnostics1.png"><img src="https://docs.microsoft.com/en-us/azure/web-application-firewall/media/web-application-firewall-logs/diagnostics1.png"/></a></figure></li></ol><ol type="1" id="0f5071b5-3d02-491e-93b9-6ad0c697c0bb" class="numbered-list" start="2"><li>Note your application gateway&#x27;s resource ID for which logging is enabled. This value is of the form: /subscriptions/&lt;subscriptionId&gt;/resourceGroups/&lt;resource group name&gt;/providers/Microsoft.Network/applicationGateways/&lt;application gateway name&gt;. You can use the portal to find this information.<figure id="8160c87a-c76b-4d94-b172-476c8647e20e" class="image"><a href="https://docs.microsoft.com/en-us/azure/web-application-firewall/media/web-application-firewall-logs/diagnostics2.png"><img src="https://docs.microsoft.com/en-us/azure/web-application-firewall/media/web-application-firewall-logs/diagnostics2.png"/></a></figure></li></ol><ol type="1" id="c1cac300-820c-4ba1-9385-499d7328c364" class="numbered-list" start="3"><li>Enable resource logging by using the following PowerShell cmdlet:<p id="2cb161cd-b2e0-4e46-acdc-f1389ac5ae3f" class="">PowerShellCopy</p><pre id="a889f7b4-1f8d-428b-8872-fdcb4394e1c8" class="code code-wrap"><code>Set-AzDiagnosticSetting  -ResourceId /subscriptions/&lt;subscriptionId&gt;/resourceGroups/&lt;resource group name&gt;/providers/Microsoft.Network/applicationGateways/&lt;application gateway name&gt; -StorageAccountId /subscriptions/&lt;subscriptionId&gt;/resourceGroups/&lt;resource group name&gt;/providers/Microsoft.Storage/storageAccounts/&lt;storage account name&gt; -Enabled $true
+</code></pre></li></ol><p id="03c3d231-b884-45a3-8715-98876ca17777" class=""><strong>Tip</strong></p><p id="03a50220-2b4e-4959-8dbc-a6e196475761" class="">Activity logs do not require a separate storage account. The use of storage for access and performance logging incurs service charges.</p><h3 id="33d8aa20-df62-4961-af82-9f21244c2012" class=""><strong>Enable logging through the Azure portal</strong></h3><ol type="1" id="d6ddaf20-e625-4bb8-93fd-0625b40d33ad" class="numbered-list" start="1"><li>In the Azure portal, find your resource and select <strong>Diagnostic settings</strong>.<p id="b7feb9ca-1a64-4ed8-8da4-5b61c98f80c6" class="">For Application Gateway, three logs are available:</p><ul id="748fbfaa-0f59-4783-b85a-5ebfd6bf73e4" class="bulleted-list"><li style="list-style-type:disc">Access log</li></ul><ul id="bd31f0bb-a611-497f-ba90-a0ed7c0e1552" class="bulleted-list"><li style="list-style-type:disc">Performance log</li></ul><ul id="052f7fbc-3998-47d8-8c57-783f83cb8ccb" class="bulleted-list"><li style="list-style-type:disc">Firewall log</li></ul></li></ol><ol type="1" id="ff33b91b-f7f4-4206-a00a-f455baa68c76" class="numbered-list" start="2"><li>To start collecting data, select <strong>Turn on diagnostics</strong>.<figure id="2e737da7-6d2e-4e3d-b5e9-01c83a551a3e" class="image"><a href="https://docs.microsoft.com/en-us/azure/web-application-firewall/media/web-application-firewall-logs/figure1.png"><img src="https://docs.microsoft.com/en-us/azure/web-application-firewall/media/web-application-firewall-logs/figure1.png"/></a></figure></li></ol><ol type="1" id="67e12eb0-7f66-4fd1-a4c6-72ada8b97865" class="numbered-list" start="3"><li>The <strong>Diagnostics settings</strong> page provides the settings for the resource logs. In this example, Log Analytics stores the logs. You can also use event hubs and a storage account to save the resource logs.<figure id="5d557cac-7bc1-4a1a-97b5-3f3ce74c0847" class="image"><a href="https://docs.microsoft.com/en-us/azure/web-application-firewall/media/web-application-firewall-logs/figure2.png"><img src="https://docs.microsoft.com/en-us/azure/web-application-firewall/media/web-application-firewall-logs/figure2.png"/></a></figure></li></ol><ol type="1" id="761eb03e-a3bd-4034-b05b-ca5c0e233efb" class="numbered-list" start="4"><li>Type a name for the settings, confirm the settings, and select <strong>Save</strong>.</li></ol><h3 id="0b0aa29c-0a49-40b3-9d06-8de57e9b5b58" class=""><strong>Activity log</strong></h3><p id="99816b59-0886-4dd7-8464-f25371a4b530" class="">Azure generates the activity log by default. The logs are preserved for 90 days in the Azure event logs store. Learn more about these logs by reading the <a href="https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/activity-log">View events and activity log</a> article.</p><h3 id="2ace1642-1155-4ecd-8e13-c22996533cbb" class=""><strong>Access log</strong></h3><p id="03b81054-361c-45b0-bf29-0eb78e5e7385" class="">The access log is generated only if you&#x27;ve enabled it on each Application Gateway instance, as detailed in the preceding steps. The data is stored in the storage account that you specified when you enabled the logging. Each access of Application Gateway is logged in JSON format, as shown in the following example for v1:</p><div id="b84997d6-f5ab-44b4-9129-cffdbef1c334" class="collection-content"><h4 class="collection-title"></h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>Value</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>Description</th></tr></thead><tbody><tr id="e25964e1-a98f-4486-b643-e3d16084f7ca"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/instanceId%20e2596.html">instanceId</a></td><td class="cell-DooY">Application Gateway instance that served the request.</td></tr><tr id="9f32e332-8fab-4811-a3a0-cf118cb6e931"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/clientIP%209f32e.html">clientIP</a></td><td class="cell-DooY">Originating IP for the request.</td></tr><tr id="173d3ac8-1ade-48b1-b52a-3496445f3b49"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/clientPort%20173d3.html">clientPort</a></td><td class="cell-DooY">Originating port for the request.</td></tr><tr id="b668e3b2-3253-47d2-a489-7c66b80d8505"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/httpMethod%20b668e.html">httpMethod</a></td><td class="cell-DooY">HTTP method used by the request.</td></tr><tr id="df41b4e0-4e63-4cd2-95d3-2e1729e74b02"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/requestUri%20df41b.html">requestUri</a></td><td class="cell-DooY">URI of the received request.</td></tr><tr id="66edc41e-cb5e-4301-a145-33a71e9b4246"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/RequestQue%2066edc.html">RequestQuery</a></td><td class="cell-DooY"><strong>Server-Routed</strong>: Back-end pool instance that was sent the request.<strong>X-AzureApplicationGateway-LOG-ID</strong>: Correlation ID used for the request. It can be used to troubleshoot traffic issues on the back-end servers.<strong>SERVER-STATUS</strong>: HTTP response code that Application Gateway received from the back end.</td></tr><tr id="8c1e07fa-f7d9-465d-af2c-532d3c059731"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/UserAgent%208c1e0.html">UserAgent</a></td><td class="cell-DooY">User agent from the HTTP request header.</td></tr><tr id="16f59933-ff59-4e03-bbe0-d87c629cbff8"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/httpStatus%2016f59.html">httpStatus</a></td><td class="cell-DooY">HTTP status code returned to the client from Application Gateway.</td></tr><tr id="7d5a2c9c-bfa1-4bd5-82d0-194a2dc43b1f"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/httpVersio%207d5a2.html">httpVersion</a></td><td class="cell-DooY">HTTP version of the request.</td></tr><tr id="18350558-bbf6-42fa-ba05-738a3548fafb"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/receivedBy%2018350.html">receivedBytes</a></td><td class="cell-DooY">Size of packet received, in bytes.</td></tr><tr id="0abb7f9d-2641-4b2f-8f04-9b1b734c351c"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/sentBytes%200abb7.html">sentBytes</a></td><td class="cell-DooY">Size of packet sent, in bytes.</td></tr><tr id="6a541649-0aa5-45ee-bb26-f98d95bd3795"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/timeTaken%206a541.html">timeTaken</a></td><td class="cell-DooY">Length of time (in milliseconds) that it takes for a request to be processed and its response to be sent. This is calculated as the interval from the time when Application Gateway receives the first byte of an HTTP request to the time when the response send operation finishes. It&#x27;s important to note that the Time-Taken field usually includes the time that the request and response packets are traveling over the network.</td></tr><tr id="7ab298b7-2a91-4317-a77b-052f68f7849b"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/sslEnabled%207ab29.html">sslEnabled</a></td><td class="cell-DooY">Whether communication to the back-end pools used TLS/SSL. Valid values are on and off.</td></tr><tr id="d038cf9b-cbe2-463d-817b-4cc0add73910"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/host%20d038c.html">host</a></td><td class="cell-DooY">The hostname with which the request has been sent to the backend server. If backend hostname is being overridden, this name will reflect that.</td></tr><tr id="8c20e2e0-5c85-46a9-b5da-f378b601d98e"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20b8499/originalHo%208c20e.html">originalHost</a></td><td class="cell-DooY">The hostname with which the request was received by the Application Gateway from the client.</td></tr></tbody></table></div><p id="f31092b9-17a8-4e4d-a4e5-720ac66ffb65" class="">JSONCopy</p><pre id="74ca9499-7e84-43fe-bf77-f9d1ed9884b9" class="code code-wrap"><code>{
+    &quot;resourceId&quot;: &quot;/SUBSCRIPTIONS/{subscriptionId}/RESOURCEGROUPS/PEERINGTEST/PROVIDERS/MICROSOFT.NETWORK/APPLICATIONGATEWAYS/{applicationGatewayName}&quot;,
+    &quot;operationName&quot;: &quot;ApplicationGatewayAccess&quot;,
+    &quot;timestamp&quot;: &quot;2017-04-26T19:27:38Z&quot;,
+    &quot;category&quot;: &quot;ApplicationGatewayAccessLog&quot;,
+    &quot;properties&quot;: {
+        &quot;instanceId&quot;: &quot;ApplicationGatewayRole_IN_0&quot;,
+        &quot;clientIP&quot;: &quot;191.96.249.97&quot;,
+        &quot;clientPort&quot;: 46886,
+        &quot;httpMethod&quot;: &quot;GET&quot;,
+        &quot;requestUri&quot;: &quot;/phpmyadmin/scripts/setup.php&quot;,
+        &quot;requestQuery&quot;: &quot;X-AzureApplicationGateway-CACHE-HIT=0&amp;SERVER-ROUTED=10.4.0.4&amp;X-AzureApplicationGateway-LOG-ID=874f1f0f-6807-41c9-b7bc-f3cfa74aa0b1&amp;SERVER-STATUS=404&quot;,
+        &quot;userAgent&quot;: &quot;-&quot;,
+        &quot;httpStatus&quot;: 404,
+        &quot;httpVersion&quot;: &quot;HTTP/1.0&quot;,
+        &quot;receivedBytes&quot;: 65,
+        &quot;sentBytes&quot;: 553,
+        &quot;timeTaken&quot;: 205,
+        &quot;sslEnabled&quot;: &quot;off&quot;,
+        &quot;host&quot;: &quot;www.contoso.com&quot;,
+        &quot;originalHost&quot;: &quot;www.contoso.com&quot;
+    }
+}
+</code></pre><p id="64ff93f5-991e-4200-b3d2-dbbbb46557c7" class="">For Application Gateway and WAF v2, the logs show a little more information:</p><div id="d22f095a-0d65-4165-b32a-512673ade976" class="collection-content"><h4 class="collection-title"></h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>Value</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>Description</th></tr></thead><tbody><tr id="c81689c1-4568-4116-ae20-b2968a7fc43c"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/instanceId%20c8168.html">instanceId</a></td><td class="cell-fnnY">Application Gateway instance that served the request.</td></tr><tr id="3bfac18a-b63e-48b6-89a7-71685926c0ca"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/clientIP%203bfac.html">clientIP</a></td><td class="cell-fnnY">Originating IP for the request.</td></tr><tr id="846a942f-41b8-4041-9ccc-dd8d68d7d25b"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/clientPort%20846a9.html">clientPort</a></td><td class="cell-fnnY">Originating port for the request.</td></tr><tr id="2f4c90da-6cc6-48ba-a8bf-2608dd2243b1"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/httpMethod%202f4c9.html">httpMethod</a></td><td class="cell-fnnY">HTTP method used by the request.</td></tr><tr id="3e8968e4-0ca2-447b-a5df-b21782db8815"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/requestUri%203e896.html">requestUri</a></td><td class="cell-fnnY">URI of the received request.</td></tr><tr id="c64b76ca-d232-407a-aff1-a907ab3ef858"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/UserAgent%20c64b7.html">UserAgent</a></td><td class="cell-fnnY">User agent from the HTTP request header.</td></tr><tr id="29b69495-5b2f-40d5-87c2-c949ba5a2af2"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/httpStatus%2029b69.html">httpStatus</a></td><td class="cell-fnnY">HTTP status code returned to the client from Application Gateway.</td></tr><tr id="398f3614-937d-4bfe-a60b-419d2014cad7"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/httpVersio%20398f3.html">httpVersion</a></td><td class="cell-fnnY">HTTP version of the request.</td></tr><tr id="9330927f-07f9-432b-a3c1-83a170f564bb"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/receivedBy%2093309.html">receivedBytes</a></td><td class="cell-fnnY">Size of packet received, in bytes.</td></tr><tr id="0132cd98-549f-4b7e-a98c-bffacc58e3ce"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/sentBytes%200132c.html">sentBytes</a></td><td class="cell-fnnY">Size of packet sent, in bytes.</td></tr><tr id="1636cc55-7a6e-4cea-9a52-19d6cb1f7db1"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/timeTaken%201636c.html">timeTaken</a></td><td class="cell-fnnY">Length of time (in milliseconds) that it takes for a request to be processed and its response to be sent. This is calculated as the interval from the time when Application Gateway receives the first byte of an HTTP request to the time when the response send operation finishes. It&#x27;s important to note that the Time-Taken field usually includes the time that the request and response packets are traveling over the network.</td></tr><tr id="efc4a9d5-91f5-4e94-94ec-8038c08b9840"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/sslEnabled%20efc4a.html">sslEnabled</a></td><td class="cell-fnnY">Whether communication to the back-end pools used TLS. Valid values are on and off.</td></tr><tr id="a47a96ad-9499-4d5b-ad00-b5ef33a04002"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/sslCipher%20a47a9.html">sslCipher</a></td><td class="cell-fnnY">Cipher suite being used for TLS communication (if TLS is enabled).</td></tr><tr id="3d6aee9e-5e1c-47aa-8a5e-6e6e5cceae93"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/sslProtoco%203d6ae.html">sslProtocol</a></td><td class="cell-fnnY">TLS protocol being used (if TLS is enabled).</td></tr><tr id="0a02cc80-fb7e-40f0-97fe-83171f903838"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/serverRout%200a02c.html">serverRouted</a></td><td class="cell-fnnY">The backend server that application gateway routes the request to.</td></tr><tr id="e0486331-e8c0-4f7a-b4fe-7e927f6ecdee"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/serverStat%20e0486.html">serverStatus</a></td><td class="cell-fnnY">HTTP status code of the backend server.</td></tr><tr id="810190a0-ecd2-421e-bbd2-6b79015bd7f9"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/serverResp%2081019.html">serverResponseLatency</a></td><td class="cell-fnnY">Latency of the response from the backend server.</td></tr><tr id="2b1d7f28-0a0f-40ba-af12-f83699d2ee96"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%20d22f0/host%202b1d7.html">host</a></td><td class="cell-fnnY">Address listed in the host header of the request.</td></tr></tbody></table></div><p id="05c4e73e-ef1a-4498-befe-70d70e9fb26a" class="">JSONCopy</p><pre id="4f5c5fec-3329-44a5-b5e3-66ce86ec6d0a" class="code code-wrap"><code>{
+    &quot;resourceId&quot;: &quot;/SUBSCRIPTIONS/{subscriptionId}/RESOURCEGROUPS/PEERINGTEST/PROVIDERS/MICROSOFT.NETWORK/APPLICATIONGATEWAYS/{applicationGatewayName}&quot;,
+    &quot;operationName&quot;: &quot;ApplicationGatewayAccess&quot;,
+    &quot;time&quot;: &quot;2017-04-26T19:27:38Z&quot;,
+    &quot;category&quot;: &quot;ApplicationGatewayAccessLog&quot;,
+    &quot;properties&quot;: {
+        &quot;instanceId&quot;: &quot;appgw_1&quot;,
+        &quot;clientIP&quot;: &quot;191.96.249.97&quot;,
+        &quot;clientPort&quot;: 46886,
+        &quot;httpMethod&quot;: &quot;GET&quot;,
+        &quot;requestUri&quot;: &quot;/phpmyadmin/scripts/setup.php&quot;,
+        &quot;userAgent&quot;: &quot;-&quot;,
+        &quot;httpStatus&quot;: 404,
+        &quot;httpVersion&quot;: &quot;HTTP/1.0&quot;,
+        &quot;receivedBytes&quot;: 65,
+        &quot;sentBytes&quot;: 553,
+        &quot;timeTaken&quot;: 205,
+        &quot;sslEnabled&quot;: &quot;off&quot;,
+        &quot;sslCipher&quot;: &quot;&quot;,
+        &quot;sslProtocol&quot;: &quot;&quot;,
+        &quot;serverRouted&quot;: &quot;104.41.114.59:80&quot;,
+        &quot;serverStatus&quot;: &quot;200&quot;,
+        &quot;serverResponseLatency&quot;: &quot;0.023&quot;,
+        &quot;host&quot;: &quot;www.contoso.com&quot;,
+    }
+}
+</code></pre><h3 id="4e81c262-01e6-4682-a4dd-b1a14b20bee9" class=""><strong>Performance log</strong></h3><p id="a1268c40-8510-43e2-b90d-0bc8a77b2919" class="">The performance log is generated only if you have enabled it on each Application Gateway instance, as detailed in the preceding steps. The data is stored in the storage account that you specified when you enabled the logging. The performance log data is generated in 1-minute intervals. It is available only for the v1 SKU. For the v2 SKU, use <a href="https://docs.microsoft.com/en-us/azure/application-gateway/application-gateway-metrics">Metrics</a> for performance data. The following data is logged:</p><div id="4372420a-d3d8-40c9-a22e-ce1f74efc394" class="collection-content"><h4 class="collection-title"></h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>Value</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>Description</th></tr></thead><tbody><tr id="86c3b4c8-0a79-465e-bfec-51e44cf36bef"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%2043724/instanceId%2086c3b.html">instanceId</a></td><td class="cell-&lt;&gt;nx">Application Gateway instance for which performance data is being generated. For a multiple-instance application gateway, there is one row per instance.</td></tr><tr id="dad796ec-4617-4b61-8d1b-5d69066317ee"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%2043724/healthyHos%20dad79.html">healthyHostCount</a></td><td class="cell-&lt;&gt;nx">Number of healthy hosts in the back-end pool.</td></tr><tr id="706f74f3-536b-49e5-bd96-00b232a8a040"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%2043724/unHealthyH%20706f7.html">unHealthyHostCount</a></td><td class="cell-&lt;&gt;nx">Number of unhealthy hosts in the back-end pool.</td></tr><tr id="19077f50-b5f0-406c-b4a4-3e0110bde6d7"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%2043724/requestCou%2019077.html">requestCount</a></td><td class="cell-&lt;&gt;nx">Number of requests served.</td></tr><tr id="34d491a2-bb68-4d90-b594-ebeb2d0894d8"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%2043724/latency%2034d49.html">latency</a></td><td class="cell-&lt;&gt;nx">Average latency (in milliseconds) of requests from the instance to the back end that serves the requests.</td></tr><tr id="25302bb4-b9da-4387-915c-e90bbf0c2893"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%2043724/failedRequ%2025302.html">failedRequestCount</a></td><td class="cell-&lt;&gt;nx">Number of failed requests.</td></tr><tr id="44540921-64c4-49fa-9fce-341519a96e50"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%2043724/throughput%2044540.html">throughput</a></td><td class="cell-&lt;&gt;nx">Average throughput since the last log, measured in bytes per second.</td></tr></tbody></table></div><p id="1bf6a2d2-cf63-4e79-91bd-86e717dc6fbc" class="">JSONCopy</p><pre id="b9cb4b84-4895-4866-9d2b-ac81f6dc108a" class="code code-wrap"><code>{
+    &quot;resourceId&quot;: &quot;/SUBSCRIPTIONS/{subscriptionId}/RESOURCEGROUPS/{resourceGroupName}/PROVIDERS/MICROSOFT.NETWORK/APPLICATIONGATEWAYS/{applicationGatewayName}&quot;,
+    &quot;operationName&quot;: &quot;ApplicationGatewayPerformance&quot;,
+    &quot;time&quot;: &quot;2016-04-09T00:00:00Z&quot;,
+    &quot;category&quot;: &quot;ApplicationGatewayPerformanceLog&quot;,
+    &quot;properties&quot;:
+    {
+        &quot;instanceId&quot;:&quot;ApplicationGatewayRole_IN_1&quot;,
+        &quot;healthyHostCount&quot;:&quot;4&quot;,
+        &quot;unHealthyHostCount&quot;:&quot;0&quot;,
+        &quot;requestCount&quot;:&quot;185&quot;,
+        &quot;latency&quot;:&quot;0&quot;,
+        &quot;failedRequestCount&quot;:&quot;0&quot;,
+        &quot;throughput&quot;:&quot;119427&quot;
+    }
+}
+</code></pre><p id="fed8a299-163e-43e5-abc0-37187d31ed4c" class=""><strong>Note</strong></p><p id="1a9370fc-18f9-4851-b570-50e3a4630dd9" class="">Latency is calculated from the time when the first byte of the HTTP request is received to the time when the last byte of the HTTP response is sent. It&#x27;s the sum of the Application Gateway processing time plus the network cost to the back end, plus the time that the back end takes to process the request.</p><h3 id="640f2351-88f7-4144-865b-5f0865ca7b14" class=""><strong>Firewall log</strong></h3><p id="56af782b-42df-4e94-868b-f2c92506b8ba" class="">The firewall log is generated only if you have enabled it for each application gateway, as detailed in the preceding steps. This log also requires that the web application firewall is configured on an application gateway. The data is stored in the storage account that you specified when you enabled the logging. The following data is logged:</p><div id="3c32c90e-6d20-4b9f-864b-949cfb5508eb" class="collection-content"><h4 class="collection-title"></h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>Value</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>Description</th></tr></thead><tbody><tr id="407cdb27-e6f4-4630-bd57-5be97dd05382"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/instanceId%20407cd.html">instanceId</a></td><td class="cell-|~A;">Application Gateway instance for which firewall data is being generated. For a multiple-instance application gateway, there is one row per instance.</td></tr><tr id="3e1844a9-c560-4b2c-924b-f08648af8ddf"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/clientIp%203e184.html">clientIp</a></td><td class="cell-|~A;">Originating IP for the request.</td></tr><tr id="9e259b6d-6353-4ff1-9a03-a490e3ae2280"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/clientPort%209e259.html">clientPort</a></td><td class="cell-|~A;">Originating port for the request.</td></tr><tr id="cc244ccf-baec-43dd-9687-bb7f2df01b76"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/requestUri%20cc244.html">requestUri</a></td><td class="cell-|~A;">URL of the received request.</td></tr><tr id="81867315-c05d-4afc-b251-37efd4f37cd3"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/ruleSetTyp%2081867.html">ruleSetType</a></td><td class="cell-|~A;">Rule set type. The available value is OWASP.</td></tr><tr id="6966db63-6cce-4da1-baa3-d031407e75c0"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/ruleSetVer%206966d.html">ruleSetVersion</a></td><td class="cell-|~A;">Rule set version used. Available values are 2.2.9 and 3.0.</td></tr><tr id="625b2e8f-e37b-44bf-830d-c30e8ade5a73"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/ruleId%20625b2.html">ruleId</a></td><td class="cell-|~A;">Rule ID of the triggering event.</td></tr><tr id="7fb92ff9-b118-4087-91bf-7a0fb4e48b26"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/message%207fb92.html">message</a></td><td class="cell-|~A;">User-friendly message for the triggering event. More details are provided in the details section.</td></tr><tr id="f01ebbd1-5eba-451c-80b2-8dc50b311551"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/action%20f01eb.html">action</a></td><td class="cell-|~A;">Action taken on the request. Available values are Blocked and Allowed (for custom rules), Matched (when a rule matches a part of the request), and Detected and Blocked (these are both for mandatory rules, depending on if the WAF is in detection or prevention mode).</td></tr><tr id="b43b1346-738c-421f-8a70-7187da07a7ce"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/site%20b43b1.html">site</a></td><td class="cell-|~A;">Site for which the log was generated. Currently, only Global is listed because rules are global.</td></tr><tr id="54f89bd0-a1cf-4805-84b5-2319d208d7ce"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/details%2054f89.html">details</a></td><td class="cell-|~A;">Details of the triggering event.</td></tr><tr id="e0055271-47d0-4ed2-a26c-e0b74a959d49"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/details%20me%20e0055.html">details.message</a></td><td class="cell-|~A;">Description of the rule.</td></tr><tr id="bc38835e-7252-457c-8cb6-7c9da1aca4f9"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/details%20da%20bc388.html">details.data</a></td><td class="cell-|~A;">Specific data found in request that matched the rule.</td></tr><tr id="01dee85c-7676-455b-bd89-25097955e1c4"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/details%20fi%2001dee.html">details.file</a></td><td class="cell-|~A;">Configuration file that contained the rule.</td></tr><tr id="63170429-8c11-4d8e-b5b5-43f2331ca87b"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/details%20li%2063170.html">details.line</a></td><td class="cell-|~A;">Line number in the configuration file that triggered the event.</td></tr><tr id="03dec86c-2873-4181-998c-e18aeaa51dfc"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/hostname%2003dec.html">hostname</a></td><td class="cell-|~A;">Hostname or IP address of the Application Gateway.</td></tr><tr id="35edf682-76c6-4217-b53a-921ab9fb20f2"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/transactio%2035edf.html">transactionId</a></td><td class="cell-|~A;">Unique ID for a given transaction which helps group multiple rule violations that occurred within the same request.</td></tr><tr id="12a21e99-f368-43a9-9005-bfb972e4b7cb"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/policyId%2012a21.html">policyId</a></td><td class="cell-|~A;">Unique ID of the Firewall Policy associated with the Application Gateway, Listener, or Path.</td></tr><tr id="6e608b27-1641-4d61-9337-621623557dbb"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/policyScop%206e608.html">policyScope</a></td><td class="cell-|~A;">The location of the policy - values can be &quot;Global&quot;, &quot;Listener&quot;, or &quot;Location&quot;.</td></tr><tr id="e8954b8b-34b0-4960-ac14-1c4148a6a9a7"><td class="cell-title"><a href="Azure%20WAF%20%20f1a00/Untitled%20D%203c32c/policyScop%20e8954.html">policyScopeName</a></td><td class="cell-|~A;">The name of the object where the policy is applied.</td></tr></tbody></table></div><p id="a59e65d8-13f5-4e4d-b35b-25d4addde5c0" class="">JSONCopy</p><pre id="be6dc81f-8a3f-467b-978b-8fb9b5030a8a" class="code code-wrap"><code>{
+  &quot;resourceId&quot;: &quot;/SUBSCRIPTIONS/{subscriptionId}/RESOURCEGROUPS/{resourceGroupName}/PROVIDERS/MICROSOFT.NETWORK/APPLICATIONGATEWAYS/{applicationGatewayName}&quot;,
+  &quot;operationName&quot;: &quot;ApplicationGatewayFirewall&quot;,
+  &quot;time&quot;: &quot;2017-03-20T15:52:09.1494499Z&quot;,
+  &quot;category&quot;: &quot;ApplicationGatewayFirewallLog&quot;,
+  &quot;properties&quot;: {
+      &quot;instanceId&quot;: &quot;ApplicationGatewayRole_IN_0&quot;,
+      &quot;clientIp&quot;: &quot;52.161.109.147&quot;,
+      &quot;clientPort&quot;: &quot;0&quot;,
+      &quot;requestUri&quot;: &quot;/&quot;,
+      &quot;ruleSetType&quot;: &quot;OWASP&quot;,
+      &quot;ruleSetVersion&quot;: &quot;3.0&quot;,
+      &quot;ruleId&quot;: &quot;920350&quot;,
+      &quot;ruleGroup&quot;: &quot;920-PROTOCOL-ENFORCEMENT&quot;,
+      &quot;message&quot;: &quot;Host header is a numeric IP address&quot;,
+      &quot;action&quot;: &quot;Matched&quot;,
+      &quot;site&quot;: &quot;Global&quot;,
+      &quot;details&quot;: {
+        &quot;message&quot;: &quot;Warning. Pattern match \&quot;^[\\\\d.:]+$\&quot; at REQUEST_HEADERS:Host ....&quot;,
+        &quot;data&quot;: &quot;127.0.0.1&quot;,
+        &quot;file&quot;: &quot;rules/REQUEST-920-PROTOCOL-ENFORCEMENT.conf&quot;,
+        &quot;line&quot;: &quot;791&quot;
+      },
+      &quot;hostname&quot;: &quot;127.0.0.1&quot;,
+      &quot;transactionId&quot;: &quot;16861477007022634343&quot;,
+      &quot;policyId&quot;: &quot;/subscriptions/1496a758-b2ff-43ef-b738-8e9eb5161a86/resourceGroups/drewRG/providers/Microsoft.Network/ApplicationGatewayWebApplicationFirewallPolicies/perListener&quot;,
+      &quot;policyScope&quot;: &quot;Listener&quot;,
+      &quot;policyScopeName&quot;: &quot;httpListener1&quot;
+    }
+  }
+}
+
+</code></pre><h3 id="4f77f90d-07fe-42c0-9f5a-bae0ac41b205" class=""><strong>View and analyze the activity log</strong></h3><p id="be42569b-5b36-48d4-adab-f57b7b3a075c" class="">You can view and analyze activity log data by using any of the following methods:</p><ul id="b067b776-c573-4303-a3ab-44629a0b0f90" class="bulleted-list"><li style="list-style-type:disc"><strong>Azure tools</strong>: Retrieve information from the activity log through Azure PowerShell, the Azure CLI, the Azure REST API, or the Azure portal. Step-by-step instructions for each method are detailed in the <a href="https://docs.microsoft.com/en-us/azure/azure-monitor/essentials/activity-log">Activity operations with Resource Manager</a> article.</li></ul><ul id="7ffcf471-86f9-4196-8d5a-c64e91b2e050" class="bulleted-list"><li style="list-style-type:disc"><strong>Power BI</strong>: If you don&#x27;t already have a <a href="https://powerbi.microsoft.com/pricing">Power BI</a> account, you can try it for free. By using the <a href="https://docs.microsoft.com/en-us/power-bi/service-template-apps-overview">Power BI template apps</a>, you can analyze your data.</li></ul><h3 id="0998a4b1-f71c-4e95-a971-50c35e6eed14" class=""><strong>View and analyze the access, performance, and firewall logs</strong></h3><p id="732ad15a-a2ad-413d-b688-c27e2ecf5a58" class=""><a href="https://docs.microsoft.com/en-us/azure/azure-monitor/insights/azure-networking-analytics">Azure Monitor logs</a> can collect the counter and event log files from your Blob storage account. It includes visualizations and powerful search capabilities to analyze your logs.</p><p id="1da25205-8264-4f29-9660-f7c8a017739f" class="">You can also connect to your storage account and retrieve the JSON log entries for access and performance logs. After you download the JSON files, you can convert them to CSV and view them in Excel, Power BI, or any other data-visualization tool.</p></div></article></body></html>

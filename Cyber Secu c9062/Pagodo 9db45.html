@@ -1,0 +1,688 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Pagodo</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="9db45c45-8b5f-4849-a9b0-e9f853a1714a" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">🐲</span></div><h1 class="page-title">Pagodo</h1></header><div class="page-body"><p id="d9c4c812-db01-4401-9464-41de4916179b" class="">
+</p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="19a13c99-c1fd-485f-9369-28ac494bddc9"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><a href="https://github.com/opsdisk/pagodo">https://github.com/opsdisk/pagodo</a></div></figure><figure id="b70e8f82-2a51-49c0-9a62-7c9516a4c027"><div class="source">https://github.com/opsdisk/pagodo</div></figure><p id="84e79e20-7fe5-40d4-936f-59d2e2fbebda" class="">
+</p><hr id="f7cafdc0-c68d-4ec4-b2e8-280880fb1bd2"/><p id="6fe7d76f-ff37-42c8-be4c-ed804733941d" class="">
+</p><p id="d3a15813-d63b-4512-b566-53ca191e3964" class="">The goal of this project was to develop a passive Google dork script to collect potentially <a href="https://www.kitploit.com/search/label/Vulnerable">vulnerable</a> web pages and applications on the Internet. There are 2 parts. The first is</p><pre id="768d0d01-9181-45e8-add4-425791eee015" class="code code-wrap"><code>ghdb_scraper.py</code></pre><p id="4c1531e1-129f-4611-82ef-1b55b02a479f" class="">that retrieves Google Dorks and the second portion is</p><pre id="c0b14ce3-4276-43c1-8edd-aab33a88b89c" class="code code-wrap"><code>pagodo.py</code></pre><p id="591114bc-3a6a-4a7f-9f12-d26c08dd61b4" class="">that leverages the information gathered by</p><pre id="3e6379b0-6d6b-420a-8a88-d18ac349fb1e" class="code code-wrap"><code>ghdb_scraper.py</code></pre><p id="b7157e54-735d-40f0-b6fc-06c11fae2458" class=""><strong>What are Google Dorks?</strong></p><p id="5e0b4138-5cf3-4dbb-bb04-5235407e248e" class="">The awesome folks at Offensive Security maintain the Google Hacking Database (GHDB) found here:</p><p id="cfafc9e6-544d-495b-b2d7-fd85fda5777d" class=""><a href="https://www.exploit-db.com/google-hacking-database">https://www.exploit-db.com/google-hacking-database</a></p><p id="c9807506-d504-4e5d-96d5-ba49c98ac6d1" class="">. It is a collection of Google searches, called dorks, that can be used to find potentially vulnerable boxes or other juicy info that is picked up by Google&#x27;s search bots.</p><p id="bdabc57c-ffc1-41c5-84fb-44f1cdaa0a43" class=""><strong>Installation</strong></p><p id="05265c52-45b8-4fa3-86a7-ae60964bd50d" class="">Scripts are written for Python 3.6+. Clone the git repository and install the requirements.</p><p id="8db902ed-78ae-4ad7-911e-dd40838312a0" class=""><code>git clone </code><a href="https://github.com/opsdisk/pagodo.git"><code>https://github.com/opsdisk/pagodo.git</code></a><code>
+cd pagodo
+virtualenv -p python3 .venv  # If using a virtual environment.
+source .venv/bin/activate  # If using a virtual environment.
+pip install -r requirements.txt</code></p><p id="2b660a56-72ff-408e-95e0-9fd1851d920d" class=""><strong>Google is blocking me!</strong></p><p id="3c2d05ee-71a0-4f5d-b2e3-77fd27562842" class="">If you start getting HTTP 503 errors, Google has rightfully detected you as a bot and will block your IP for a set period of time. The solution is to use proxychains and a bank of proxies to round robin the lookups.</p><p id="6b8991b6-958a-4491-a2d4-db80e70acdb3" class="">Install proxychains4</p><p id="2774df84-3b76-429c-a86f-666efc1d99c9" class=""><code>apt install proxychains4 -y</code></p><p id="9dc26bd6-5a1f-4236-a06b-85f27cf75210" class="">Edit the</p><pre id="cfcc8b63-af9c-4436-9522-c687ccc277d4" class="code code-wrap"><code>/etc/proxychains4.conf</code></pre><p id="6330ffc7-064b-4b45-bdf0-9749b7c3316e" class="">configuration file to round robin the look ups through different proxy servers. In the example below, 2 different</p><p id="91c27b04-c97c-4452-87ab-6707806a0815" class=""><a href="https://www.kitploit.com/search/label/Dynamic">dynamic</a></p><p id="c0ba8ae8-e760-4005-afe9-34d5de7d3e05" class="">socks proxies have been set up with different local listening ports (9050 and 9051). Don&#x27;t know how to utilize SSH and dynamic socks proxies? Do yourself a favor and pick up a copy of</p><p id="2aed192a-0e0f-4504-98ee-a2123d311303" class=""><a href="https://cph.opsdisk.com/">The Cyber Plumber&#x27;s Handbook</a></p><p id="0f015560-cf05-4c5a-a2ca-2843e2e4ef6b" class="">to learn all about Secure Shell (SSH) tunneling, port redirection, and bending traffic like a boss.</p><p id="ac82f9b7-57c0-4ef0-a458-0f2cde010f5d" class=""><code>vim /etc/proxychains4.conf</code></p><p id="f474807e-927b-4cab-9efb-b28f091458b0" class=""><code>round_robin
+chain_len = 1
+proxy_dns
+remote_dns_subnet 224
+tcp_read_time_out 15000
+tcp_connect_time_out 8000
+[ProxyList]
+socks4 127.0.0.1 9050
+socks4 127.0.0.1 9051</code></p><p id="e277dfbf-e2ca-43dc-af5b-a36655cf2108" class="">Throw</p><pre id="3e171e7a-2734-44e1-992b-fdbf7f6d5eec" class="code code-wrap"><code>proxychains4</code></pre><p id="e840b8be-6bb7-4965-9b97-b4e9a635b190" class="">in front of the Python script and each lookup will go through a different proxy (and thus source from a different IP). You could even tune down the</p><pre id="cdc7fce9-52ee-4604-87f4-7f175859b147" class="code code-wrap"><code>-e</code></pre><p id="69df5f84-8540-4473-8ab8-70048e182f5d" class="">delay time because you will be leveraging different proxy boxes.</p><p id="51b95695-a5c6-4d1e-9c84-9e06ce22d945" class=""><code>proxychains4 python3 pagodo.py -g ALL_dorks.txt -s -e 17.0 -l 700 -j 1.1</code></p><p id="68c203e7-ed56-418c-b01f-358ece15f010" class=""><strong>ghdb_scraper.py</strong></p><p id="4ab2054b-6aef-4dc7-93ab-7971e4fb532e" class="">To start off,</p><pre id="323053ab-9c50-459f-ab37-20122f151f44" class="code code-wrap"><code>pagodo.py</code></pre><p id="8641092f-fd87-4557-a211-db732569e5a7" class="">needs a list of all the current Google dorks. A datetimestamped file with the Google dorks and the indididual dork category dorks are also provided in the repo. Fortunately, the entire database can be pulled back with 1 GET request using</p><pre id="3ea155ec-b4b9-4949-b869-95e4cf51546d" class="code code-wrap"><code>ghdb_scraper.py</code></pre><p id="19e51461-6c5c-4d3d-b366-e82e71234c59" class="">. You can dump all dorks to a file, the individual dork categories to separate dork files, or the entire json blob if you want more contextual data about the dork.</p><p id="ea335ff4-561d-4ebf-8787-1d930f089486" class="">To retrieve all dorks</p><p id="4eee0e4a-7ac2-45b6-8a00-9c48957b8c25" class=""><code>python3 ghdb_scraper.py -j -s</code></p><p id="60aab00d-0eda-49bf-9f4c-266213e5d002" class="">To retrieve all dorks and write them to individual categories:</p><p id="794fc64c-7e8f-4efb-8248-258f5d4a3862" class=""><code>python3 ghdb_scraper.py -i</code></p><p id="3cc46121-de69-43d4-9315-5522dbfc9ead" class="">Dork categories:</p><pre id="35be8336-5f8d-44bd-b0e9-8a9bef642a09" class="code code-wrap"><code>categories = {      1: &quot;Footholds&quot;,      2: &quot;File Containing Usernames&quot;,      3: &quot;Sensitives Directories&quot;,      4: &quot;Web Server Detection&quot;,      5: &quot;Vulnerable Files&quot;,      6: &quot;Vulnerable Servers&quot;,      7: &quot;Error Messages&quot;,      8: &quot;File Containing Juicy Info&quot;,      9: &quot;File Containing Passwords&quot;,      10: &quot;Sensitive Online Shopping Info&quot;,      11: &quot;Network orVulnerability Data&quot;,      12: &quot;Pages Containing Login Portals&quot;,      13: &quot;Various Online devices&quot;,      14: &quot;Advisories and Vulnerabilities&quot;,  }</code></pre><p id="3baf1ebd-72e5-4a15-99ba-2ae1f16f2527" class=""><strong>pagodo.py</strong></p><p id="2f0e0ba1-5313-49b6-a99c-fefe02e80006" class="">Now that a file with the most recent Google dorks exists, it can be fed into</p><pre id="a9b07c50-58fd-42c8-aab0-df6c90a50a42" class="code code-wrap"><code>pagodo.py</code></pre><p id="381c56c5-665e-4baa-8f29-9e756cb2f16c" class="">using the</p><pre id="49e506a5-3830-4fa2-8b11-27bbb3de634c" class="code code-wrap"><code>-g</code></pre><p id="081d47c8-21b5-45e1-95e5-15ed334fa0e7" class="">switch to start collecting potentially vulnerable public applications.</p><pre id="873b02da-7d5a-4e70-8f9f-49cfd00a1524" class="code code-wrap"><code>pagodo.py</code></pre><p id="792a5278-c3c6-4420-b290-fba5a2fe7be8" class="">leverages the</p><pre id="57f0da7b-f799-4422-bc24-32ca4ee4d644" class="code code-wrap"><code>google</code></pre><p id="cb84b4fd-09c0-4fa2-8bdb-fee3ee475b16" class=""><a href="https://www.kitploit.com/search/label/Python%20Library">python library</a></p><p id="ea0fb1ee-fda5-420a-a405-91bc3e56cf37" class="">to search Google for sites with the Google dork, such as:</p><pre id="e24b6c86-e8db-4e7e-a633-1f76655bf430" class="code code-wrap"><code>intitle:&quot;ListMail Login&quot; admin -demo</code></pre><p id="3c0049b8-0e8c-4d93-a11e-a2801b477f7b" class="">The</p><pre id="1e9f80f7-c7a5-48b8-8bc5-5e9c880f3079" class="code code-wrap"><code>-d</code></pre><p id="71f6f5a1-2b6a-4426-b3f6-8959a2d4f3ef" class="">switch can be used to specify a domain and functions as the Google search operator:</p><pre id="d3f6be58-7515-4a87-84c4-113733f2cf2a" class="code code-wrap"><code>site:example.com</code></pre><p id="e9c412c3-c283-4fa1-8c58-e274106a7203" class="">Performing ~4600 search requests to Google as fast as possible will simply not work. Google will rightfully detect it as a bot and block your IP for a set period of time. In order to make the search queries appear more human, a couple of enhancements have been made. A pull request was made and accepted by the maintainer of the Python</p><pre id="f66fa0b4-e8e0-4097-a7e9-4d404e570e7d" class="code code-wrap"><code>google</code></pre><p id="4b6bd3a8-6ea6-48fb-9f89-cb14a9d4349a" class="">module to allow for User-Agent randomization in the Google search queries. This feature is available in</p><p id="da10a7d5-c726-49fb-b9c6-0316c2cc2cf5" class=""><a href="https://pypi.python.org/pypi/google">1.9.3</a></p><p id="86d868b2-a4bb-4f5c-ad28-6a864a38dfd2" class="">and allows you to randomize the different user agents used for each search. This emulates the different</p><p id="ce6046bb-ee6a-4f23-be71-f75c2f1922db" class=""><a href="https://www.kitploit.com/search/label/Browsers">browsers</a></p><p id="72eb575b-ee5e-40a6-b801-d78a44a092a7" class="">used in a large corporate environment.</p><p id="8a6b4acc-4bfb-45e7-ade9-1601041b0c31" class="">The second enhancement focuses on randomizing the time between search queries. A minimum delay is specified using the</p><pre id="43af3503-0e47-4e9e-bd21-fb22768b893f" class="code code-wrap"><code>-e</code></pre><p id="d8ac2bf5-904b-4568-8c66-51577c46f3bb" class="">option and a jitter factor is used to add time on to the minimum delay number. A list of 50 jitter times is created and one is randomly appended to the minimum delay time for each Google dork search.</p><p id="434de372-636b-4a2c-b7e3-09bbc0c5edc3" class=""><code>categories = {
+    1: &quot;Footholds&quot;,
+    2: &quot;File Containing Usernames&quot;,
+    3: &quot;Sensitives Directories&quot;,
+    4: &quot;Web Server Detection&quot;,
+    5: &quot;Vulnerable Files&quot;,
+    6: &quot;Vulnerable Servers&quot;,
+    7: &quot;Error Messages&quot;,
+    8: &quot;File Containing Juicy Info&quot;,
+    9: &quot;File Containing Passwords&quot;,
+    10: &quot;Sensitive Online Shopping Info&quot;,
+    11: &quot;Network or Vulnerability Data&quot;,
+    12: &quot;Pages Containing Login Portals&quot;,
+    13: &quot;Various Online devices&quot;,
+    14: &quot;Advisories and Vulnerabilities&quot;,
+}</code></p><p id="dbe50ceb-597f-4e5a-9a4d-0b2a1b0e27e3" class="">Latter in the script, a random time is selected from the jitter array and added to the delay.</p><p id="180dfaf4-3668-4a84-877a-f50d1333bfcb" class=""><code>intitle:&quot;ListMail Login&quot; admin -demo</code></p><p id="ccc60cac-6082-488a-a7de-54fff87a03b6" class="">Experiment with the values, but the defaults successfully worked without Google blocking my IP. Note that it could take a few days (3 on average) to run so be sure you have the time.</p><p id="55cef8e3-860a-418c-8481-baee582af61f" class="">To run it:</p><p id="fd6c511b-4bbe-4af3-b923-68d8bae969af" class=""><code>site:example.com</code></p><p id="617acbf9-a734-42a3-a2ad-3ad0e8c2644d" class=""><strong>Conclusion</strong></p><p id="0d284790-3528-4317-b5f2-37070056f85f" class="">Comments, suggestions, and improvements are always welcome. Be sure to follow</p><p id="e27aab02-d9c2-479c-a3dc-742dbc7883ad" class=""><a href="https://twitter.com/opsdisk">@opsdisk</a></p><p id="3c1a366a-2347-46e8-a94a-ff223393fae2" class="">on Twitter for the latest updates.</p><p id="d0ac68af-6b7a-4f1d-8fb4-c7c8b0ac2613" class="">
+</p></div></article></body></html>

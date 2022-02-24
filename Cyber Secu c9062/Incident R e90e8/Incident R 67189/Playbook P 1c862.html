@@ -1,0 +1,657 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Playbook: Phishing</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1c862e75-70b0-4c2b-a54d-181275d16777" class="page sans"><header><h1 class="page-title">Playbook: Phishing</h1><table class="properties"><tbody><tr class="property-row property-row-text"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>Comments</th><td></td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-pink">Notes</span><span class="selected-value select-value-color-orange">Playbooks</span></td></tr><tr class="property-row property-row-url"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesUrl"><path d="M3.73333,3.86667 L7.46667,3.86667 C8.49613,3.86667 9.33333,4.70387 9.33333,5.73333 C9.33333,6.7628 8.49613,7.6 7.46667,7.6 L6.53333,7.6 C6.01813,7.6 5.6,8.0186 5.6,8.53333 C5.6,9.04807 6.01813,9.46667 6.53333,9.46667 L7.46667,9.46667 C9.5284,9.46667 11.2,7.79507 11.2,5.73333 C11.2,3.6716 9.5284,2 7.46667,2 L3.73333,2 C1.6716,2 0,3.6716 0,5.73333 C0,7.124 0.762067,8.33453 1.88953,8.97713 C1.87553,8.83107 1.86667,8.6836 1.86667,8.53333 C1.86667,7.92013 1.98753,7.33447 2.2036,6.7978 C1.99267,6.4954 1.86667,6.12953 1.86667,5.73333 C1.86667,4.70387 2.70387,3.86667 3.73333,3.86667 Z M12.1095,5.28907 C12.1231,5.4356 12.1333,5.58307 12.1333,5.73333 C12.1333,6.34607 12.0101,6.9294 11.7931,7.46513 C12.0059,7.768 12.1333,8.13573 12.1333,8.53333 C12.1333,9.5628 11.2961,10.4 10.2667,10.4 L6.53333,10.4 C5.50387,10.4 4.66667,9.5628 4.66667,8.53333 C4.66667,7.50387 5.50387,6.66667 6.53333,6.66667 L7.46667,6.66667 C7.98187,6.66667 8.4,6.24807 8.4,5.73333 C8.4,5.2186 7.98187,4.8 7.46667,4.8 L6.53333,4.8 C4.4716,4.8 2.8,6.4716 2.8,8.53333 C2.8,10.59507 4.4716,12.2667 6.53333,12.2667 L10.2667,12.2667 C12.3284,12.2667 14,10.59507 14,8.53333 C14,7.14267 13.2375,5.93167 12.1095,5.28907 Z"></path></svg></span>URL</th><td><a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-phishing.md" class="url-value">https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-phishing.md</a></td></tr></tbody></table></header><div class="page-body"><h2 id="ace9fd2b-a0d0-4551-86db-5f6e025fe8de" class=""><strong>Playbook: Phishing</strong></h2><p id="362ebb46-aba0-4080-a007-a23c959a37de" class=""><strong>Investigate, remediate (contain, eradicate), and communicate in parallel!</strong></p><p id="c143849a-1bbc-40aa-85c2-157593a7c71c" class="">Assign steps to individuals or teams to work concurrently, when possible; this playbook is not purely sequential. Use your best judgment.</p><h3 id="90439189-7986-4652-95ac-364db7612e3e" class=""><strong>Investigate</strong></h3><p id="73f453ea-9c70-4f37-b2a7-cb8d6dc11cd3" class=""><code>TODO: Expand investigation steps, including key questions and strategies, for phishing.</code></p><ol type="1" id="8cbb0c70-08e4-4795-aa3b-0949fc5831d0" class="numbered-list" start="1"><li><strong>Scope the attack</strong> Usually you will be notified that a potential phishing attack is underway, either by a user, customer, or partner.<ul id="5b06d79b-82fd-4b16-a80f-d04d923a1e0b" class="bulleted-list"><li style="list-style-type:disc">Determine <strong>total number of impacted users</strong></li></ul><ul id="50243894-83ed-4bf2-bb79-86a399daca00" class="bulleted-list"><li style="list-style-type:disc">Understand <strong>user actions</strong> in response to the phishing email (<em>e.g.</em>, did they download the attachment, visit the spoofed site, or give out any personal or business information such as credentials)</li></ul><ul id="588c1025-75ce-4d70-8f67-965b6873945c" class="bulleted-list"><li style="list-style-type:disc">Find the potentially related activity. Check:<ul id="d494de90-c1b4-421d-b767-e2142ff4324c" class="bulleted-list"><li style="list-style-type:circle">social media</li></ul><ul id="73495df9-f7c4-4aa8-a1e8-365c100dff54" class="bulleted-list"><li style="list-style-type:circle">any possibly suspicious emails</li></ul><ul id="4e030ab4-dca4-403a-88d2-ced7e1384809" class="bulleted-list"><li style="list-style-type:circle">emails with links to external and unknown URLs</li></ul><ul id="510ffdfe-77dd-47e1-bd12-78192ad5d07d" class="bulleted-list"><li style="list-style-type:circle">non-returnable or non-deliverable emails</li></ul><ul id="b3419891-97b6-4083-8e8a-82310f5ac28b" class="bulleted-list"><li style="list-style-type:circle">any kind of notification of suspicious activity</li></ul></li></ul></li></ol><ol type="1" id="8b3415ab-7c33-4582-a3ef-9ccee541b4e6" class="numbered-list" start="2"><li><strong>Analyze the message</strong> using a safe device (i.e., <strong>do not</strong> open messages on a device with access to sensitive data or credentials as the message may contain malware), determine: <code>TODO: Specify tools and procedure</code><ul id="886d19b8-5dc3-4e1c-a1ae-83850752b936" class="bulleted-list"><li style="list-style-type:disc">who received the message</li></ul><ul id="e1eecd23-248a-459c-b43d-1946d227ed2a" class="bulleted-list"><li style="list-style-type:disc">who was targeted by the message (may be different than &quot;successful&quot; recipients)</li></ul><ul id="52a82ec6-7c62-4dbc-b2af-edc0593458e8" class="bulleted-list"><li style="list-style-type:disc">email address of the sender</li></ul><ul id="8c76cbcb-a1d7-4405-bdc9-b2884d815b7c" class="bulleted-list"><li style="list-style-type:disc">subject line</li></ul><ul id="0945da64-8ba6-4f39-8e96-4160873be0fd" class="bulleted-list"><li style="list-style-type:disc">message body</li></ul><ul id="3be2717e-4e60-46dc-b14c-8c66c7cd6e84" class="bulleted-list"><li style="list-style-type:disc">attachments (<strong>do not open attachments</strong> except according to established procedures)</li></ul><ul id="a8a9ced6-e2e8-4566-80ec-8071cb1e7bd8" class="bulleted-list"><li style="list-style-type:disc">links, domains, and hostnames (<strong>do not follow links</strong> except according to established procedures)</li></ul><ul id="1dfdbe2e-efd7-411c-ac04-9670127c3fe2" class="bulleted-list"><li style="list-style-type:disc">email metadata including message headers (see below)<ul id="84826398-4bc9-4e26-b698-d9dcf3baec92" class="bulleted-list"><li style="list-style-type:circle">sender information from the &#x27;from&#x27; field and the X-authenticated user header</li></ul><ul id="de4ce6b9-cc24-4010-9448-938d31c5fae6" class="bulleted-list"><li style="list-style-type:circle">all client and mail server IP addresses</li></ul></li></ul><ul id="98f89639-88a6-4e0f-a293-aa2ef3d737bb" class="bulleted-list"><li style="list-style-type:disc">note &quot;quirks&quot; or suspicious features</li></ul></li></ol><ol type="1" id="913bb6a6-7748-47fd-963b-7e79f9abb779" class="numbered-list" start="3"><li><strong>Analyze links and attachments</strong> <code>TODO: Specify tools and procedure</code><ul id="ad894b9f-16e2-4df9-bc43-4cf14dd492cd" class="bulleted-list"><li style="list-style-type:disc">use passive collection such as nslookup and whois to find IP addresses and registration information</li></ul><ul id="ae2e8f08-d896-48cd-9bab-20a8e70d4373" class="bulleted-list"><li style="list-style-type:disc">find related domains using OSINT (<em>e.g.</em>, <a href="https://www.whoxy.com/reverse-whois/">reverse whois</a>) on email addresses and other registration data</li></ul><ul id="70e42673-65a2-412f-a663-cb345447e16f" class="bulleted-list"><li style="list-style-type:disc">submit links, attachments, and/or hashes to <a href="https://www.virustotal.com/gui/">VirusTotal</a></li></ul><ul id="5af0de45-ddfb-4e38-8f67-363717a0a4e7" class="bulleted-list"><li style="list-style-type:disc">submit links, attachments, and/or hashes to a malware sandbox such as <a href="https://cuckoosandbox.org/">Cuckoo</a>, <a href="https://www.hybrid-analysis.com/">Hybrid Analysis</a>, <a href="https://www.joesecurity.org/">Joe Sandbox</a>, or <a href="https://www.vmray.com/">VMray</a>.</li></ul></li></ol><ol type="1" id="c27e399d-acc8-44f4-b98f-d8ec59952e1b" class="numbered-list" start="4"><li>Categorize the type of attack. <code>TODO: Customize categories and create additional playbooks for common or high-impact phishing types</code></li></ol><ol type="1" id="422883cf-b045-498f-bf4f-e8e9ed19968a" class="numbered-list" start="5"><li><strong>Determine the severity.</strong> Consider:<ul id="1f3c04cd-43b2-45e5-aff9-2ca601e03012" class="bulleted-list"><li style="list-style-type:disc">whether public or personal safety is at risk</li></ul><ul id="557e8881-9680-4862-bea2-c09075ddc341" class="bulleted-list"><li style="list-style-type:disc">whether personal data (or other sensitive data) is at risk</li></ul><ul id="2d4886ff-ae43-4220-b87f-dd5712123e08" class="bulleted-list"><li style="list-style-type:disc">any evidence of who is behind the attack</li></ul><ul id="bc3275ee-4889-4bd8-bbe4-647e35766039" class="bulleted-list"><li style="list-style-type:disc">number of affected assets</li></ul><ul id="10a9f3a7-0e16-4bcd-913b-ceab2e3ad709" class="bulleted-list"><li style="list-style-type:disc">preliminary business impact</li></ul><ul id="5b05d105-b0fb-4b94-bc26-67f284d1eafe" class="bulleted-list"><li style="list-style-type:disc">whether services are affected</li></ul><ul id="f0655684-4623-4886-8822-953948ccc998" class="bulleted-list"><li style="list-style-type:disc">whether you are able to control/record critical systems</li></ul></li></ol><p id="c10b1264-de93-475e-8ee6-421a5f0bb55e" class=""><code>TODO: Expand investigation steps, including key questions and strategies, for phishing.</code></p><h3 id="74cb87a7-b5e9-4368-8e59-41aba60601df" class=""><strong>Remediate</strong></h3><ul id="91f0a541-cbcd-4ee5-8052-bfb2a5bfd8f5" class="bulleted-list"><li style="list-style-type:disc"><strong>Plan remediation events</strong> where these steps are launched together (or in coordinated fashion), with appropriate teams ready to respond to any disruption.</li></ul><ul id="6f7ee8f1-df7d-4676-9b4f-e027ecdaf908" class="bulleted-list"><li style="list-style-type:disc"><strong>Consider the timing and tradeoffs</strong> of remediation actions: your response has consequences.</li></ul><h3 id="df1bfdbe-a783-4078-85b9-468666239f02" class=""><strong>Contain</strong></h3><p id="13e87fda-38d0-48cc-ab5e-19907356fcd8" class=""><code>TODO: Customize containment steps, tactical and strategic, for phishing.</code></p><p id="fbdec175-38e1-4ba6-afbd-4306bb5450eb" class=""><code>TODO: Specify tools and procedures for each step, below.</code></p><ul id="8f748236-d1dd-43c6-82d9-03a8d4f5b3bc" class="bulleted-list"><li style="list-style-type:disc">Contain affected accounts<ul id="f2da1a7d-33f9-4f3c-97b8-23d005d0e386" class="bulleted-list"><li style="list-style-type:circle">change login credentials</li></ul><ul id="da7a8de0-7179-4614-b553-f176a77199e9" class="bulleted-list"><li style="list-style-type:circle">reduce access to critical services, systems, or data until investigation is complete</li></ul><ul id="3ddbb371-b475-4953-86de-3283964e7de3" class="bulleted-list"><li style="list-style-type:circle">reenforce multi-factor authentication (MFA)</li></ul></li></ul><ul id="220293d8-47a9-4d2c-9b33-f047557aa475" class="bulleted-list"><li style="list-style-type:disc">Block activity based on discovered indicators of compromise, <em>e.g.</em>:<ul id="83dccf3b-0933-4e06-b6a7-7153f10a2c26" class="bulleted-list"><li style="list-style-type:circle">block malicious domains using DNS, firewalls, or proxies</li></ul><ul id="bad313e0-bb00-4cf6-914a-3536de6b44b4" class="bulleted-list"><li style="list-style-type:circle">block messages with similar senders, message bodies, subjects, links, attachments, <em>etc.</em>, using email gateway or service.</li></ul></li></ul><ul id="32d40783-0c1b-4f93-a561-bf382d8c112d" class="bulleted-list"><li style="list-style-type:disc">Implement forensic hold or retain forensic copies of messages</li></ul><ul id="5e77becf-865c-405d-8375-54e2912508f3" class="bulleted-list"><li style="list-style-type:disc">Purge related messages from other user inboxes, or otherwise make inaccessible</li></ul><ul id="b3858cb6-d880-410d-8148-7a100360a7d7" class="bulleted-list"><li style="list-style-type:disc">Contain broader compromise in accordance with general IR plan</li></ul><ul id="8e82579b-8ad4-45c0-a236-7c229a4dabfc" class="bulleted-list"><li style="list-style-type:disc">Consider mobile device containment measures such as wiping via mobile device management (MDM). Balance against investigative/forensic impact.</li></ul><ul id="cdfa1cea-ce8d-419a-8655-5b762e65c8b2" class="bulleted-list"><li style="list-style-type:disc">Increase detection &quot;alert level,&quot; with enhanced monitoring, particularly from related accounts, domains, or IP addresses.</li></ul><ul id="cb9db2b9-c010-4fa9-9e41-2d1142ab3765" class="bulleted-list"><li style="list-style-type:disc">Consider outside security assistance to support investigation and remediation</li></ul><ul id="7dcea971-0920-4b0a-ae52-26560fd93fa6" class="bulleted-list"><li style="list-style-type:disc">Confirm relevant software upgrades and anti-malware updates on assets.</li></ul><h3 id="e135dc23-57de-452b-9da8-48231cde2550" class=""><strong>Reference: Remediation Resources</strong></h3><p id="4aeb67b4-35de-4d17-ac1c-b5760e26d26a" class=""><code>TODO: Specify financial, personnel, and logistical resources to accomplish remediation</code></p><h3 id="0c56b2ab-e4ec-4bcd-a7ca-ba71665260e1" class=""><strong>Communicate</strong></h3><p id="983edd25-6528-42dd-be43-ab1d2e70784d" class=""><code>TODO: Customize communication steps for phishing</code></p><p id="84cce9fa-ac45-4a11-89c6-e8baf2714c84" class=""><code>TODO: Specify tools and procedures (including who must be involved) for each step, below, or refer to overall plan</code></p><ol type="1" id="fdf2e8d5-3064-4a30-9b72-44d25d3c917a" class="numbered-list" start="1"><li>Escalate incident and communicate with leadership per procedure</li></ol><ol type="1" id="d9557c63-543c-477a-b281-9245ce1e5107" class="numbered-list" start="2"><li>Document incident per procedure (and <a href="https://us-cert.cisa.gov/report-phishing">report</a>)</li></ol><ol type="1" id="14d31e71-23dd-445a-9f2e-8775642d07e5" class="numbered-list" start="3"><li>Communicate with internal and external legal counsel per procedure, including discussions of compliance, risk exposure, liability, law enforcement contact, <em>etc.</em></li></ol><ol type="1" id="6ad3cf8d-66cd-46ca-b41b-b17407fd8118" class="numbered-list" start="4"><li>Communicate with users (internal)<ol type="a" id="878e9b2d-e503-4110-9b14-eeb53f8808bb" class="numbered-list" start="1"><li>Communicate incident response updates per procedure</li></ol><ol type="a" id="de135163-e7b5-427d-a921-a20d2db5855f" class="numbered-list" start="2"><li>Communicate impact of incident <strong>and</strong> incident response actions (e.g., containment: &quot;why is the file share down?&quot;)</li></ol><ol type="a" id="22d3b011-966b-4657-9ab0-cbdec4794fd9" class="numbered-list" start="3"><li>Communicate requirements: &quot;what should users do and not do?&quot;</li></ol></li></ol><ol type="1" id="3a8e1cd3-2126-4581-911d-b049ecd7aac2" class="numbered-list" start="5"><li>Communicate with customers<ol type="a" id="5819e83c-e801-4eee-8d5d-114c1a17def4" class="numbered-list" start="1"><li>Focus particularly on those whose data was affected</li></ol><ol type="a" id="1d812126-cde8-4e93-b627-434e1a5b620a" class="numbered-list" start="2"><li>Generate required notifications based on applicable regulations (particularly those that may consider phishing a data breach or otherwise requires notifications) <code>TODO: Expand notification requirements and procedures for applicable regulations</code></li></ol></li></ol><ol type="1" id="3501126f-05f2-4f60-9a3a-b1d21344cbf9" class="numbered-list" start="6"><li>Contact insurance provider(s)<ol type="a" id="a038b810-1b8c-4b78-8a24-a51c324f3e29" class="numbered-list" start="1"><li>Discuss what resources they can make available, what tools and vendors they support and will pay for, <em>etc.</em></li></ol><ol type="a" id="ef58cccf-ab25-47b8-b3e3-a8104799b9e6" class="numbered-list" start="2"><li>Comply with reporting and claims requirements to protect eligibility</li></ol></li></ol><ol type="1" id="38b59382-fb51-41fa-827b-2172a12a8fee" class="numbered-list" start="7"><li>Consider notifying and involving <a href="https://www.usa.gov/stop-scams-frauds">law enforcement</a> TODO: Link the following bullets to actual resources for your organization<ol type="a" id="7e2f6302-97b6-41e8-8b72-ab40c2b59588" class="numbered-list" start="1"><li><a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-phishing.md#TODO-link-to-actual-resource">Local law enforcement</a></li></ol><ol type="a" id="c3ac5559-e400-4c56-bfef-88e8c5f2bc28" class="numbered-list" start="2"><li><a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-phishing.md#TODO-link-to-actual-resource">State or regional law enforcement</a></li></ol><ol type="a" id="7cc92bd8-6e0a-45be-bbb4-2d0357bb87e9" class="numbered-list" start="3"><li><a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-phishing.md#TODO-link-to-actual-resource">Federal or national law enforcement</a></li></ol></li></ol><ol type="1" id="adcbb276-d0c4-4640-8061-fdc3ab3a2bdf" class="numbered-list" start="8"><li>Communicate with security and IT vendors TODO: Link the following bullets to actual resources for your organization<ol type="a" id="911d2012-51fc-401b-a3f9-42c65077bda4" class="numbered-list" start="1"><li>Notify and collaborate with <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-phishing.md#TODO-link-to-actual-resource">managed providers</a> per procedure</li></ol><ol type="a" id="075d942c-6567-4ca9-888c-979cefcf60b5" class="numbered-list" start="2"><li>Notify and collaborate with <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-phishing.md#TODO-link-to-actual-resource">incident response consultants</a> per procedure</li></ol></li></ol><h3 id="012bfb51-2e67-4acf-bbca-00f802624b12" class=""><strong>Recover</strong></h3><p id="0f115dab-9bbb-44bd-8326-3fcc779444f5" class=""><code>TODO: Customize recovery steps for phishing</code></p><p id="cb509a9c-66c8-4995-a6db-69f3167151b7" class=""><code>TODO: Specify tools and procedures for each step, below</code></p><ol type="1" id="f24e2cdb-5e8b-4b32-b391-e77555017683" class="numbered-list" start="1"><li>Launch business continuity/disaster recovery plan(s) if compromise involved business outages: <em>e.g.</em>, consider migration to alternate operating locations, fail-over sites, backup systems.</li></ol><ol type="1" id="98b469a8-08a5-44c5-beaa-418314be01d8" class="numbered-list" start="2"><li>Reinforce training programs regarding suspected phishing attacks. Key suspicious indicators may include:<ul id="4020fd02-8453-48aa-831e-ac22039609bb" class="bulleted-list"><li style="list-style-type:disc">misspellings in the message or subject</li></ul><ul id="362bac4c-d20e-4cdb-83e0-5dd50728500b" class="bulleted-list"><li style="list-style-type:disc">phony-seeming sender names, including mismatches between display name and email address</li></ul><ul id="2ec1cfd4-8020-4611-9076-85675865347b" class="bulleted-list"><li style="list-style-type:disc">personal email addresses for official business (e.g., gmail or yahoo emails from business colleagues)</li></ul><ul id="16f3b451-0064-46c0-ac26-404404f3216b" class="bulleted-list"><li style="list-style-type:disc">subject lines marked &quot;[EXTERNAL]&quot; on emails that look internal</li></ul><ul id="d0975fa1-59a8-4872-b9ca-8d42e4f22e99" class="bulleted-list"><li style="list-style-type:disc"><a href="https://www.pcworld.com/article/248963/how-to-tell-if-a-link-is-safe-without-clicking-on-it.html">malicious or suspicious links</a></li></ul><ul id="0e0028b1-8843-496d-8a81-a97d3041de45" class="bulleted-list"><li style="list-style-type:disc">receiving an email or attachment they were not expecting but from someone they know (contact sender before opening it)</li></ul><ul id="22046ee1-a3f4-429f-9824-30fef4b90f79" class="bulleted-list"><li style="list-style-type:disc">reporting suspicious activity to IT or security</li></ul></li></ol><ol type="1" id="eaaa1b36-00d4-4c78-860e-1741843ab0bb" class="numbered-list" start="3"><li>Ensure that IT and security staff is up to date on recent phishing techniques.</li></ol><ol type="1" id="e1423919-b992-4e02-9fc8-b3a687de657f" class="numbered-list" start="4"><li>Determine if any controls have failed when falling victim to an attack and rectify them. Here is a <a href="https://www.proofpoint.com/us/security-awareness/post/14-things-do-after-phishing-attack">good source</a> to consider following a phishing attack.</li></ol><h3 id="e00c3ebc-1c40-4f7e-990e-1a93b6b91e88" class=""><strong>Resources</strong></h3><h3 id="229aae38-6385-4054-8ce7-b9e3ff2811ae" class=""><strong>Reference: User Actions for Suspected Phishing Attack</strong></h3><p id="c27223a1-5f6d-4daa-b2fb-4f19b2113aea" class=""><code>TODO: Customize steps for users dealing with suspected phishing</code></p><ol type="1" id="126d77f1-426a-4319-b6be-6afae6608038" class="numbered-list" start="1"><li>Stay calm, take a deep breath.</li></ol><ol type="1" id="f49738df-1fbe-495f-971a-48c0d3524316" class="numbered-list" start="2"><li>Take pictures of your screen using your smartphone showing the things you noticed: the phishing message, the link if you opened it, the sender information.</li></ol><ol type="1" id="8af39708-dc73-4adf-9fc7-7a01055144a2" class="numbered-list" start="3"><li>Take notes about the problem(s) using the voice memo app on your smartphone or pen-and-paper. Every little bit helps! Document the following:<ol type="a" id="0cefaef0-3a2f-48b5-98e1-df53ceecdc37" class="numbered-list" start="1"><li>What did you notice?</li></ol><ol type="a" id="07d2a21b-5026-47d7-84b3-e745ea06fd1d" class="numbered-list" start="2"><li>Why did you think it was a problem?</li></ol><ol type="a" id="8898e27a-75b3-45a0-8b78-0bccbca43d04" class="numbered-list" start="3"><li>What were you doing at the time you detected it?</li></ol><ol type="a" id="3340748d-8004-4232-b6a1-41dc2f6024e0" class="numbered-list" start="4"><li>When did it first occur, and how often since?</li></ol><ol type="a" id="45e3efcc-16da-4e73-a6c4-cfe718007146" class="numbered-list" start="5"><li>Where were you when it happened, and on what network? (office/home/shop, wired/wireless, with/without VPN, <em>etc.</em>)</li></ol><ol type="a" id="34c6cdf2-9d50-4a4a-b01e-4c17031f8c95" class="numbered-list" start="6"><li>What systems are you using? (operating system, hostname, <em>etc.</em>)</li></ol><ol type="a" id="00344bf5-7bf2-46b9-9af7-37b9723462eb" class="numbered-list" start="7"><li>What account were you using?</li></ol><ol type="a" id="99697a58-1084-4be1-a860-89b1aefd8240" class="numbered-list" start="8"><li>What data do you typically access?</li></ol><ol type="a" id="43caacdb-e1da-45a8-a896-17677841a493" class="numbered-list" start="9"><li>Who else have you contacted about this incident, and what did you tell them?</li></ol></li></ol><ol type="1" id="5d5b5ae7-8e3a-41aa-b15e-00489b8aa652" class="numbered-list" start="4"><li>Contact the <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-phishing.md#TODO-link-to-actual-resource">help desk</a> using the <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-phishing.md#TODO-link-to-actual-resource">phishing hotline</a> or the <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-phishing.md#TODO-link-to-actual-resource">phishing report toolbar</a> and be as helpful as possible.</li></ol><ol type="1" id="b7eb10bf-00f2-4ea1-8a63-050e1eb0b309" class="numbered-list" start="5"><li>Be patient: the response may be disruptive, but you are protecting your team and the organization! <strong>Thank you.</strong></li></ol><h3 id="375abb4c-c11c-46b1-86c1-ec86cdb9551a" class=""><strong>Reference: Help Desk Actions for Suspected Phishing Attack</strong></h3><p id="3a4cc88b-7251-4f10-a4ac-afd350e004ac" class=""><code>TODO: Customize steps for help desk personnel dealing with suspected phishing</code></p><ol type="1" id="8c59eaa6-5a26-4cbf-835c-8be21cc7d328" class="numbered-list" start="1"><li>Stay calm, take a deep breath.</li></ol><ol type="1" id="f216bc7f-d190-40a4-90d3-1a652ddb0cc7" class="numbered-list" start="2"><li>Open a ticket to document the incident, per procedure. <code>TODO: Customize template with key questions (see below) and follow-on workflow</code></li></ol><ol type="1" id="0c6b5dc9-42b4-48e6-86ae-a88a15a2e51c" class="numbered-list" start="3"><li>Ask the user to take pictures of their screen using their smartphone showing the things they noticed: the phishing message, the link if you opened it, the sender information, <em>etc.</em> If this is something you noticed directly, do the same yourself.</li></ol><ol type="1" id="d91d988e-3a9d-4d98-9219-3781c528e8a3" class="numbered-list" start="4"><li>Take notes about the problem(s) using the voice memo app on your smartphone or pen-and-paper. If this is a user report, ask detailed questions, including:<ol type="a" id="e76af00f-54f1-4e78-b7e7-5a24a3e56ed9" class="numbered-list" start="1"><li>What did you notice?</li></ol><ol type="a" id="b81fff21-8dd7-49ba-956c-05f38a85a80e" class="numbered-list" start="2"><li>Why did you think it was a problem?</li></ol><ol type="a" id="775ad519-9709-424b-8790-5c5de2f169b8" class="numbered-list" start="3"><li>What were you doing at the time you detected it?</li></ol><ol type="a" id="0e25fce3-5c2a-4e97-8813-d549acd2ebdc" class="numbered-list" start="4"><li>When did it first occur, and how often since?</li></ol><ol type="a" id="5d4773b2-a9ad-43be-91f7-455ab45bd04c" class="numbered-list" start="5"><li>What networks are involved? (office/home/shop, wired/wireless, with/without VPN, <em>etc.</em>)</li></ol><ol type="a" id="0dacdf98-949b-4e36-9d1d-26d8d66becd4" class="numbered-list" start="6"><li>What systems are involved? (operating system, hostname, <em>etc.</em>)</li></ol><ol type="a" id="c0042b03-2364-4c05-996b-8b274c2b64e3" class="numbered-list" start="7"><li>What data is involved? (paths, file types, file shares, databases, software, <em>etc.</em>)</li></ol><ol type="a" id="7a9aa1bb-7dfb-4d6f-8fdc-f28f6b7fb3a1" class="numbered-list" start="8"><li>What users and accounts are involved? (active directory, SaaS, SSO, service accounts, <em>etc.</em>)</li></ol><ol type="a" id="c7e84d75-bbd8-4f3a-8843-41f01eae1191" class="numbered-list" start="9"><li>What data do the involved users typically access?</li></ol><ol type="a" id="cb761783-c392-47a4-9eaf-2ecb1a0cbee1" class="numbered-list" start="10"><li>Who else have you contacted about this incident, and what did you tell them?</li></ol></li></ol><ol type="1" id="49175bc9-77a1-4da8-b944-7f11b81511e8" class="numbered-list" start="5"><li>Ask follow-up questions as necessary. <strong>You are an incident responder, we are counting on you.</strong></li></ol><ol type="1" id="2c6f5e7e-dbdc-4df4-8eb4-7fa56859dbc6" class="numbered-list" start="6"><li>Get detailed contact information from the user (home, office, mobile), if applicable.</li></ol><ol type="1" id="9698e0cc-c0b1-4c91-8512-a8a85c82a9dc" class="numbered-list" start="7"><li>Record all information in the ticket, including hand-written and voice notes.</li></ol><ol type="1" id="f592f9fd-a739-4ffe-8e95-af194e0bf87a" class="numbered-list" start="8"><li>Quarantine affected users and systems. <code>TODO: Customize containment steps, automate as much as possible</code></li></ol><ol type="1" id="20e3e76f-4c5d-4572-81b0-e4429f1d39c7" class="numbered-list" start="9"><li>Contact the <a href="https://github.com/counteractive/incident-response-plan-template/blob/master/playbooks/playbook-phishing.md#TODO-link-to-actual-resource">security team</a> and stand by to participate in the response as directed: investigation, remediation, communication, and recovery.</li></ol><h3 id="c5f61495-a673-4e75-9863-188b8e048928" class=""><strong>Additional Information</strong></h3><ol type="1" id="ffb3f5a9-e10a-41c3-8e5b-cc3aa1a39208" class="numbered-list" start="1"><li><a href="https://resources.infosecinstitute.com/category/enterprise/phishing/phishing-countermeasures/top-16-anti-phishing-resources/#gref">Anti-Phishing Attack resources</a></li></ol><ol type="1" id="8fcc4878-ba1b-40fc-8a07-219bcd5b119c" class="numbered-list" start="2"><li><a href="https://www.securitymetrics.com/blog/7-ways-recognize-phishing-email">Methods of Identifying a Phishing attack</a></li></ol><ol type="1" id="5110297a-bdb8-465f-8769-98790e26ec0a" class="numbered-list" start="3"><li><a href="https://www.phishing.org/phishing-examples">Phishing Email Examples</a></li></ol><ol type="1" id="1ec6e2f1-f3e2-4152-b2ad-14dc8bd7f33e" class="numbered-list" start="4"><li><a href="https://resources.infosecinstitute.com/category/enterprise/phishing/phishing-countermeasures/anti-phishing-best-practices/#gref">Anti-Phishing best practices</a></li></ol></div></article></body></html>

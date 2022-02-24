@@ -1,0 +1,782 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>AWS - Web Application Dos/DDoS Attack</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="9a01c41c-8e1f-480b-8725-6f50691bf9fe" class="page sans"><header><h1 class="page-title">AWS - Web Application Dos/DDoS Attack</h1><table class="properties"><tbody><tr class="property-row property-row-text"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>Comments</th><td>Incident Response Run-book Template for AWS Web Application Dos/DDoS Attack</td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-green">AWS</span></td></tr><tr class="property-row property-row-url"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesUrl"><path d="M3.73333,3.86667 L7.46667,3.86667 C8.49613,3.86667 9.33333,4.70387 9.33333,5.73333 C9.33333,6.7628 8.49613,7.6 7.46667,7.6 L6.53333,7.6 C6.01813,7.6 5.6,8.0186 5.6,8.53333 C5.6,9.04807 6.01813,9.46667 6.53333,9.46667 L7.46667,9.46667 C9.5284,9.46667 11.2,7.79507 11.2,5.73333 C11.2,3.6716 9.5284,2 7.46667,2 L3.73333,2 C1.6716,2 0,3.6716 0,5.73333 C0,7.124 0.762067,8.33453 1.88953,8.97713 C1.87553,8.83107 1.86667,8.6836 1.86667,8.53333 C1.86667,7.92013 1.98753,7.33447 2.2036,6.7978 C1.99267,6.4954 1.86667,6.12953 1.86667,5.73333 C1.86667,4.70387 2.70387,3.86667 3.73333,3.86667 Z M12.1095,5.28907 C12.1231,5.4356 12.1333,5.58307 12.1333,5.73333 C12.1333,6.34607 12.0101,6.9294 11.7931,7.46513 C12.0059,7.768 12.1333,8.13573 12.1333,8.53333 C12.1333,9.5628 11.2961,10.4 10.2667,10.4 L6.53333,10.4 C5.50387,10.4 4.66667,9.5628 4.66667,8.53333 C4.66667,7.50387 5.50387,6.66667 6.53333,6.66667 L7.46667,6.66667 C7.98187,6.66667 8.4,6.24807 8.4,5.73333 C8.4,5.2186 7.98187,4.8 7.46667,4.8 L6.53333,4.8 C4.4716,4.8 2.8,6.4716 2.8,8.53333 C2.8,10.59507 4.4716,12.2667 6.53333,12.2667 L10.2667,12.2667 C12.3284,12.2667 14,10.59507 14,8.53333 C14,7.14267 13.2375,5.93167 12.1095,5.28907 Z"></path></svg></span>URL</th><td></td></tr></tbody></table></header><div class="page-body"><p id="fb52a5eb-c209-4247-871c-944bc27e1f9f" class="">Run Book Github Link: </p><figure id="ab6f032a-43eb-4f29-ae45-13638557c505"><a href="https://github.com/aws-samples/aws-incident-response-playbooks/blob/0d9a1c0f7ad68fb2c1b2d86be8914f2069492e21/runbooks/runbook%20sample%20-%20DoS%20or%20DDoS%20attack.md" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">aws-incident-response-playbooks/runbook sample - DoS or DDoS attack.md at 0d9a1c0f7ad68fb2c1b2d86be8914f2069492e21 · aws-samples/aws-incident-response-playbooks</div><div class="bookmark-description">Web Application Dos/DDoS Attack These run-books are created to be used as templates only. They should be customized by administrators working with AWS to suit their particular needs, risks, available tools and work processes. These guides are not official AWS documentation and are provided as-is to customers using AWS products and who are looking to improve their incident response capability.</div></div><div class="bookmark-href"><img src="https://github.com/favicon.ico" class="icon bookmark-icon"/>https://github.com/aws-samples/aws-incident-response-playbooks/blob/0d9a1c0f7ad68fb2c1b2d86be8914f2069492e21/runbooks/runbook%20sample%20-%20DoS%20or%20DDoS%20attack.md</div></div><img src="https://opengraph.githubassets.com/5d81f0288e23a6b8924f0a017e5a37b3fb4d62d64591c0a5e5ff102b162eeae4/aws-samples/aws-incident-response-playbooks" class="bookmark-image"/></a></figure><p id="73d2f235-64a7-477d-9d5b-098d9013cbdc" class="">
+</p><p id="927aa47a-b758-4695-bf3a-8abe16a0dbf4" class=""><strong><strong>Incident Response Run-book Template</strong></strong></p><p id="06f2eb7c-cff9-431b-b490-805c6c62a1cd" class=""><strong><strong>
+Incident Type: </strong></strong>Web Application Dos/DDoS Attack</p><p id="f2a31658-2e51-41ce-916e-28a51c5d452d" class=""><strong>
+Summary</strong>
+These run-books are created to be used as templates only. They should be customized by administrators working with AWS to suit their particular needs, risks, available tools and work processes. These guides are not official AWS documentation and are provided as-is to customers using AWS products and who are looking to improve their incident response capability.
+The run-books included below cover several common scenarios faced by AWS customers. They outline steps based on the <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf">NIST Computer Security Incident Handling Guide</a> (Special Publication 800-61 Revision 2) that can be used to:
+• Gather evidence
+• Contain and then eradicate the incident
+• recover from the incident
+• Conduct post-incident activities, including post-mortem and feedback processes
+Interested readers may also find the AWS Security Incident Response Guide (first published in June 2019) a useful guide as an overview of how the below steps were created.
+Each runbook corresponds to a unique incident and there are 5 parts to handling each incident type, following the NIST guidelines referenced above. Each part corresponds to an action in that NIST document.
+It is not sufficient to customize these scenarios to the need of your customers, organization or applications. It is important that these runbook scenarios are tested (for example, in Game Days) prior to deployment to your knowledge management system and that all responders are familiar with the actions required to respond to an incident.
+Note that some of the incident response steps noted in each scenario may incur costs in your AWS account(s) for services used in either preparing for, or responding to incidents. Customizing these scenarios and testing them will help you to determine if additional costs will be incurred. You can use AWS Cost Explorer and look at costs incurred over a particular time frame (such as when running Game Days) to establish what the possible impact might be.<strong>
+Incident Handling</strong></p><p id="1c7de47f-729c-40b9-bddb-1defb270c58e" class=""><strong>
+</strong><mark class="highlight-red"><strong>Part 1: Acquire, Preserve, document evidence</strong></mark></p><p id="5868fea7-5374-4d3f-8aa5-0330103a1c73" class=""><mark class="highlight-red">
+</mark>1. Confirm an internal ticket/case has been raised for the incident within your organization. If not, manually raise one.
+2. Determine and begin to document end-user impact/experience of the issue. This should be documented in the ticket/case related to the incident
+3. In the case of automatically created tickets/cases, determine what internal alarms/metrics are currently indicating an issue (what caused the ticket to be created?)
+4. Determine the application impacted (this may be done quickly via Resource Tags)
+5. Determine if there are any known events that could be causing service disruption (increased traffic due to a sales event, or similar)
+6. Check the CMDB to determine if there were any deployments to production (code, software or infrastructure updates) that may result in an increase in traffic to the affected URL(s)
+7. Internal Communications:
+    1. Identify stakeholder roles from the application entry in the Configuration Management Database (CMDB) entry for that application, or via the application’s risk register
+    2. Open a conference bridge war room for the incident
+    3. Notify identified stakeholders including (if required) legal personnel, public relations, technical teams and developers and add them to the ticket and the war room, so they are updated as the ticket is updated
+8. External Communications:
+    1. For colleagues in the organization that are responsible for providing public/external communication statements, ensure these internal colleagues are added to the ticket so they receive regular status updates regarding the incident and can complete their own requirements for communications within and external to the business.
+9. Determine the resources involved in serving the application (start with front-end resources, including CDNs, load balancers and front-end application servers, then move to supporting services, such as databases, caches, etc.)
+10. Obtain the application’s documented baseline and locate the metrics for standard application performance from the Configuration Management Database (CMDB).
+11. Determine if the application’s resources are currently displaying metrics outside the baseline:
+    1. For CloudFront, check the following metrics:
+        1. Confirm if there is a significant variation in:
+            1. <a href="https://aws.amazon.com/cloudfront/reporting/">Data transferred</a> over HTTP and/or HTTPS
+            2. <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/monitoring-using-cloudwatch.html">Total number</a> of HTTP requests
+        2. If monitoring CloudFront access logs, determine if there has been a spike in 4xx or 5xx HTTP return codes (in CloudWatch, All &gt;&gt; CloudFront &gt;&gt; Per-Distribution Metrics) with a Metric Name of 5xxErrorRate or 4xxErrorRate
+    2. For Application Load Balancers, <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-cloudwatch-metrics.html">check the following metrics</a>:
+        1. Confirm if there is a significant variation in:
+            1. HTTPCode_ELB_4xx_Count (indicators of attacks that may involve credential stuffing, malformed or incomplete requests, or overly aggressive website scraping, etc.)
+            2. HTTPCode_ELB_2xx_Count (a dramatic increase may indicate a HTTP flood attack)
+            3. ActiveConnectionCount (indicates total concurrent TCP connections to ALB, when used with SUM)
+            4. ClientTLSNegotiationErrorCount (this may indicate a protocol exploitation attack by abusing the SSL handshake process, such as sending only weak ciphers in a request)
+            5. RequestCount (a significant increase in requests may indicate a HTTP flood attack)
+            6. HTTPCode_Target_5XX_Count (as this is a response dedicated by a host or container behind the load balancer, this may indicate that the server is unable to respond to the number of received requests, this may also be the result of impacted services downstream, such as a supporting database)
+            7. TargetResponseTime (increasing response times may indicate server resources are not available to serve requests from the load balancer)
+            8. ELBAuthFailure (indicates that user authentication could not be completed, as the IdP denied access to the user, or a user attempted to replay an already used auth token)
+        2. Note the metrics of concern
+    3. For EC2 instances, check the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring_ec2.html">following metrics</a>:
+        1. Confirm if there is significant variation in:
+            1. CPU utilization
+            2. Network utilization
+            3. Disk performance
+            4. Memory utilization (if using the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html">CloudWatch Logs Agent</a>)
+        2. Note the metrics of concern
+12. Obtain logs relevant to the incident (these will be the logs from the resources identified above, in point 4), these should include the following (note that these logs should be already configured to be sent to CloudWatch Logs):
+    1. Web server access logs
+        1. RHEL-based - /var/log/apache/access.log, or
+        2. Debian-based - /var/log/apache2/access.log
+    2. Load balancer logs:
+        1. Application Load Balancer Logs will be configured for the ALB and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html">sent to an S3 bucket</a>. If you are not sure which bucket the logs are being sent to, <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#enable-access-logging">use this document to help you determine the bucket name</a>.
+    3. CloudFront Distribution logs. CloudFront will be configured to <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html">send its access logs to an S3 bucket</a>.
+13. Once you have verified you have access to the logs, use your preferred tool (for example, Amazon Athena, or internal tools, such as Splunk) to review the logs and determine if there are any identifiable attack signatures. These may include the following:
+    1. An unusual number of requests within a given time period
+    2. An unusual set of source IPs
+    3. A set of unrecognized URLs in the request section
+    4. POST or Query parameters that are not expected or supported by the application
+    5. Unexpected HTTP verbs (GET, where we expect POST, etc)
+    6. An unusually high number of 2xx, 4xx or 5xx responses
+14. From the log dive outlined in previous steps, determine the likely attack vector (HTTP flood, SYN flood, credential stuffing, UDP reflection attack, etc.)
+15. What AWS resources are being targeted? Supply the Amazon resource names (ARN)
+16. Supply specific information about the service hosted on the AWS resources? example Media platform, Game, Static Website etc?</p><p id="002fae49-05a3-4d3e-9d30-b26314b983e5" class=""><strong>
+</strong><strong><mark class="highlight-red">Part 2: Contain The Incident</mark></strong></p><p id="8f844f02-e1b6-4414-8c32-dda03b8934ea" class=""><strong>
+</strong>From the Acquire, Preserve, Document Evidence phase, you should now have a good idea of the attack vector. We will now attempt to mitigate the attack.
+1. If it is a single EC2 instance serving the public content:
+    1. determine from the application’s developer whether the application is “cloud native” (can handle things such as Auto Scaling, for example as application instances spin up and down).
+    2. Determine the AMI ID for the EC2 instance(s) identified during the evidence phase and determine if this is a approved image for this application
+    3. If there is no pre-defined image for spinning up additional EC2 instances, consult with the application developer whether an image can be created from the existing instance, and additional instances spun up from that image. If this is possible, proceed with those steps
+    4. From EC2 metrics in CloudWatch outlined in the evidence phase (Part 1), determine if the most suitable <a href="https://aws.amazon.com/ec2/instance-types/">instance type</a> is in use and/or if additional instances should be added behind a <a href="https://aws.amazon.com/elasticloadbalancing/">load balancer</a> to spread the load
+    5. If so, this will allow you to scale additional EC2 instances using <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/GettingStartedTutorial.html">Auto Scaling</a>, and put those instances behind an appropriate load balancer
+    6. Update DNS records in your Hosted Zone to point to the load balancer. For security groups on the EC2 instance, allow access only from the Load Balancer’s security group, and do not allow direct public access from any port or protocol
+2. If it is a group of EC2 instances behind a load balancer:
+    1. Determine if Auto Scaling is in use.
+        1. If not, create an Auto Scaling Group, define a <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-launch-config.html">Launch Configuration</a> or <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">Launch Template</a> and add the existing instances to the Auto Scaling Group
+        2. If it is in use, move to step (2 b).
+    2. Confirm with the relevant stakeholders that CloudFront can be used and;
+    3. <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html">Deploy a CloudFront distribution</a>, using the load balancer as an origin for the distribution
+3. If it is a load balancer (or EC2 instance) behind a CloudFront distribution
+    1. Determine if it is a single EC2 instance serving as an origin:
+        1. If so, go to step 1 and work through those steps
+        2. If it is not, verify the following:
+            1. There is a load balancer
+            2. The target groups are spread across multiple Availability Zones
+            3. The EC2 instances are managed by Auto Scaling
+        3. If any of the points in (ii) are not true, go back and work through step 2, above
+        4. Finally, ensure that the security groups for the Load Balancer are appropriately configured. This can be done automatically by using AWS Lambda and the AWS published IP ranges for CloudFront. There is a <a href="https://github.com/aws-samples/aws-cloudfront-samples">Git Repository with code that will set this up for you</a> and maintain the ranges if there are changes to the public IP ranges published.</p><p id="3c81f3b0-2d21-4d17-85ed-fb1929ef8497" class=""><strong>
+</strong><strong><mark class="highlight-red">Part 3: Eradicate the Incident</mark></strong></p><p id="f817dcc0-a18e-4c48-9fe3-25093e47eb76" class=""><strong><mark class="highlight-red">
+</mark></strong>By following steps 1 through to 3 in PART 2, the service is now protected by AWS Shield. Now further refine protections by using AWS WAF.
+1. Determine if the CloudFront distribution or Application Load Balancer are protected by an AWS WAF WebACL.
+    1. For a CloudFront distribution:
+        1. Go to the CloudFront console and click on the name of the relevant distribution
+        2. Under the <strong>General</strong> tab, make note of the value in the AWS WAF Web ACL field
+        3. Go to the AWS WAF and Shield console and select Web ACLs from the navigation pane
+        4. Locate the Web ACL with the same name as noted from step (ii) and click on the name
+    2. For an Application Load Balancer:
+        1. Go to the EC2 console and select “Load Balancers” from the “Load Balancing” menu in the navigation pane
+        2. Select the name of the relevant Application Load Balancer and in the tabs below, select “Integrated services”
+        3. Note the name of the Web ACL listed under “AWS WAF”
+2. If it is determined that the CloudFront distribution or Application Load Balancer are not protected by a Web ACL, take one of the two following steps:
+    1. If a Web ACL already exists and the CMDB shows that this Web ACL should be associated to either the CloudFront Distribution or the Application Load Balancer, go to the AWS console or CLI tools and associate that resource to the Web ACL.
+    2. If no reference exists to a Web ACL in the CMDB that should be associated to either the CloudFront Distribution or Application Load Balancer, there are now two possible options:
+        1. If the CMDB contains references to known Web ACL rules that should be contained in a Web ACL, go ahead and create those rules and add them to a new Web ACL. Finally, associate that Web ACL to the resources to be protected.
+        2. If the CMDB does not contain references to Web ACL rules that should be deployed, the quickest solution is to deploy a set of AWS WAF Managed Rules. These are available in the AWS Marketplace for <a href="https://aws.amazon.com/marketplace/solutions/security/waf-managed-rules">third-party providers</a>. There are also AWS-Managed rules available directly from AWS when you <a href="https://aws.amazon.com/blogs/aws/announcing-aws-managed-rules-for-aws-waf/">create a new Web ACL</a>.
+        3. Alternatively, if the application developers know what type of rules should be deployed to protect the application, work with those developers to <a href="https://docs.aws.amazon.com/waf/latest/developerguide/classic-web-acl-rules-creating.html">create the rules</a>, deploy the Web ACL and then go back to step (a), above.</p><p id="588b46ba-1c44-4a7c-9e4a-bac542e204ca" class=""><strong>
+</strong><mark class="highlight-red"><strong>Part 4: Recover from the Incident</strong></mark></p><p id="68ecc116-f6c8-4679-ae9b-5b0713c046d0" class=""><mark class="highlight-red"><strong>
+</strong></mark>With DDoS Resiliency best practices now in place, the next step is to determine if the attack has been mitigated, or if additional tuning is needed to eradicate the attack. This includes reviewing pre- and post-mitigation logs to:
+• Determine the impact of the mitigations already performed
+• Identify attack signatures to attempt to eradicate or further mitigate the attack
+From points (9) and (10) in PART 1, review the logs obtained once the incident was detected. Now that mitigation has been placed, we need to go back and obtain those metrics and logs again, and compare them to the incident metrics and logs obtained earlier. If request activity has returned to baseline levels, and the service is confirmed to be available, the attack has been mitigated: Continue to monitor the service post-attack. If the service request rate is still elevated and the service is available, the attack has been mitigated: Continue to monitor the service for potential change in attack method. If the service is unavailable, return to Part 1 and review logs and related data to determine if you have correctly identified the attack vector, or if the attacker has changed the vector in response to the mitigation.</p><p id="ab07f661-34b7-4c0e-89ca-06f20e1bbac5" class=""><strong>
+</strong><mark class="highlight-red"><strong>Part 5: Post-Incident Activity</strong></mark></p><p id="d056d536-1831-4164-af4f-f1f0a968a785" class=""><mark class="highlight-teal"><strong>
+</strong></mark>This “sharpen the saw” activity allows teams to assess their response to the actual incident, determine what worked and what didn’t, update the process based on that information and record these findings.
+1. Review the incident handling and the incident handling process with key stakeholders identified in Part 1, Step 6.
+2. Document lessons learned, including attack vector(s) mitigation(s), misconfiguration, etc.
+3. Store the artifacts from this process with the application information in the CMDB entry for the application and also in the CMDB entry for the DDoS Response process.
+4. Update risk documents based on any newly discovered threat/vulnerability combinations that were discovered as a result of lessons learned
+5. If new application or infrastructure configuration is required to mitigate any newly identified risks, conduct these change activities and update application and component configuration in the CMDB</p><p id="9a883ee6-d23c-4b69-957e-da37c1f51255" class="">
+</p></div></article></body></html>

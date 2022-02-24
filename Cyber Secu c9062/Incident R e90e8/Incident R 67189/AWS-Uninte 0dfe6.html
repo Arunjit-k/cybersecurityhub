@@ -1,0 +1,658 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>AWS-Unintended access to an S3 Bucket</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="0dfe6001-c933-41a6-9988-dc73c3e11fae" class="page sans"><header><h1 class="page-title">AWS-Unintended access to an S3 Bucket</h1><table class="properties"><tbody><tr class="property-row property-row-text"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>Comments</th><td>Incident Response Run-book Template for Unintended access to an S3 Bucket</td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-green">AWS</span></td></tr><tr class="property-row property-row-url"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesUrl"><path d="M3.73333,3.86667 L7.46667,3.86667 C8.49613,3.86667 9.33333,4.70387 9.33333,5.73333 C9.33333,6.7628 8.49613,7.6 7.46667,7.6 L6.53333,7.6 C6.01813,7.6 5.6,8.0186 5.6,8.53333 C5.6,9.04807 6.01813,9.46667 6.53333,9.46667 L7.46667,9.46667 C9.5284,9.46667 11.2,7.79507 11.2,5.73333 C11.2,3.6716 9.5284,2 7.46667,2 L3.73333,2 C1.6716,2 0,3.6716 0,5.73333 C0,7.124 0.762067,8.33453 1.88953,8.97713 C1.87553,8.83107 1.86667,8.6836 1.86667,8.53333 C1.86667,7.92013 1.98753,7.33447 2.2036,6.7978 C1.99267,6.4954 1.86667,6.12953 1.86667,5.73333 C1.86667,4.70387 2.70387,3.86667 3.73333,3.86667 Z M12.1095,5.28907 C12.1231,5.4356 12.1333,5.58307 12.1333,5.73333 C12.1333,6.34607 12.0101,6.9294 11.7931,7.46513 C12.0059,7.768 12.1333,8.13573 12.1333,8.53333 C12.1333,9.5628 11.2961,10.4 10.2667,10.4 L6.53333,10.4 C5.50387,10.4 4.66667,9.5628 4.66667,8.53333 C4.66667,7.50387 5.50387,6.66667 6.53333,6.66667 L7.46667,6.66667 C7.98187,6.66667 8.4,6.24807 8.4,5.73333 C8.4,5.2186 7.98187,4.8 7.46667,4.8 L6.53333,4.8 C4.4716,4.8 2.8,6.4716 2.8,8.53333 C2.8,10.59507 4.4716,12.2667 6.53333,12.2667 L10.2667,12.2667 C12.3284,12.2667 14,10.59507 14,8.53333 C14,7.14267 13.2375,5.93167 12.1095,5.28907 Z"></path></svg></span>URL</th><td></td></tr></tbody></table></header><div class="page-body"><p id="c11ac416-985e-4461-828e-7e14d1a6d09a" class="">Github Link on Runbook:  </p><figure id="571533f2-9185-41b8-8a16-26e06dec4b4f"><a href="https://github.com/aws-samples/aws-incident-response-playbooks/blob/0d9a1c0f7ad68fb2c1b2d86be8914f2069492e21/runbooks/runbook%20sample%20-%20unintended%20access%20to%20an%20Amazon%20S3%20bucket.md" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">aws-incident-response-playbooks/runbook sample - unintended access to an Amazon S3 bucket.md at 0d9a1c0f7ad68fb2c1b2d86be8914f2069492e21 · aws-samples/aws-incident-response-playbooks</div><div class="bookmark-description">Unintended access to an S3 Bucket This runbook is provided to be used as a template only. It should be customized by administrators working with AWS to suit their particular needs, risks, available tools and work processes. It is not official AWS documentation and is provided as-is to customers using AWS products and who are looking to improve their incident response capability.</div></div><div class="bookmark-href"><img src="https://github.com/favicon.ico" class="icon bookmark-icon"/>https://github.com/aws-samples/aws-incident-response-playbooks/blob/0d9a1c0f7ad68fb2c1b2d86be8914f2069492e21/runbooks/runbook%20sample%20-%20unintended%20access%20to%20an%20Amazon%20S3%20bucket.md</div></div><img src="https://opengraph.githubassets.com/5d81f0288e23a6b8924f0a017e5a37b3fb4d62d64591c0a5e5ff102b162eeae4/aws-samples/aws-incident-response-playbooks" class="bookmark-image"/></a></figure><p id="172ed363-c681-4621-8104-6f681ff85eb0" class="">
+</p><h1 id="893df65f-cd4f-4dae-b68d-44548b204986" class=""><strong>Incident Response Run-book Template</strong></h1><h3 id="da27395b-696e-46f8-af07-c33b205e6a9f" class=""><mark class="highlight-teal"><strong>Incident Type</strong></mark></h3><p id="8c42b3d5-69da-4bb0-9c45-bc1b637b8c80" class="">Unintended access to an S3 Bucket</p><h3 id="af37f29e-5ada-4f73-90cd-9141eeb43748" class=""><mark class="highlight-teal"><strong>Summary</strong></mark></h3><p id="88b10b2c-5cd3-4c22-8037-b53eabf903bf" class="">This runbook is provided to be used as a template only. It should be customized by administrators working with AWS to suit their particular needs, risks, available tools and work processes. It is not official AWS documentation and is provided as-is to customers using AWS products and who are looking to improve their incident response capability.</p><p id="61313a79-7188-42f3-8429-00a24f54d0e9" class="">The run-book included below covers one of several common scenarios faced by AWS customers. It outlines steps based on the <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf">NIST Computer Security Incident Handling Guide</a> (Special Publication 800-61 Revision 2) that can be used to:</p><ul id="1c08aeb2-191f-4809-ac24-ab3bf7973c38" class="bulleted-list"><li style="list-style-type:disc">Gather evidence</li></ul><ul id="8f496e5e-b514-4c7e-8c32-c1bca7e535f7" class="bulleted-list"><li style="list-style-type:disc">Contain and then eradicate the incident</li></ul><ul id="8b024fc3-798f-4fdc-a594-705c716c0436" class="bulleted-list"><li style="list-style-type:disc">recover from the incident</li></ul><ul id="ea50279e-b302-4da4-a5df-74632f4220fc" class="bulleted-list"><li style="list-style-type:disc">Conduct post-incident activities, including post-mortem and feedback processes</li></ul><p id="be011e8b-3167-4449-8410-9e32659a7e96" class="">Interested readers may also find the AWS Security Incident Response Guide (first published in June 2019) a useful guide as an overview of how the below steps were created.</p><p id="5d19856f-afb0-4fac-9e2c-e140381c6b60" class="">Each run-book corresponds to a unique incident and there are 5 parts to handling each incident type, following the NIST guidelines referenced above. Each part corresponds to an action in the NIST handling guide.</p><p id="d9b4f0b4-9602-4795-9920-c951aaed4d59" class="">Once you have customized the runbook to meet your needs, it is important that you test them (for example, in Game Days) prior to publishing within your knowledge management system and that all necessary personnel are familiar with the actions required to respond to an incident.</p><p id="d579195e-18e5-4ad5-afde-113fb3a23d46" class="">Note that some of the incident response steps noted below may incur costs in your AWS account(s) for services used in either preparing for, or responding to incidents. Customizing this runbook and testing it will help you to determine if additional costs will be incurred. You can use <a href="https://aws.amazon.com/aws-cost-management/aws-cost-explorer/">AWS Cost Explorer</a> and look at costs incurred over a particular time frame (such as when running Game Days) to establish what the possible impact might be.</p><p id="2c1a51f3-edaa-41b2-9ea4-4ceac68bd85e" class="">The next section “Incident Handling Process” will cover the five steps (parts 1 - 5) for handling unintended access to an S3 bucket.</p><h2 id="f5c3a93a-8250-4d46-aac0-b04edf5c8fd2" class=""><mark class="highlight-teal"><strong>Incident Handling Process</strong></mark></h2><h3 id="6e0b825c-5671-4c77-91f0-b00fb627fe85" class=""><mark class="highlight-red"><strong>Part 1: Gather evidence</strong></mark></h3><ol type="1" id="4409152b-8fc4-44f9-a33d-5c49a1185e44" class="numbered-list" start="1"><li>You are made aware that there has been a possible unintended data access from an Amazon Simple Storage Service (Amazon S3, or just S3) bucket. This information could come via different means:<ol type="a" id="f05ba197-4c7f-4df7-b48e-f08db365357c" class="numbered-list" start="1"><li>An internal ticketing system (the sources of the ticket are varied and could include any of the means below)</li></ol><ol type="a" id="a812bbf0-eb25-481b-9c50-cad0cd4c6eab" class="numbered-list" start="2"><li>A message from a contractor or third-party service provider</li></ol><ol type="a" id="552f44f6-7689-43a0-bca7-c9160776c71d" class="numbered-list" start="3"><li>From an alert in one of your own monitoring systems (for example, in AWS, this might include an AWS Config managed rule, AWS CloudTrail via Event Bridge or CloudWatch Events and SNS, via GuardDuty, Security Hub or a similar service)</li></ol><ol type="a" id="cc6d2c83-da91-4b99-bafe-805a81b9277e" class="numbered-list" start="4"><li>From an attacker (for example, requesting a ransom or they will disclose further data)</li></ol><ol type="a" id="85949896-d516-4eb0-8251-b0f787ddbbf7" class="numbered-list" start="5"><li>Via an anonymous tip</li></ol><ol type="a" id="a52fd917-9664-44ac-93e7-6c9d9606b229" class="numbered-list" start="6"><li>From a public news article in the press, on a blog or in the news</li></ol></li></ol><ol type="1" id="2f29afa6-6909-40c3-b4a3-f1dd2dbe1e76" class="numbered-list" start="2"><li>At this point, you may not know if the data leak is due to a miss-configured bucket, or a set of leaked credentials:<ol type="a" id="ce74cc31-fa89-40da-8d83-bc61283cb31e" class="numbered-list" start="1"><li>Use <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/what-is-access-analyzer.html">IAM Access Analyzer</a> to determine if any S3 buckets may have overly permissive configuration, giving unintended access to unauthorized principals</li></ol><ol type="a" id="3826594c-f1f2-48d7-b626-726b659e415b" class="numbered-list" start="2"><li>Use IAM Access Analyzer to determine if any IAM role trust policy provides unintended access to principals in the same or other AWS accounts</li></ol><ol type="a" id="0a8d1681-9d60-42d3-b5b0-4ef7044ecc1e" class="numbered-list" start="3"><li><a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/get-and-view-cloudtrail-log-files.html">Review CloudTrail logs</a> to determine if recent (prior to breach date, if known) changes had been made to bucket configuration, such as the bucket’s Block All Public Access settings, object ACLs, or bucket policies. You may choose to do this using a tool such as <a href="https://docs.aws.amazon.com/athena/latest/ug/cloudtrail-logs.html#tips-for-querying-cloudtrail-logs">Amazon Athena</a></li></ol><ol type="a" id="89c9eaa3-a1c8-4414-a596-59de6bf30e2e" class="numbered-list" start="4"><li>Review CloudTrail logs to determine if recent (prior to breach date, if known) changes have been made to IAM role trust policies</li></ol></li></ol><ol type="1" id="ae26c7b2-4c40-4ab2-9370-9677c60a73f3" class="numbered-list" start="3"><li>If you are already aware of the S3 bucket(s) involved, Firstly move to <strong>Part 2</strong> to contain the incident. Once that is done, return here and then move on to step 5. If you have not established which bucket(s) are involved, continue to step 4.</li></ol><ol type="1" id="d3cb847e-3cc7-4ab4-8ea1-51aa4e1d5376" class="numbered-list" start="4"><li>If you do not know which bucket is involved:<ol type="a" id="a11b015e-7ec2-4932-b353-df7838de4b65" class="numbered-list" start="1"><li>If you do not know which bucket is involved, but do know which data is involved:<ol type="i" id="66ffd5c9-836d-4215-8b8a-3f777fe21495" class="numbered-list" start="1"><li>Use internal tools that links that data to a bucket, such as checking a Configuration Management Database (CMDB)</li></ol><ol type="i" id="cb3526e0-8d11-4bba-a06d-7cc83322f8e6" class="numbered-list" start="2"><li>Use the <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-services-s3-commands.html#using-s3-commands-listing-buckets">S3 ls command</a> from the <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html">AWS CLI</a> to list out the contents of your S3 bucket(s). For buckets with many objects, you can filter by specifying specific key prefixes in the ls command. This will be especially useful if you already know the data objects involved</li></ol><ol type="i" id="2320c6af-9cc9-4c7e-91d6-00ebdaa42226" class="numbered-list" start="3"><li>There are several common third-party tools that can also be used to search though files in Amazon S3</li></ol><ol type="i" id="70d6c5ad-1fd2-42a9-89fb-115e30bf151d" class="numbered-list" start="4"><li>Query CloudTrail Data Event logs for one of the files in question, and determine the name of the bucket from the CloudTrail event. <a href="https://docs.aws.amazon.com/athena/latest/ug/cloudtrail-logs.html#query-examples-cloudtrail-logs">You can do this using Amazon Athena</a> This will also provide you the identity of the principal making the API call</li></ol></li></ol><ol type="a" id="dd420737-bd95-48af-952e-d0f730e27692" class="numbered-list" start="2"><li>If you do not know specifically which bucket or which data was involved, there are several options:<ol type="i" id="43961851-becb-4ca1-9380-eadbef4af723" class="numbered-list" start="1"><li>If you know the set of credentials involved, search CloudTrail <strong>Data Events</strong> using a tool such as Amazon Athena, filtering on that set of credentials and <a href="http://s3.amazonaws.com/">s3.amazonaws.com</a> as the event source. If you do not have an Amazon Athena table already configured, you can <a href="https://docs.aws.amazon.com/athena/latest/ug/cloudtrail-logs.html#create-cloudtrail-table-ct">quickly set one up from the AWS CloudTrail console</a>.</li></ol><ol type="i" id="1a127ff9-e630-4a35-a9c5-2695bfbcb743" class="numbered-list" start="2"><li>Review <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/view-insights-events.html">CloudTrail Insights</a> (this must be enabled prior to the event) to determine if any insights have been generated that may relate to the time and date of the breach, and determine which resources were involved by drilling down into the events highlighted by the specific insight. This will also provide the user identity of the principal that accessed the object(s)</li></ol><ol type="i" id="b24ecedc-6c7c-4c80-ab13-f84ef39f05c8" class="numbered-list" start="3"><li>Simply go to the Amazon S3 console and review the “<strong>Access</strong>” column in the table listing all S3 buckets (under the <strong>Buckets</strong> menu). If the column lists a value of <strong>Public</strong> for a bucket, this means that unauthenticated users have access to objects in the bucket, by virtue of object ACLs or the bucket’s bucket policy. This is a useful approach for a single account</li></ol><ol type="i" id="bfb855b0-fdef-49dd-8f97-fe237f8efab7" class="numbered-list" start="4"><li>If you want to check across multiple accounts in an AWS Organization, you can use Amazon Macie. Go to the Macie console and select <strong>Summary</strong> from the navigation menu. Review the percentage of buckets that are publicly accessible under the <strong>Public</strong> heading of the first table. Next, review the number of buckets that are shared with other AWS accounts by reviewing the information under the <strong>Shared</strong> heading of the first table.</li></ol></li></ol></li></ol><ol type="1" id="79d4ee9c-ea2a-4985-8e19-bd2367dd8003" class="numbered-list" start="5"><li>If the buckets are under your administrative control (either in an AWS account you control, or in an AWS account for which you have authorization and appropriate access, for example via an IAM Role), move ahead to <strong>Part 2</strong> to contain the incident, then return to this point and move on to step 7. If they are not under your administrative control, move on to step 6</li></ol><ol type="1" id="f0d12965-2fd0-484e-8407-fec40aec70c6" class="numbered-list" start="6"><li>If you do not have administrative control of the S3 buckets involved, you will need to establish a communication channel with the provider/team/individual that does. This may involve opening a new case on the provider’s service platform, contacting their customer service, directly contacting your technical point of contact (PoC) in that organization, or something similar. Do this as a matter of urgency, as in Part 2, below, you will need to request that they take action to contain the incident</li></ol><ol type="1" id="781f3ebf-3b91-4b62-b759-7b53e5df9da3" class="numbered-list" start="7"><li>Confirm a ticket/case has been raised for the incident. If not, manually raise one.</li></ol><ol type="1" id="a1626786-097b-4ad1-8571-a9114e543b31" class="numbered-list" start="8"><li>Determine if any user cases are already open for the bucket(s) that can be correlated to any notifications or data you already have in relation to the incident. Document any noted end-user impact/experience of the issue in the relevant ticket. These may include (but not be limited to):<ol type="a" id="ce5b32ed-bc63-4e2d-a27f-3dd6555f3cbe" class="numbered-list" start="1"><li>Files missing from the bucket</li></ol><ol type="a" id="69450368-0ce0-4e49-9ed4-f7b4dbbf644c" class="numbered-list" start="2"><li>Unfamiliar new files in the bucket</li></ol><ol type="a" id="c4623f1e-db7a-4230-a240-0007ef3adb51" class="numbered-list" start="3"><li>Files that have had their access settings (such as ACLs) changed, in particular where those files have been made public</li></ol><ol type="a" id="ec759c54-f4be-437a-a98f-4111684c558d" class="numbered-list" start="4"><li>Modified bucket permissions, ACLs, Block Public Access settings (all less likely to be noted by regular users, but possible)</li></ol></li></ol><ol type="1" id="1e706097-7445-4b78-a637-7e908c8c1dca" class="numbered-list" start="9"><li>In the case of automatically created tickets/cases, determine what internal alarms/metrics are currently indicating an issue (what caused the ticket to be created? - see 1a, above)</li></ol><ol type="1" id="f255d279-0a9c-4115-b3fe-dd065794e8d6" class="numbered-list" start="10"><li>Determine the application impacted (if any, this may be done quickly via Resource Tags, or by using your CMDB)</li></ol><ol type="1" id="67dd7a43-ebd5-48a2-8468-2ca2bbfded3d" class="numbered-list" start="11"><li>Determine if there are any known events that could be causing service disruption (for example, an application change roll-out that is now resulting in the mishandling API interactions with the S3 bucket. This could include but may not be limited to:<ol type="a" id="241b0fc8-f7b6-4817-abf3-c0282306b946" class="numbered-list" start="1"><li>Writing incorrect files to the bucket</li></ol><ol type="a" id="4c2b3b65-c4de-4537-8afd-f4d5a7b58556" class="numbered-list" start="2"><li>Incorrectly deleting files from the bucket</li></ol><ol type="a" id="574f9dde-a8e1-4e0f-a097-15f9169437ef" class="numbered-list" start="3"><li>Modifying file or bucket permissions, ACLs, or Block Public Access settings</li></ol></li></ol><ol type="1" id="b35f8da0-899d-422b-95f0-958a0165706a" class="numbered-list" start="12"><li>Determine for the bucket and/or data in question, what is the <a href="https://d1.awsstatic.com/whitepapers/compliance/AWS_Data_Classification.pdf">data classification</a> of the data that has been (or allegedly has been) leaked? The classification level may determine the incident response path taken, however the remainder of this run book will assume that the classification of the data indicates some level of business impact (whether reputational, financial or other). This classification may be recorded in your CMDB or a specific data classification document.</li></ol><ol type="1" id="bf7f4009-c931-4c08-b1e4-c11499c924c4" class="numbered-list" start="13"><li>Internal Communications:<ol type="a" id="96aa65d4-177d-48d4-a841-781cfe13a2e1" class="numbered-list" start="1"><li>Identify stakeholder roles from the application entry in the Configuration Management Database (CMDB) entry for that application, or via the application’s risk register</li></ol><ol type="a" id="7af27b4a-bd8d-42c9-aee6-33e5a5749f76" class="numbered-list" start="2"><li>Open a conference bridge war room for the incident</li></ol><ol type="a" id="136b85b4-c4e2-425e-8e9a-87013db7954d" class="numbered-list" start="3"><li>Notify identified stakeholders including (if required) legal personnel, technical teams and developers and add them to the ticket and the war room, so they are updated as the ticket is updated</li></ol></li></ol><ol type="1" id="2f0d35d9-bc79-462d-a473-68a514513bb9" class="numbered-list" start="14"><li>External Communications (for the relevant team/people, not necessarily the first responder - most likely legal, PR, board, C-levels, etc.):<ol type="a" id="6973b196-e207-414d-81ca-07c75c6dae18" class="numbered-list" start="1"><li>Identify customers that could have/are impacted by the data leak</li></ol><ol type="a" id="60d13cff-99b4-4185-bbe9-1bf9a8ec8f8e" class="numbered-list" start="2"><li>Identify customer data that could have been leaked as a result of the data leak</li></ol><ol type="a" id="ac22402e-a3eb-49b7-8167-475f29488391" class="numbered-list" start="3"><li>Compile this information and <em>securely</em> distribute it to the relevant people (for example, using a corporate file share where permissions and access can be controlled)<p id="2f73bf75-cbd0-4d59-af03-e17435c18020" class="">Those teams/individuals will also likely identify public domain material (news articles, blog posts, tweets, etc.) that mention the leak and determine if/how to respond to these (are they factually correct? How much information can be shared and at what time so as not to compromise any ongoing or future investigations? Are there any potential legal ramifications that need to be considered when responding? etc.). This is not a task for the responder and should not distract that person from the immediate task of handling the technical aspects of the incident.</p></li></ol></li></ol><h3 id="8d6f9c5e-a6be-4739-b46c-a8d5675d570f" class=""><mark class="highlight-red"><strong>Part 2: Contain The Incident</strong></mark></h3><p id="8fffb505-cb95-45a8-9275-3da668f90474" class="">By now ideally it will have been established that there is an incident and whether the compromise relates to a set of leaked credentials, miss-configured bucket policies, modified object ACLs, or a combination of these. Firstly, disable compromised credentials or revoke permissions associated with those credentials, thereby preventing any further API activity using the compromised credentials. Next, move on to bucket policies (if relevant). Finally, move on to Block Public Access settings.</p><ol type="1" id="e56d615c-af0a-457b-a70a-284706df97cd" class="numbered-list" start="1"><li>For the <strong>compromised credential</strong> details obtained from reviewing CloudTrail logs in Part 1, disable those credentials if they are from AWS accounts under your administrative control<ol type="a" id="18eb9db6-acfc-4085-aa02-fca7134be437" class="numbered-list" start="1"><li>If they are long term IAM user credentials, <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html">disable them using the IAM console or API</a></li></ol><ol type="a" id="1d993c5f-1cd8-45a4-8479-0e3a80525b5e" class="numbered-list" start="2"><li>If they are short term credentials obtained via STS they will be associated with an IAM role. There are a couple of options available to disable these:<ol type="i" id="f4b55d48-cda8-486a-a46b-3e93376e6d26" class="numbered-list" start="1"><li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_revoke-sessions.html">Revoke all current roles sessions</a> (note that if the attacker has the ability to obtain new credentials, this won’t solve the problem)</li></ol><ol type="i" id="9e9cc755-84ff-40de-a41f-fa93b83a385a" class="numbered-list" start="2"><li>If the attacker is able to obtain another set of credentials and the activity continues, it will then be necessary to remove all IAM policies attached to the role, modify the attached policies to block all access, or modify the role’s trust policy to prevent the attacker from assuming the role. As the credentials will remain valid for the specified time duration once issued, it is important to note that modifying the trust policy will allow any current valid credentials to continue to be used whilst still valid <strong>Note that the above actions will stop all users from using credentials obtained by assuming the role, including any legitimate users or applications</strong></li></ol><ol type="i" id="b64ec1d6-660a-4cca-b4df-178e05df1f8d" class="numbered-list" start="3"><li>If the role is attached to an EC2 instance, you will also need to review credentials related to the instance (for example, private/public key pairs used for SSH) to ensure that these have not also been compromised, allowing an attacker to access an S3 bucket using the role credentials attached to the instance. Two key vectors:<ol type="1" id="70cbacf5-3f0b-4f30-a528-a71d8641f04f" class="numbered-list" start="1"><li>A user can gain access to an EC2 instance using a set of credentials (private key) that allows them to SSH to the instance</li></ol><ol type="1" id="2f2b79fd-29a5-48cf-a610-0660425cc775" class="numbered-list" start="2"><li>The instance is being used as a reverse proxy, or behind certain types of web application firewalls, or has a role that is directly or indirectly internet-facing and a malicious user performs a Server-side Request Forgery (SSRF) with the goal of having the instance’s application simply repeat the request to S3 and return the output</li></ol></li></ol></li></ol></li></ol><ol type="1" id="68a6945a-9c7f-46d2-a820-4474c5611bcc" class="numbered-list" start="2"><li>The compromised credentials should now be disabled. Verify this by checking the CloudTrail console for the next 30 minutes or so for ongoing credential use, whether by access key, IAM user, or Role.</li></ol><ol type="1" id="a3acd113-1cd4-4dcc-8273-2ea8c00b6cb9" class="numbered-list" start="3"><li>If the credentials used to obtain data are not under your administrative control, and the access was obtained using credentials (i.e., <strong>not</strong> anonymous access) this means that the <strong>bucket policy</strong> is too permissive. This is because IAM roles or users from other AWS accounts will also need permissions to access a bucket in your account via the bucket policy. Therefore, it is necessary to modify the bucket’s bucket policy:<ol type="a" id="0f0bf97c-af23-4f36-87f9-15d0ed7260c2" class="numbered-list" start="1"><li>From the bucket(s) identified in Part 1, review the bucket policies to determine which principals have access to the buckets for data plane and/or management plane operations:<ol type="i" id="f36b2435-8253-4f7a-940a-c10ef6ec8034" class="numbered-list" start="1"><li><strong>Do this first</strong>: You will need to modify control plane access to prevent unauthorized users from making changes to the bucket’s configuration (bucket policies, bucket ACL, bucket or account level Block Public Access settings)</li></ol><ol type="i" id="6a3e968c-81f2-4a35-9af1-6b086aa760fb" class="numbered-list" start="2"><li>You will need to modify data plane access Put*/Get* to prevent unauthorized users from accessing data that they should not have access to, for all applicable read and write operations</li></ol><ol type="i" id="842b5f64-bf25-455c-91c9-26928e492b89" class="numbered-list" start="3"><li>For specific objects of concern, identify any AWS accounts or predefined groups listed as having permission in the <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html">object’s ACL</a> (IAM users cannot be listed individually in an ACL). Another approach (if your permission model does not involve ACLs) is to modify the ACLs for all objects in the bucket to remove all other accounts or predefined groups and simply apply FULL_CONTROL to the bucket owner only (not the object owner - potentially from a different AWS account)</li></ol></li></ol></li></ol><ol type="1" id="d3c22d6f-78a0-4e1d-824b-66b0f9365f45" class="numbered-list" start="4"><li>If the issue is that the bucket allows public (unauthenticated) access to objects, either via ACLs, the bucket policy (“principal”: “*”) or a combination thereof, such settings will need to be modifed:<ol type="a" id="8f39e061-4f34-4c56-96d4-49cbb99c4241" class="numbered-list" start="1"><li>the quickest way to remove this access is to modify the bucket’s <strong>Block All Public Access</strong> configuration. However note this will impact <strong>all</strong> objects in the bucket, not just the one(s) you are concerned with</li></ol><ol type="a" id="a6db05a0-28d2-48a2-ac7c-957554784656" class="numbered-list" start="2"><li>For each bucket, in the Amazon S3 console, go to the object, select it and then click on <strong>Permissions &gt;&gt; Access Control List</strong>. There will be a note on the Access Control List button indicating public access. Check the <strong>Everyone</strong> radio button under the <strong>Public access</strong> row and then remove the checks in the boxes in the ACL’s settings. Finally, click **Save. **Note that this doesn’t modify</li></ol><ol type="a" id="f21775b9-af91-426e-a303-b66fd241247f" class="numbered-list" start="3"><li>For each object, in the Amazon S3 console, go to the object, select it and then click on <strong>Permissions</strong>. Under the <strong>Public access</strong> row, select the <strong>Everyone</strong> radio button and uncheck all the boxes in the resulting object ACL properties box and click <strong>Save</strong>. If many objects are involved, it will be quicker to use either the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObjectAcl.html">AWS CLI or one of the AWS SDKs</a>.</li></ol></li></ol><h3 id="19b8b262-03b3-4a7d-95d6-e7343ceefc33" class=""><mark class="highlight-red"><strong>Part 3: Eradicate the Incident</strong></mark></h3><p id="208218fd-3468-42db-975f-8318618c0844" class="">Key components of the eradication process include the following:</p><ol type="1" id="a7636781-038e-404d-aba2-83d12f3eba1d" class="numbered-list" start="1"><li>Mitigate any vulnerabilities that were exploited</li></ol><ol type="1" id="97702811-659f-4bcc-a8d6-abadd916aff0" class="numbered-list" start="2"><li>Rotate compromised passwords/credentials</li></ol><p id="b04c264c-bd93-49c5-a0ab-690fcfe8b20a" class="">Most of the steps in this section are taken from the <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html">security best practices for Amazon S3</a>. Check back with that document frequently for updates.</p><ol type="1" id="4ac5550e-1f9f-407b-a497-40e599211fa3" class="numbered-list" start="1"><li>Eradicate any attack vectors related to systems writing to or reading from the S3 bucket(s). It is likely that you will have applications that are writing to or reading from an S3 bucket. As per Part 2, If an attacker has gained access to systems that are writing to a bucket (for example, an EC2 instance), The attacker could now effectively use the instance’s credentials (via the AWS CLI or SDK) on an application instance, for example, to read data from the bucket:<ol type="a" id="9057225c-ba19-4502-83f3-ff2e58f563e7" class="numbered-list" start="1"><li><a href="https://aws.amazon.com/blogs/security/defense-in-depth-open-firewalls-reverse-proxies-ssrf-vulnerabilities-ec2-instance-metadata-service/">Configure IMDSv2</a> on all application instances/role holding instances</li></ol><ol type="a" id="9ae7807b-874f-4cd2-b168-f8ca40baf639" class="numbered-list" start="2"><li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Rotate SSH credentials</a> for EC2 Linux</li></ol><ol type="a" id="83be14a3-48fb-431e-889c-c7b540a918d7" class="numbered-list" start="3"><li>Update user passwords for domain or local users using Microsoft Windows Remote Desktop Protocol (RDP) and verify users in the Remote Desktop Users group within Windows and/or Group Policy (for example, if you are adding Active Directory Global Security Groups to the Remote Desktop Users group on local operating systems, a fairly common Group Policy task)</li></ol></li></ol><ol type="1" id="221a1afa-7a1b-408a-b40f-63d67b5189d2" class="numbered-list" start="2"><li>Mitigate vulnerabilities related to your service configurations. For example, with S3, determine which configuration items need to be updated:<ol type="a" id="701ec043-1d33-4ee8-b130-8c8f928a5e82" class="numbered-list" start="1"><li>Return modified object ACLs to their secure settings, removing unauthenticated access permissions</li></ol><ol type="a" id="35f52dc6-ccb2-47be-9e33-5ff79085527c" class="numbered-list" start="2"><li>Implement least privilege in bucket policies</li></ol><ol type="a" id="b6f23e9f-6320-495d-ad90-e4a00a439329" class="numbered-list" start="3"><li>Ensure only appropriate principals have permission to perform data or control plane operations on the bucket</li></ol><ol type="a" id="9bd7b744-2042-4e21-bffd-6b708b84f43f" class="numbered-list" start="4"><li>Ensure IAM policies are appropriately scoped and if necessary, <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permission Boundaries</a> and/or <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps_examples.html">Service Control Policies</a> have been deployed appropriately</li></ol><ol type="a" id="969d7362-fb4e-4f75-92d1-c6724cb5ba0a" class="numbered-list" start="5"><li>Encrypt data at rest using <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/serv-side-encryption.html">Amazon S3 Server Side Encryption</a> - this protects the data at rest, and means that principals must have permissions in **both **S3 and AWS KMS (the KMS Customer Master Key (CMK) key policy) to access the data</li></ol><ol type="a" id="a8078b23-1473-406e-9d69-f5d20e6efe56" class="numbered-list" start="6"><li><a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html">Enable versioning</a> in S3 to enable data recovery, and consider:</li></ol><ol type="a" id="370eb433-a9ae-4e1c-aa20-7bb239c664cc" class="numbered-list" start="7"><li><a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lock.html">Object Lock</a> to prevent the deletion of critical data</li></ol></li></ol><ol type="1" id="98cb5299-5793-43ec-9ea6-6d56ef968f81" class="numbered-list" start="3"><li>If credential compromise was involved:<ol type="a" id="ab4658a0-1181-48d1-a2b8-85b282f64e59" class="numbered-list" start="1"><li>Flag for review the process for handling user credentials during Move/Add/Change (MAC) procedures for the post-incident activity</li></ol><ol type="a" id="665bf1e4-39dc-4b47-b127-38d558bfbc7b" class="numbered-list" start="2"><li>The offending credentials should have been disabled in Part 2, you may now consider issuing new credentials to impacted users</li></ol><ol type="a" id="7d413748-0b4b-43b5-900e-4b69bcdd0871" class="numbered-list" start="3"><li>Close down/remove user accounts or roles if they are not valid accounts/roles (or IAM IdPs, AWS SSO instances, etc.)</li></ol><ol type="a" id="10da462c-1ea1-42a8-a253-f12950178471" class="numbered-list" start="4"><li>Enable MFA Delete for S3</li></ol><ol type="a" id="78c396de-2507-4c75-aae1-3170f4d63a8f" class="numbered-list" start="5"><li>If you have objects that need to be public, rather than setting the ACL so that the object is world-readable, consider using an S3 pre-signed URL with a suitable expiry time and have your application pass that to the unauthenticated user to allow them to access the object.</li></ol></li></ol><h3 id="d55482f9-2a11-4cd5-81cf-e198a725d468" class=""><mark class="highlight-red"><strong>Part 4: Recover from the Incident</strong></mark></h3><p id="9036c003-66ba-4689-a230-4c7aeefc67d5" class="">With S3 best practices now in place, the next step is to determine if the attack has been mitigated, or if additional tuning is needed to eradicate the attack. This includes reviewing pre- and post-mitigation logs to:</p><ul id="6916c769-9359-4c7b-bd3e-b8d1596c3f7d" class="bulleted-list"><li style="list-style-type:disc">Determine the impact of the mitigations already performed</li></ul><ul id="a7490b09-6979-4680-a669-46ffc0ced0a3" class="bulleted-list"><li style="list-style-type:disc">Identify any other attack signatures to attempt to eradicate or further mitigate the attack</li></ul><p id="c122b1dc-929d-444e-908a-e4f9c7b35a23" class="">Once this has been completed, it will likely be necessary to restore any lost or corrupted data.</p><p id="eebb18b3-d0de-45c4-91bb-3120ef134875" class="">Restore lost or modified data:</p><ol type="1" id="b2fe83c4-ff8c-48c7-888e-b0913a7ce6bb" class="numbered-list" start="1"><li>If you have <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html">S3 Versioning</a>, <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/RestoringPreviousVersions.html">restore an earlier version of the object</a> to replace the modified object. If the object has been deleted using a simple delete command (without specifying a version ID for the object, it will now have a <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/DeleteMarker.html">delete marker</a> in place of the object. you can <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/RemDelMarker.html">delete the delete marker</a> to recover the object</li></ol><ol type="1" id="1908c661-4499-45c2-9805-d0ef17a07f6a" class="numbered-list" start="2"><li>If the object was deleted and the delete command specified an object Version ID, that version of the object will be permanently deleted. You will need to establish if previous versions of the object still exist, or of the object can be retrieved from another location (see below steps)</li></ol><ol type="1" id="3925be2b-f016-4b5f-a26e-0a278a3bc2f8" class="numbered-list" start="3"><li>If you move data to other S3 storage classes (S3 IA, Glacier, etc.) as part of a back-up or archival process, determine if the files still exist in that storage class and retrieve them (remember that files <em>can be deleted</em> from other storage classes). <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/lifecycle-transition-general-considerations.html">Lifecycle policies</a> are used to move objects between storage classes</li></ol><ol type="1" id="f09c7f12-8a80-4926-8444-df1c14ef2a29" class="numbered-list" start="4"><li>If you are using S3 Cross Region Replication (CRR) restore the data from the target bucket to the source bucket as necessary</li></ol><ol type="1" id="77deeb91-4ef0-46ea-84de-b16fd8efef7e" class="numbered-list" start="5"><li>If none of the previous actions allow you to restore the deleted or modified data, you will need to determine if the data is retrievable from another source (such as an on-premise system or an S3 bucket in a different account</li></ol><p id="3c06b60b-4d97-4da1-91c0-a0b143a451b5" class="">From the logs obtained in PART 1, review those obtained at the time of the initial investigation. Now that mitigation has been placed, you need to go back and obtain those metrics and logs again, and compare them to the incident metrics and logs obtained earlier.</p><p id="d8efb3db-1b83-4372-acc9-f07f71fe3473" class="">If data plane activity has returned to pre-attack levels and the logs show no further evidence of malicious use, the attack has been mitigated (at least for now). Continue to monitor the service post-attack; if suspicious data plane activity reoccurs, take the following steps:</p><ol type="1" id="cd8ca4ed-3657-4f69-8ed5-6e353f2c84a0" class="numbered-list" start="1"><li>return to Part 1 and follow those steps again</li></ol><ol type="1" id="00efe3f7-8a1a-420a-ac9d-b81b9b882656" class="numbered-list" start="2"><li>Review logs and related data to determine if you have correctly identified the attack vector, or if the attacker has changed the vector in response to the mitigation</li></ol><h3 id="68c8ea1d-f207-4efe-8760-e4d1e7f74f43" class=""><mark class="highlight-red"><strong>Part 5: Post-Incident Activity</strong></mark></h3><p id="c490af90-76a2-4217-b506-8d0814c8af83" class="">This “sharpen the saw” activity allows teams to assess their response to the actual incident, determine what worked and what didn’t, update the process based on that information and record these findings.</p><ol type="1" id="697490fe-579e-45d2-8359-8974267c80d8" class="numbered-list" start="1"><li>Review how the incident was handled, as well as the incident handling process generally, with key stakeholders identified in Part 1.</li></ol><ol type="1" id="84b7d0da-5741-43f4-8108-f5cea7bd3218" class="numbered-list" start="2"><li>Document lessons learned, including attack vector(s) mitigation(s), misconfiguration, etc.</li></ol><ol type="1" id="6e12d2a9-7d47-424d-90ae-132484874a1e" class="numbered-list" start="3"><li>Store the artifacts from this process with the application information in the CMDB entry for the application and also in the CMDB entry for the S3 bucket and the data leak incident response process.</li></ol><ol type="1" id="50e94693-16b4-4fe5-a62e-1829d9c513e9" class="numbered-list" start="4"><li>Update risk documents based on any newly discovered threat/vulnerability combinations that were discovered as a result of lessons learned</li></ol><ol type="1" id="b5325782-a8fe-419f-80b6-520e344d6aec" class="numbered-list" start="5"><li>If new application or infrastructure configuration is required to mitigate any newly identified risks, conduct these change activities and update application and component configuration in the CMDB</li></ol><ol type="1" id="86614d9f-5f9f-470a-920c-22f7f1b4975d" class="numbered-list" start="6"><li>Ask the following questions and assign people to resolve any issues that come up as a result:<ol type="a" id="ab4e3325-02d6-498e-ac6e-9b1790e9e5d3" class="numbered-list" start="1"><li>What information would have helped me respond to this incident more swiftly?</li></ol><ol type="a" id="4f0e3027-bd90-447e-b5db-143b301a4b58" class="numbered-list" start="2"><li>What detection would have alerted me to the issue sooner?</li></ol><ol type="a" id="7ccaf003-db09-4c69-b0df-56b892dc9307" class="numbered-list" start="3"><li>What configuration (technical or process) would have prevented this data being exposed in this way?</li></ol><ol type="a" id="908b0f44-1627-4506-a4bd-d69b971e51d8" class="numbered-list" start="4"><li>What automation, tooling or access would have made it easier to investigate the root cause?</li></ol></li></ol><ol type="1" id="083aeded-b385-4a2d-a87d-c41d9a1526ef" class="numbered-list" start="7"><li>For any actions that are raised as the result of parts 3, 4 and 5, assign those actions and follow up to ensure they are completed</li></ol></div></article></body></html>

@@ -1,0 +1,663 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>AWS-Credential Leakage/Compromise</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="750322f9-8dc8-4143-a427-b1141b9063b8" class="page sans"><header><h1 class="page-title">AWS-Credential Leakage/Compromise</h1><table class="properties"><tbody><tr class="property-row property-row-text"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>Comments</th><td>Incident Response Run-book Template for Credential Leakage/Compromise</td></tr><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-green">AWS</span></td></tr><tr class="property-row property-row-url"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesUrl"><path d="M3.73333,3.86667 L7.46667,3.86667 C8.49613,3.86667 9.33333,4.70387 9.33333,5.73333 C9.33333,6.7628 8.49613,7.6 7.46667,7.6 L6.53333,7.6 C6.01813,7.6 5.6,8.0186 5.6,8.53333 C5.6,9.04807 6.01813,9.46667 6.53333,9.46667 L7.46667,9.46667 C9.5284,9.46667 11.2,7.79507 11.2,5.73333 C11.2,3.6716 9.5284,2 7.46667,2 L3.73333,2 C1.6716,2 0,3.6716 0,5.73333 C0,7.124 0.762067,8.33453 1.88953,8.97713 C1.87553,8.83107 1.86667,8.6836 1.86667,8.53333 C1.86667,7.92013 1.98753,7.33447 2.2036,6.7978 C1.99267,6.4954 1.86667,6.12953 1.86667,5.73333 C1.86667,4.70387 2.70387,3.86667 3.73333,3.86667 Z M12.1095,5.28907 C12.1231,5.4356 12.1333,5.58307 12.1333,5.73333 C12.1333,6.34607 12.0101,6.9294 11.7931,7.46513 C12.0059,7.768 12.1333,8.13573 12.1333,8.53333 C12.1333,9.5628 11.2961,10.4 10.2667,10.4 L6.53333,10.4 C5.50387,10.4 4.66667,9.5628 4.66667,8.53333 C4.66667,7.50387 5.50387,6.66667 6.53333,6.66667 L7.46667,6.66667 C7.98187,6.66667 8.4,6.24807 8.4,5.73333 C8.4,5.2186 7.98187,4.8 7.46667,4.8 L6.53333,4.8 C4.4716,4.8 2.8,6.4716 2.8,8.53333 C2.8,10.59507 4.4716,12.2667 6.53333,12.2667 L10.2667,12.2667 C12.3284,12.2667 14,10.59507 14,8.53333 C14,7.14267 13.2375,5.93167 12.1095,5.28907 Z"></path></svg></span>URL</th><td></td></tr></tbody></table></header><div class="page-body"><p id="7b7f9d89-6c63-4185-afb5-656190a7e6b0" class="">Github Runbook Link: </p><figure id="5f551360-a6e8-402e-acd3-10262c2163fc"><a href="https://github.com/aws-samples/aws-incident-response-playbooks/blob/0d9a1c0f7ad68fb2c1b2d86be8914f2069492e21/runbooks/runbook%20sample%20-%20credential%20leakage.md" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">aws-incident-response-playbooks/runbook sample - credential leakage.md at 0d9a1c0f7ad68fb2c1b2d86be8914f2069492e21 · aws-samples/aws-incident-response-playbooks</div><div class="bookmark-description">Credential Leakage/Compromise These run-books are created to be used as templates only. They should be customized by administrators working with AWS to suit their particular needs, risks, available tools and work processes. These guides are not official AWS documentation and are provided as-is to customers using AWS products and who are looking to improve their incident response capability.</div></div><div class="bookmark-href"><img src="https://github.com/favicon.ico" class="icon bookmark-icon"/>https://github.com/aws-samples/aws-incident-response-playbooks/blob/0d9a1c0f7ad68fb2c1b2d86be8914f2069492e21/runbooks/runbook%20sample%20-%20credential%20leakage.md</div></div><img src="https://opengraph.githubassets.com/5d81f0288e23a6b8924f0a017e5a37b3fb4d62d64591c0a5e5ff102b162eeae4/aws-samples/aws-incident-response-playbooks" class="bookmark-image"/></a></figure><h1 id="97101892-2341-496e-917b-1a0b36166398" class=""><strong>Incident Response Run-book Template</strong></h1><h3 id="98dd38fc-2ce8-431a-9b7b-5a11c08af8e0" class=""><strong>Incident Type</strong></h3><p id="3af08d4c-c283-428e-952d-aaa4877ec818" class="">Credential Leakage/Compromise</p><h3 id="5e1e78c8-1c9e-464a-9bd5-71abb05e2345" class=""><strong>Summary</strong></h3><p id="c744167e-0149-446d-8e19-c3c8cb567aa5" class="">These run-books are created to be used as templates only. They should be customized by administrators working with AWS to suit their particular needs, risks, available tools and work processes. These guides are not official AWS documentation and are provided as-is to customers using AWS products and who are looking to improve their incident response capability.</p><p id="05355510-461e-4e67-8642-c8be0d5c79c3" class="">The run-books included below cover several common scenarios faced by AWS customers. They outline steps based on the <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-61r2.pdf">NIST Computer Security Incident Handling Guide</a> (Special Publication 800-61 Revision 2) that can be used to:</p><ul id="627632da-0294-411e-941e-e20c51f07c6e" class="bulleted-list"><li style="list-style-type:disc">Gather evidence</li></ul><ul id="12f24e88-b308-4cb2-8307-e52e5397f517" class="bulleted-list"><li style="list-style-type:disc">Contain and then eradicate the incident</li></ul><ul id="82fd6ab1-b71f-42ee-a5ee-1ff35c9697bb" class="bulleted-list"><li style="list-style-type:disc">recover from the incident</li></ul><ul id="4c8daa39-c285-415f-a884-d72e4d900c94" class="bulleted-list"><li style="list-style-type:disc">Conduct post-incident activities, including post-mortem and feedback processes</li></ul><p id="592fbfca-bdb8-48ad-80fe-53e4005af6a9" class="">Interested readers may also find the AWS Security Incident Response Guide (first published in June 2019) a useful guide as an overview of how the below steps were created.</p><p id="73eaed00-9ce2-4956-9a29-d1569ee58c1c" class="">Each runbook corresponds to a unique incident and there are 5 parts to handling each incident type, following the NIST guidelines referenced above. Each part corresponds to an action in that NIST document.</p><p id="a025b317-e908-4af3-80f8-5b3611f66496" class="">It is not sufficient to customize these scenarios to the need of your customers, organization or applications. It is important that these runbook scenarios are tested (for example, in Game Days) prior to deployment to your knowledge management system and that all responders are familiar with the actions required to respond to an incident.</p><p id="1b741469-7338-48e2-a708-d4aa8ff3a7f8" class="">Note that some of the incident response steps noted in each scenario may incur costs in your AWS account(s) for services used in either preparing for, or responding to incidents. Customizing these scenarios and testing them will help you to determine if additional costs will be incurred. You can use AWS Cost Explorer and look at costs incurred over a particular time frame (such as when running Game Days) to establish what the possible impact might be.</p><h2 id="91aef753-1e83-49ba-8f9d-c8d5c42f68db" class=""><strong>Incident Handling Process</strong></h2><h3 id="efd8987f-e37c-47d7-866b-39e436fc9a10" class=""><mark class="highlight-red"><strong>Part 1: Acquire, Preserve, document evidence</strong></mark></h3><p id="ad06ccc3-e2f5-4c14-955f-8d9686fabb70" class="">
+</p><ol type="1" id="227389b1-bdf5-4d7b-996f-7af3e840b258" class="numbered-list" start="1"><li>Confirm a ticket/case has been raised for the incident. If not, manually raise one.</li></ol><ol type="1" id="fcdf9edf-5cc3-4246-90bb-3644319bfd53" class="numbered-list" start="2"><li>Determine and begin to document any end-user impact/experience of the issue. From a user’s perspective, for this type of scenario, there may be no direct user impact. Findings should be documented in the ticket/case related to the incident</li></ol><ol type="1" id="ef8d30d4-28df-4db5-bf9d-269ca774901c" class="numbered-list" start="3"><li>In the case of automatically created tickets/cases, determine what internal alarms/metrics are currently indicating an issue (what caused the ticket to be created?) This may be a CloudWatch metric indicating an API was called that included a reference to an AWS policy, or a Config rule that indicates some aspect of IAM configuration has fallen out of compliance, or a GuardDuty alert that indicates possible credential compromise. It may also be a billing alert where your billing costs have passed a predetermined threshold, triggering an alarm and notification. Determine exactly which of these has caused the ticket/case to be raised</li></ol><ol type="1" id="ec63dbb6-4ae9-4a86-953c-8cb9bfebaf09" class="numbered-list" start="4"><li>Determine the set of credentials that have been compromised. Note that there will be additional steps in Part 3 to deal with scenarios where attackers have planted resources to gain an account foothold.<ol type="a" id="0bb86d7b-b1c7-4e4b-81f2-38bdb7de8e61" class="numbered-list" start="1"><li>If an internal ticket/case has been created, review the case to determine if the user/role name or ARN, user or role ID, or Access Key ID are provided in that ticket. If it is not, reference the alert specified in the ticket (for example, a GuardDuty finding) and go to point b., below</li></ol><ol type="a" id="4a45b458-b7aa-4e51-b0b6-c4d0acdb19f1" class="numbered-list" start="2"><li>If the alert has come from GuardDuty or Security Hub, locate the specific event in the service’s AWS console and then locate the Access Key ID for the impacted credentials. In GuardDuty, this will be located under the “Resource” section of the finding. “resourceType” should be Access Key and there will be a field named accessKeyDetails that will contain the Access Key ID, Principal ID, User Type and additional information</li></ol></li></ol><ol type="1" id="08399ddf-07cc-47f3-bef1-1538ed63614c" class="numbered-list" start="5"><li>Determine the likely time at which the credentials were compromised (any API actions taken post that time should be considered as malicious and any resources created post that time should be considered compromised). As an example, for a GuardDuty finding, note the “eventFirstSeen” field in the “Service” section of the finding.</li></ol><ol type="1" id="242ef8bc-9dab-4a6a-a885-093b78fa931e" class="numbered-list" start="6"><li>If there is service disruption occurring (see point 2, above) for a given application, determine if there are any known events that could be causing that disruption that may not be related to the credential leakage (deployed CRs or other service modifications, for example). Check the deployment pipeline to determine if any changes have been made leading up to the event (the time the event was first recorded, or the time the automated system cut the ticket/case)</li></ol><ol type="1" id="85cf15b5-546e-4d0a-a2bf-b1039583583b" class="numbered-list" start="7"><li>Internal Communications:<ol type="a" id="bcf67ec9-7aa3-43b3-85be-3a5640cb92b1" class="numbered-list" start="1"><li>Identify stakeholder roles from the application entry in the Configuration Management Database (CMDB) entry for that application, or via the application’s risk register</li></ol><ol type="a" id="d4b909ac-46c2-48cf-873e-4983a928bd30" class="numbered-list" start="2"><li>Open a conference bridge war room for the incident</li></ol><ol type="a" id="4e635cc1-e205-453e-9c7e-a6c9252d3ee2" class="numbered-list" start="3"><li>Notify identified stakeholders including (if required) legal personnel, technical teams and developers and add them to the ticket and the war room, so they are updated as the ticket is updated</li></ol></li></ol><h3 id="67ab1eed-e3ca-4968-9033-4d4d97c4b0b5" class=""><mark class="highlight-red"><strong>Part 2: Contain The Incident</strong></mark></h3><p id="4de6b2c0-d35f-4737-8a11-1bdfdeabf32e" class="">
+</p><p id="f28c8404-7d13-42c1-bf24-a61ecdb88b77" class="">The immediate task will be to disable compromised credentials or revoke permissions associated with those credentials, thereby preventing any further API activity using the compromised credentials.</p><ol type="1" id="55a0fa01-af67-4a64-86e4-c83ba2cdd189" class="numbered-list" start="1"><li>For the compromised credential details obtained from Part 1, disable those credentials<ol type="a" id="afed994b-233b-4a42-ae9f-89c8d02da1d7" class="numbered-list" start="1"><li>If they are long term IAM user credentials, <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html">disable them using the IAM console or API</a></li></ol><ol type="a" id="e9b182f9-1d6a-4ae6-9bf4-d89f27b25771" class="numbered-list" start="2"><li>If they are short term credentials obtained via STS they will be associated with an IAM role. There are a couple of options available to disable these:<ol type="i" id="13d4f0b5-30ab-4e20-bb91-2f0d816a6ace" class="numbered-list" start="1"><li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_revoke-sessions.html">Revoke all current roles sessions</a> (note that if the attacker has the ability to obtain new credentials, this won’t solve the problem</li></ol><ol type="i" id="9a349f20-cbe5-4a51-ad7e-b63b056e93ff" class="numbered-list" start="2"><li>If the attacker is able to obtain another set of credentials and the activity continues, it will then be necessary to remove all IAM policies attached to the role, modify the attached policies to block all access, or modify the role’s trust policy to prevent the attacker from assuming the role. As the credentials will remain valid for the specified time duration once issued, it is important to note that modifying the trust policy will allow any current valid credentials to continue to be used whilst still valid <strong>Note that the above actions will stop all users from using credentials obtained by assuming the role, including any legitimate users or applications</strong></li></ol></li></ol></li></ol><ol type="1" id="5d5ae75d-aa26-4c53-b6e1-5cacc1f7eb29" class="numbered-list" start="2"><li>The compromised credentials should now be disabled. Verify this by checking the CloudTrail console for the next 30 minutes or so for ongoing credential use, whether by access key, IAM user, or Role.</li></ol><h3 id="19c870e4-1ee8-44f5-9b14-2d366cbbbbd7" class=""><mark class="highlight-red"><strong>Part 3: Eradicate the Incident</strong></mark></h3><p id="8631c6ce-95bd-479b-bbbe-0a628a891e83" class="">
+</p><p id="9d1a1c30-35c4-4549-a145-969b6fc4624b" class="">Now it is time to further investigate what API actions the leaked credentials have performed since the compromise occurred, and then determine if additional resources need to be deleted, terminated, or investigated further. From Part 1, you have identified the compromised credentials, and the likely time of compromise. It will now be necessary to determine what API actions have been performed and what resources have been created, deleted or modified after that time.</p><ol type="1" id="5008f53b-493b-4f27-85e6-e1ba0dab2a87" class="numbered-list" start="1"><li>Using your preferred monitoring tool, access CloudTrail and search for all API actions performed by the compromised credentials, from the date and time of compromise through to the current time:<ol type="a" id="d43a6529-8c0c-453a-95b6-acb029257dee" class="numbered-list" start="1"><li>If this tool is a third-party tool such as Splunk, Sumo Logic or others, follow the normal procedure for obtaining log information from that tool</li></ol><ol type="a" id="a369308a-16e4-4f61-834c-8a2335fcd665" class="numbered-list" start="2"><li>If you do not ingest CloudTrail logs into a third-party tool, but do send those logs to S3, you will be able to use Amazon Athena to query the logs. The remaining steps will focus on AWS tools to retrieve the necessary information</li></ol></li></ol><ol type="1" id="ca66918b-9ac0-40cb-b87a-1a22d4c134d3" class="numbered-list" start="2"><li><a href="https://aws.amazon.com/premiumsupport/knowledge-center/athena-tables-search-cloudtrail-logs/">Create an Athena table referencing the bucket containing your CloudTrail logs</a> that link also includes example queries that can be run in Athena</li></ol><ol type="1" id="1181c7f7-4fb8-493f-9ffa-a5a8709c1516" class="numbered-list" start="3"><li>In the Athena console, run a query that shows all API actions taken by the compromised credentials post-compromise date/time</li></ol><ol type="1" id="03fbcdaa-2e54-4c4e-956d-0b275ac800f2" class="numbered-list" start="4"><li>From the resulting list, determine which API calls:<ol type="a" id="065dcde1-4afb-4fb8-9d5e-3b99b6187971" class="numbered-list" start="1"><li>Accessed sensitive data (such as S3 GetObject)</li></ol><ol type="a" id="eb45664f-64a1-4ec1-9a97-20117929a1c8" class="numbered-list" start="2"><li>Created new AWS resources, such as databases, EC2 instances, Lambda functions or S3 buckets, etc. High value targets should also be carefully checked, these includes targets such as Auto Scaling Groups, EC2 Spot Fleets, EKS/ECS clusters, etc.</li></ol><ol type="a" id="c7a5e3d7-75a2-414e-a4ed-73f382479f45" class="numbered-list" start="3"><li>Created or modified AWS identity resources that could be used to extend a foothold into the account (or other accounts, especially with STS API methods such as AssumeRole), including (but not limited to) the following:<ol type="i" id="64259478-eacd-4c57-abcd-70fe2ae316bf" class="numbered-list" start="1"><li>CreateUser</li></ol><ol type="i" id="341f6fab-d9f8-4184-8b02-7ff23c801e05" class="numbered-list" start="2"><li>CreateRole</li></ol><ol type="i" id="e080cc33-a5c0-4bd1-85e2-f7ff8b7e9684" class="numbered-list" start="3"><li>AssumeRole*</li></ol><ol type="i" id="153eba30-0bd3-4b4c-b504-d605f3e7bde7" class="numbered-list" start="4"><li>Get*Token</li></ol><ol type="i" id="de3cfe78-a063-4b43-b790-23e28a5f943b" class="numbered-list" start="5"><li>Attach*Policy</li></ol><ol type="i" id="0d5f8f55-dd9b-42b5-89a1-b46d9c2061fa" class="numbered-list" start="6"><li>RunInstances (especially with PassRole)</li></ol><ol type="i" id="a0fafe9d-4c76-4ab1-aded-6286cb0ccda0" class="numbered-list" start="7"><li>/<em>Image/</em></li></ol><ol type="i" id="b33f119b-0849-4357-aa7d-abe1bb55dde4" class="numbered-list" start="8"><li>Provider</li></ol><ol type="i" id="32948b73-b3c2-4ad9-90ff-9d489590c201" class="numbered-list" start="9"><li>Tag*</li></ol><ol type="i" id="251f5d60-516c-4f10-aeba-6731daafd48b" class="numbered-list" start="10"><li>Untag*</li></ol><ol type="i" id="03b4924c-d973-40b9-8fe5-3c755fa35bc0" class="numbered-list" start="11"><li>Create*</li></ol><ol type="i" id="69c033fe-0e0b-4bee-9e23-09133ea23db3" class="numbered-list" start="12"><li>Delete*</li></ol><ol type="i" id="82329e6d-e1fd-481e-8609-9e9516a3e744" class="numbered-list" start="13"><li>Update*</li></ol><ol type="i" id="06a44daa-b99a-4536-a87b-fd7b6e16db3e" class="numbered-list" start="14"><li>etc.</li></ol></li></ol><ol type="a" id="70594947-8322-40d1-8ed9-cfc1440b5978" class="numbered-list" start="4"><li>Deleted existing AWS resources</li></ol><ol type="a" id="2077c815-d5d0-493c-bfa1-ea0039e93ecb" class="numbered-list" start="5"><li>Modified existing AWS resources</li></ol></li></ol><ol type="1" id="7cdf6081-6e88-4e04-9aca-493d8278dc38" class="numbered-list" start="5"><li>Based on the above results (step 4), determine if any applications are potentially impacted:<ol type="a" id="b5edd42e-a9e2-4a79-b39d-ef443e5f7ead" class="numbered-list" start="1"><li>Obtain the ARN and/or tag information for each resource impacted (from step 4, above)</li></ol><ol type="a" id="4243056f-3696-43f3-8e39-7ad194b0610d" class="numbered-list" start="2"><li>Go back to the CMDB and determine which application that resource belongs to</li></ol><ol type="a" id="011a603f-7afa-471e-b768-be8cac24d018" class="numbered-list" start="3"><li>Notify the application owner based on the results of the above steps</li></ol></li></ol><ol type="1" id="46085c6d-bedb-4b3e-8ede-46a7b90c1fde" class="numbered-list" start="6"><li>Based on the above results (step 4, c), if additional credential-obtaining resources have been created (IAM users, roles, EC2 instances with roles, etc.), take the following steps:<ol type="a" id="b522a186-87bd-40f7-80da-5f82169ce159" class="numbered-list" start="1"><li>Disable and/or delete any credentials for those resources, as per the steps outlined in Part 2, Step 1</li></ol><ol type="a" id="4e779ff3-3fc4-4206-b91a-68f5e575ecbd" class="numbered-list" start="2"><li>Use your preferred logging tool to analyze CloudTrail again, this time specifying the additionally discovered credentials as a query parameter, as outlined in Part 3, steps 1 through to 6 (this step). Continue to iterate through this process until you discover that there were no further resources created capable of obtaining valid credentials for the AWS account.</li></ol><ol type="a" id="1723e21d-6916-466b-b00b-1556715d0be0" class="numbered-list" start="3"><li>For each set of newly discovered compromised credentials, go through the following steps from 7 in Part 3 (below) and all relevant steps in Part 4, also below</li></ol></li></ol><ol type="1" id="69f9f315-26c0-4bc9-b206-01cb442f2eb8" class="numbered-list" start="7"><li>For new resources created during the compromise: Delete all resources created by the compromised credentials that were created post the date/time of the compromise occurring</li></ol><ol type="1" id="f9c9dd9d-304e-4726-bf09-5fcc07a3d7fd" class="numbered-list" start="8"><li>For handling resources that were modified or deleted during the compromise, see Part 4</li></ol><p id="76006509-1bec-40fe-b1d7-7a6f58cadc37" class="">
+</p><h3 id="7bc31aca-da78-42e6-8954-f10300fe46bc" class=""><mark class="highlight-red"><strong>Part 4: Recover from the Incident</strong></mark></h3><p id="e008901f-f9d2-4967-88bf-35d426d1dbd7" class="">
+</p><ol type="1" id="bbcc71dd-a15a-4653-8b42-d1feb81789fd" class="numbered-list" start="1"><li>For resources that were modified during the compromise:<ol type="a" id="c64a8066-082c-4e4c-b21b-db0dd2d81321" class="numbered-list" start="1"><li>If the resource can be destroyed and replaced, do so. For example, EC2 instances in an Auto Scaling group, with a Launch Configuration referencing a non-compromised AMI, or Launch Templates used to create EC2 instances, terminate the instance, allow Auto Scaling to add a new one</li></ol><ol type="a" id="e85682b0-27f4-41ef-928b-44fa523eac73" class="numbered-list" start="2"><li>If the resource cannot be replaced, either:<ol type="i" id="7f47d51c-e993-4d5b-909b-a7226ab453bb" class="numbered-list" start="1"><li>Restore the resource from a known good backup, or;</li></ol><ol type="i" id="c3de605a-c847-4f97-b596-16666edeb220" class="numbered-list" start="2"><li>Prepare a new resource and configure it into the application’s infrastructure, while isolating the compromised resource and removing it from the application’s infrastructure. Update the CMDB accordingly</li></ol><ol type="i" id="a7d05509-77b5-4f9b-95f0-c439411188b3" class="numbered-list" start="3"><li>Either destroy the compromised resource, or continue to leave it isolated for post-incident forensics</li></ol></li></ol></li></ol><ol type="1" id="279eeeab-6d5f-4b5f-872a-8792354f2d6b" class="numbered-list" start="2"><li>For resources that were deleted during the compromise:<ol type="a" id="26a17938-66e0-426c-a034-47cdadf23688" class="numbered-list" start="1"><li>Determine what (if any) application the resource belonged to, by checking in the CMDB, or confirming the resource’s tag(s) (Check AWS Config if the tags aren’t listed in the CloudTrail entry and the <a href="https://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html">resource is supported by AWS Config</a>)</li></ol><ol type="a" id="0cd141a7-edb1-42c4-84b5-f2210942fd1d" class="numbered-list" start="2"><li>If the deleted resource can be restored from backup, commence the restore procedure</li></ol><ol type="a" id="fc1478d9-2731-4b0b-b4e6-5de084cd939b" class="numbered-list" start="3"><li>If the deleted resource cannot be restored from backup, consult the CMDB to obtain the resource’s configuration, and recreate the resource and configure it into the application’s infrastructure</li></ol></li></ol><h3 id="26832f9a-f7f0-4b84-b9df-07e40612d4e1" class=""><mark class="highlight-red"><strong>Part 5: Post-Incident Activity</strong></mark></h3><p id="3857231f-b741-465d-96a8-33eff34b4122" class="">
+</p><p id="6a0d8e17-44fd-445b-b8e8-34f76bbbe844" class="">This activity contains two parts. Firstly, some compromised resources may require forensic analysis, either to fulfil regulatory obligations or improved incident handling, both taking input from the root cause analysis that will result from forensic investigation. The second part is a “sharpen the saw” activity allows teams to assess their response to the actual incident, determine what worked and what didn’t, update the process based on that information and record these findings.</p><p id="77ff8ac7-0817-4edd-ba55-5e12f368692f" class="">Firstly, perform any required forensic investigation to determine (for compromised resources, what methods the attackers used and to determine if additional risks and risk mitigations are required for the resources and/or applications in question.</p><ol type="1" id="19200409-ef25-4c2d-9964-0aafd71a3e70" class="numbered-list" start="1"><li>For any compromised resources that have been isolated for further analysis, perform the forensic activity on those resources and incorporate the findings into the post-incident report.</li></ol><ol type="1" id="083041f2-c657-4244-b529-78f18409c047" class="numbered-list" start="2"><li>Ensure that the CMDB is correctly updated to reflect the current status of all resources and applications impacted</li></ol><p id="fc2f3400-3624-4686-9541-30189a4c3b31" class="">Secondly, review the incident itself and the response to it, to determine if anything needs to be changed for handling any similar incidents in the future.</p><ol type="1" id="fd6e51c8-8258-42cc-a4b7-14fb3e3ca455" class="numbered-list" start="1"><li>Review the incident handling and the incident handling process with key stakeholders identified in Part 1, Step 6.</li></ol><ol type="1" id="1517fcb9-0585-4e43-9517-d1c5d3147f0d" class="numbered-list" start="2"><li>Document lessons learned, including attack vector(s) mitigation(s), misconfiguration, etc.</li></ol><ol type="1" id="2d9ec97a-b48e-4eaa-a9a8-76e4bd659e54" class="numbered-list" start="3"><li>Store the artifacts from this process with the application information in the CMDB entry for the application and also in the CMDB entry for the credential compromise response process.</li></ol></div></article></body></html>

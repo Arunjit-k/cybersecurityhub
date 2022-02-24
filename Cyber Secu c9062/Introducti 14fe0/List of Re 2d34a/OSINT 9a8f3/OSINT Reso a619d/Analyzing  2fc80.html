@@ -1,0 +1,717 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Analyzing DNS TXT Records to Fingerprint Online Service Providers</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2fc8063f-22eb-4ce2-a434-fe9cc1035dd0" class="page sans"><header><h1 class="page-title">Analyzing DNS TXT Records to Fingerprint Online Service Providers</h1><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M4,3 C4,2.447715 4.447715,2 5,2 L12,2 C12.5523,2 13,2.447716 13,3 C13,3.55228 12.5523,4 12,4 L5,4 C4.447715,4 4,3.55228 4,3 Z M4,7 C4,6.447715 4.447715,6 5,6 L12,6 C12.5523,6 13,6.447716 13,7 C13,7.55228 12.5523,8 12,8 L5,8 C4.447715,8 4,7.55228 4,7 Z M4,11 C4,10.447715 4.447715,10 5,10 L12,10 C12.5523,10 13,10.447716 13,11 C13,11.55228 12.5523,12 12,12 L5,12 C4.447715,12 4,11.55228 4,11 Z M2,4 C1.44771525,4 1,3.55228475 1,3 C1,2.44771525 1.44771525,2 2,2 C2.55228475,2 3,2.44771525 3,3 C3,3.55228475 2.55228475,4 2,4 Z M2,8 C1.44771525,8 1,7.55228475 1,7 C1,6.44771525 1.44771525,6 2,6 C2.55228475,6 3,6.44771525 3,7 C3,7.55228475 2.55228475,8 2,8 Z M2,12 C1.44771525,12 1,11.5522847 1,11 C1,10.4477153 1.44771525,10 2,10 C2.55228475,10 3,10.4477153 3,11 C3,11.5522847 2.55228475,12 2,12 Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-red">Playbook</span><span class="selected-value select-value-color-gray">SOP</span></td></tr></tbody></table></header><div class="page-body"><p id="bc328374-84e3-4fe7-a857-17230756b4ea" class="">DNS reconnaissance is an important part of most external network penetration tests and red team operations. Within DNS reconnaissance there are many areas of focus, but I thought it would be fun to dig into DNS TXT records that were created to verify domain ownership. They’re pretty common and can reveal useful information about the technologies and services being used by the target company.</p><p id="3edcf5a7-f1d7-40b3-aa14-d8f09063a5eb" class="">In this blog I’ll walkthrough how domain validation typically works, review the results of my mini DNS research project, and share a PowerShell script that can be used to fingerprint online service providers via DNS TXT records. This should be useful to red teams and internal security teams looking for ways to reduce their internet facing footprint.</p><p id="e65c364d-6e87-4736-a008-5ed99b068abc" class="">Below is an overview of the content if you want to skip ahead:</p><ul id="2293c6ec-8532-4ac8-ad6f-c23b89dba17a" class="bulleted-list"><li style="list-style-type:disc"><a href="https://www.netspi.com/blog/technical/network-penetration-testing/analyzing-dns-txt-records-to-fingerprint-service-providers/#validationprocess">Domain Ownership Validation Process</a></li></ul><ul id="d9184d54-0605-42d6-84d8-5c002dbcad1f" class="bulleted-list"><li style="list-style-type:disc"><a href="https://www.netspi.com/blog/technical/network-penetration-testing/analyzing-dns-txt-records-to-fingerprint-service-providers/#AnalyzingTxt">Analyzing TXT Records for a Million Domains</a></li></ul><ul id="155b4708-d5d0-47f7-bd77-fca26972078d" class="bulleted-list"><li style="list-style-type:disc"><a href="https://www.netspi.com/blog/technical/network-penetration-testing/analyzing-dns-txt-records-to-fingerprint-service-providers/#top5">Top 5 Service Provider Categories</a></li></ul><ul id="20231ce0-bf9e-4dd5-9540-256f8baff179" class="bulleted-list"><li style="list-style-type:disc"><a href="https://www.netspi.com/blog/technical/network-penetration-testing/analyzing-dns-txt-records-to-fingerprint-service-providers/#top25">Top 25 Service Providers</a></li></ul><ul id="7b6e116a-a64b-42aa-b51e-9aeb3bcbb1c3" class="bulleted-list"><li style="list-style-type:disc"><a href="https://www.netspi.com/blog/technical/network-penetration-testing/analyzing-dns-txt-records-to-fingerprint-service-providers/#fingerprinting">Automating Domain Validation Token Fingerprinting</a></li></ul><ul id="dc5b0b80-b0c6-4ad1-a15c-c4467ab0a0a6" class="bulleted-list"><li style="list-style-type:disc"><a href="https://www.netspi.com/blog/technical/network-penetration-testing/analyzing-dns-txt-records-to-fingerprint-service-providers/#evil">How can domain validation tokens be used for evil?</a></li></ul><h1 id="8ca52ab5-24f1-4f3c-baaf-9e44e352be61" class=""><strong>Domain Ownership Validation Process</strong></h1><p id="1b0ff45f-630b-4527-8e07-29d2c99fbdf9" class="">When companies or individuals want to use an online service that is tied to one of their domains, the ownership of that domain needs to be verified.  Depending on the service provider, the process is commonly referred to as “domain validation” or “domain verification”.</p><p id="dbf731c4-b40a-451a-a1cf-daabee891548" class="">Below is an outline of how that process typically works:</p><ol type="1" id="6cd47426-d2c1-4db7-8e50-4ee0c6abf0ad" class="numbered-list" start="1"><li>The company creates an account with the online service provider.</li></ol><ol type="1" id="7ade75ce-00ee-4ac4-8f6d-b419758f4ba6" class="numbered-list" start="2"><li>The company provides the online service provider with the domain name that needs to be verified.</li></ol><ol type="1" id="ab38d689-0168-43ec-bee0-9a5066246e1c" class="numbered-list" start="3"><li>The online service provider sends an email containing a unique domain validation token (text value) to the company’s registered contact for the domain.</li></ol><ol type="1" id="00089fec-a846-4c3b-ae1e-3f22297dce85" class="numbered-list" start="4"><li>The company then creates a DNS TXT record for their domain containing the domain validation token they received via email from the online service provider.</li></ol><ol type="1" id="845c43ab-3464-4cee-b599-f4d4ebeaaedf" class="numbered-list" start="5"><li>The online service provider validates domain ownership by performing a DNS query to verify that the TXT record containing the domain validation token has been created.</li></ol><ol type="1" id="90bb53f0-fd77-4c98-81bc-10be0133409f" class="numbered-list" start="6"><li>In most cases, once the domain validation process is complete, the company can remove the DNS TXT record containing the domain validation token.</li></ol><p id="be142b13-7ac1-4225-ad16-eb658f4400d7" class="">It’s really that last step that everyone seems to forget to do, and that’s why simple DNS queries can be so useful for gaining insight into what online service providers companies are using.</p><p id="374bcd8c-e033-42f5-8e7c-7756783f77b6" class=""><strong>Note:</strong> The domain validation process doesn’t always require a DNS TXT entry.  Some online service providers simply request that you upload of a text file containing the domain validation token to the webroot of the domain’s website.  For example, http://mywebsite.com/validation_12345.txt.  Google dorking can be a handy way to find those instances if you know what you’re looking for, but for now let’s stay focused on DNS records.</p><h1 id="5c5e6ff3-56c8-4263-b903-863504f2c60a" class=""><strong>Analyzing TXT Records for a Million Domains</strong></h1><p id="8dc60ad6-9dd9-4d71-a2e6-7b034e3a7fc4" class="">Our team has been gleaning information about online service providers from DNS TXT records for years,  but I wanted a broader understanding of what was out there.  So began my journey to identify some domain validation token trends.</p><h1 id="00cf95c2-2923-4f53-9c32-2437f3307bb9" class=""><strong>Choosing a Domain Sample</strong></h1><p id="1612c22b-946c-4cbe-8270-3b9756b95c19" class="">I started by simply grabbing DNS TXT records for the Alexa top 1 million sites.  I used a slightly older list, but for those looking to mine that information on a reoccurring basis, Amazon has a service you can use at <a href="https://aws.amazon.com/alexa-top-sites/">https://aws.amazon.com/alexa-top-sites/</a>.</p><h1 id="11557857-1f03-4435-83fe-440769ce2dbf" class=""><strong>Tools for Querying TXT Records</strong></h1><p id="c0dee8a2-4a54-41aa-92cb-54250c734cd0" class="">DNS TXT records can be easily viewed with tools like nslookup, host, dig, <a href="https://github.com/blechschmidt/massdns">massdns</a>, or security focused tools like <a href="https://github.com/darkoperator/dnsrecon">dnsrecon</a> .  I ended up using a basic PowerShell script to make all of the DNS requests, because PowerShell lets me be lazy. 😊  It was a bit slow, but it still took less than a day to collect all of the TXT records from 1 million sites.</p><p id="5b21839a-512b-417f-a5fe-32eb478c1c2b" class="">Below is the basic collection script I used.</p><pre id="51fe9d3d-1dfe-4a90-a9e6-2f895baf6b80" class="code"><code># Import list of domains
+
+$Domains = gc c:tempdomains.txt
+
+# Get TXT records for domains
+
+$txtlist = $Domains |
+
+ForEach-Object{
+
+Resolve-DnsName -Type TXT $_ -Verbose
+
+}
+
+# Filter out most spf records
+
+$Results = $txtlist  | where type -like txt |  select name,type,strings |
+
+ForEach-Object {
+
+$myname = $_.name
+
+$_.strings |
+
+foreach {
+
+$object = **New**-Object psobject
+
+$object | add-member noteproperty name $myname
+
+$object | add-member noteproperty txtstring $_
+
+**if**($_ -notlike &quot;v=spf*&quot;)
+
+{
+
+$object
+
+}
+
+}
+
+} | Sort-Object name
+
+# Save results to CSV
+
+$Results | Export-Csv -NoTypeInformation dnstxt-records.csv
+
+# Return results to console
+
+$Results</code></pre><h1 id="acbe9d81-837a-4e3f-9d26-cf962a3f3065" class=""><strong>Quick and Dirty Analysis of Records</strong></h1><p id="e9b292ea-955e-4f9b-8a6c-650b07f095e0" class="">Below is the high level process I used after the information was collected:</p><ol type="1" id="7099669d-6ce3-46c6-a335-a518fc4388c0" class="numbered-list" start="1"><li>Removed remaining SPF records</li></ol><ol type="1" id="fa4366c3-21c3-4fe4-ac53-7d86382924fe" class="numbered-list" start="2"><li>Parsed key value pairs</li></ol><ol type="1" id="92552bfd-95c9-4be8-a697-3e94a5572b3a" class="numbered-list" start="3"><li>Sorted and grouped similar keys</li></ol><ol type="1" id="24b532e7-2ea0-45b4-9002-bc8e1f2ac383" class="numbered-list" start="4"><li>Identified the service providers through Google dorking and documentation review</li></ol><ol type="1" id="9357d682-6635-4d00-91d1-aa027441131c" class="numbered-list" start="5"><li>Removed keys that were completely unique and couldn’t be easily attributed to a specific service provider</li></ol><ol type="1" id="8731910d-df7f-4138-b9ac-3b26a72adeee" class="numbered-list" start="6"><li>Categorized the service providers</li></ol><ol type="1" id="f8f87632-cdb2-4549-8cae-c21e0f061eb2" class="numbered-list" start="7"><li>Identified most commonly used service provider categories based on domain validation token counts</li></ol><ol type="1" id="a8348f1b-409b-461f-bcbc-c48bf491926e" class="numbered-list" start="8"><li>Identified most commonly used service providers based on domain validation token counts</li></ol><h1 id="452f6c17-ffe0-4541-b8f5-b9e8bc4e3a5d" class=""><strong>Top 5 Service Provider Categories</strong></h1><p id="7a13f80b-ef31-425e-b52a-65f6f27c3853" class="">After briefly analyzing the DNS TXT records for approximately 1 million domains, I’ve created a list of the most common online service categories and providers that require domain validation.</p><p id="53f79dde-d98b-48f9-9c14-2d90979e7774" class="">Below are the top 5 categories:</p><figure id="489aabbc-f837-448c-bcb1-ded4852ca020" class="image"><a href="Analyzing%20%202fc80/Untitled.png"><img style="width:1588px" src="Analyzing%20%202fc80/Untitled.png"/></a></figure><p id="a4de94f2-9aeb-4dbb-93ae-c2c1f77e87a9" class="">There are many other types of services that range from caching services like Cloudflare to security services like “Have I Been Pwned”, but the categories above seem to be the most ubiquitous. It’s also worth noting that I removed SPF records, because technically there are not domain validation tokens.  However, SPF records are another rich source of information that could potentially lead to email spoofing opportunities if they aren’t managed well.  Either way, they were out of scope for this blog.</p><h1 id="c9bc1b45-7432-490c-b43b-cced3126ee7a" class=""><strong>Top 25 Service Providers</strong></h1><p id="a705db66-d9fb-4815-9a92-4bb7bf052be6" class="">Below are the top 25 service providers I was able to fingerprint based on their domain validation token (TXT record).  However, in total I was able to provide attribution for around 130.</p><figure id="1cd6325a-3f4c-4184-8932-597582a5b8a5" class="image"><a href="Analyzing%20%202fc80/Untitled%201.png"><img style="width:536px" src="Analyzing%20%202fc80/Untitled%201.png"/></a></figure><h1 id="4f5fd276-c68a-4b41-9235-fa4bdfecbe99" class=""><strong>Automating Domain Validation Token Fingerprinting</strong></h1><p id="3eab6e6d-42e6-4dff-be37-5bfddeeef8e4" class="">To streamline the process a little bit I’ve written a PowerShell function called “Resolve-DnsDomainValidationToken”.  You can simply provide it domains and it will scan the associated DNS TXT records for known service providers based on the library of domain validation tokens I created.  Currently it supports parameters for a single domain, a list of domains, or a list of URLs.</p><p id="49743c79-71ea-43b0-9b64-8079b98ca4ac" class="">Resolve-DnsDomainValidationToken can be downloaded <a href="https://raw.githubusercontent.com/NetSPI/PowerShell/master/Resolve-DnsDomainValidationToken.ps1">HERE</a>.</p><h1 id="ab921cbf-239e-441e-9de3-61d10404f62f" class=""><strong>Command Example</strong></h1><p id="431c2bdf-07f3-435e-8885-6703a69aed1a" class="">To give you an idea of what the commands and output look like I’ve provided an example below.  The target domain was randomly selected from the Alexa 1 Million list.</p><pre id="be78f07e-9bd5-45ca-87bd-fe9f9f725c04" class="code"><code># Load Resolve-DnsDomainValidationToken into the PowerShell session
+
+IEX(**New**-Object System.Net.WebClient).DownloadString(&quot;https://raw.githubusercontent.com/NetSPI/PowerShell/master/Resolve-DnsDomainValidationToken.ps1&quot;)
+
+# Run Resolve-DnsDomainValidationToken to collect and fingerprint TXT records
+
+$Results = Resolve-DnsDomainValidationToken -Verbose -Domain adroll.com
+
+# View records in the console
+
+$Results</code></pre><figure id="97f8e5d8-1279-45a7-9411-ee0d11b6f473" class="image"><a href="Analyzing%20%202fc80/Untitled%202.png"><img style="width:1598px" src="Analyzing%20%202fc80/Untitled%202.png"/></a></figure><p id="28e1bf63-1fb4-4e20-9574-af55be66a58a" class="">For those of you that don’t like starring at the console, the results can also be viewed using Out-GridView.</p><figure id="106ede99-fda4-4291-ac24-166f0f4883f2" class="image"><a href="Analyzing%20%202fc80/Untitled%203.png"><img style="width:1598px" src="Analyzing%20%202fc80/Untitled%203.png"/></a></figure><p id="3e407068-af62-4957-b419-a400552ed0ef" class="">Finally, the command also automatically creates two csv files that contain the results:</p><ol type="1" id="04d8fc02-131f-4569-90c7-a8e9d0832d11" class="numbered-list" start="1"><li>Dns_Txt_Records.csv contains all TXT records found.</li></ol><ol type="1" id="a762d3b3-c375-4974-96d4-82672b063289" class="numbered-list" start="2"><li>Dns_Txt_Records_Domain_Validation_Tokens.csv contains those TXT records that could fingerprinted.</li></ol><figure id="b811db33-756a-4365-b455-1ba7e87de3b5" class="image"><a href="Analyzing%20%202fc80/Untitled%204.png"><img style="width:1598px" src="Analyzing%20%202fc80/Untitled%204.png"/></a></figure><h1 id="11ca9de5-8b99-4809-aaa9-3b7ea6eddd00" class=""><strong>How can Domain Validation Tokens be used for Evil?</strong></h1><p id="9bdb1256-3c23-4263-9245-9718c6acbfd0" class="">Below are a few examples of how we’ve used domain validation tokens during penetration tests.  I’ve also added a few options only available to real-world attackers due to legal constraints placed on penetration testers and red teams.</p><h1 id="0e1a6596-bc45-4a50-b691-04886374d3b3" class=""><strong>Penetration Testers Use Cases</strong></h1><ol type="1" id="f61caa72-c316-4ef9-9d3a-f16d04b90cc0" class="numbered-list" start="1"><li><strong>Services that Support Federated Authentication without MFA</strong>This is our most common use case. By reviewing domain validation tokens we have been able to identify service providers that support federated authentication associated with the company’s Active Directory deployment. In many cases they aren’t configured with multi-factor authentication (MFA). Common examples include Office 365, AWS, G Suite, and Github.<p id="184e9a2d-3aaa-4366-b6b4-64f41be9061a" class=""><em><strong>Pro Tip:</strong></em> Once you’ve authenticated to Azure, you can quickly find additional service provider targets that support federated/managed authentication by parsing through the service principal names.  <a href="https://github.com/NetSPI/MicroBurst/blob/master/Get-AzureDomainInfo.ps1">You can do that with Karl’s Get-AzureDomainInfo.ps1 script</a>.</p></li></ol><ol type="1" id="e81e43e2-3a79-43ac-8c03-780022df52e4" class="numbered-list" start="2"><li><strong>Subdomain Hijacking Targets</strong>The domain validation tokens could reveal services that support subdomain which can be attacked once the CNAME records go stale. For information on common techniques Patrik Hudak wrote a nice overview <a href="https://0xpatrik.com/subdomain-takeover/">here</a>.</li></ol><ol type="1" id="fe0bbf2b-cea2-49e6-82e9-71970879968c" class="numbered-list" start="3"><li><strong>Social Engineering Fuel</strong>Better understanding the technologies and service providers used by an organization can be useful when constructing phone and email phishing campaigns.</li></ol><ol type="1" id="fac93ff0-89ad-453d-bc04-5d9e6cf6537c" class="numbered-list" start="4"><li><strong>General Measurement of Maturity</strong>When reviewing domain validation tokens for all of the domains owned by an organization it’s possible to get a general understanding of their level of maturity, and you can start to answer some basic questions like:<ol type="a" id="7f1e3906-a45f-45df-bd18-cbc6fc540a9d" class="numbered-list" start="1"><li>Do they use Content Distribution Networks (CDNs) to distribute and protect their website content?</li></ol><ol type="a" id="2a0cd577-6a8b-4859-9f01-ca44ce8244dc" class="numbered-list" start="2"><li>Do they user 3 party marketing and analytics? If so who? How are they configured?<p id="f35fd28a-0d3b-44a3-8254-0f66a68008b6" class="">rd</p></li></ol><ol type="a" id="25bb961e-e810-4ffe-bd94-47cec00211ec" class="numbered-list" start="3"><li>Do they use security related service providers? What coverage do those provide?</li></ol><ol type="a" id="6c205a3a-979f-49b0-8e35-032813c13942" class="numbered-list" start="4"><li>Who are they using to issue their SSL/TLS certifications? How are they used?</li></ol><ol type="a" id="1ea8b24b-cfdb-419d-b41f-e0295c89ba68" class="numbered-list" start="5"><li>What mail protection services are they using? What are those default configurations?</li></ol></li></ol><ol type="1" id="74a3b129-1fb2-4c81-89ee-87e8c2d9607e" class="numbered-list" start="5"><li><strong>Analyzing domain validation tokens</strong> for a specific online service provider can yield additional insights. For example,<ol type="a" id="6f9862d8-75c1-4ab4-ad9b-85c4eb5ae122" class="numbered-list" start="1"><li>Many domain validation tokens are unique numeric values that are simply incremented for each new customer. By analyzing the values over thousands of domains you can start to infer things like how long a specific client has been using the service provider.</li></ol><ol type="a" id="b1e922f0-7fd5-4133-8425-54c6fce02686" class="numbered-list" start="2"><li>Some of the validation tokens also include hashes and encrypted base64 values that could potentially be cracked offline to reveal information.</li></ol></li></ol><ol type="1" id="727873a6-622c-476d-94b5-4bb0360638d5" class="numbered-list" start="6"><li>Real-world attackers can also attempt to compromise service providers directly and then move laterally into a specific company’s site/data store/etc. Shared hosting providers are a common example. Penetration testers and red teams don’t get to take advantage of those types of scenarios, but if you’re a service provider you should be diligent about enforcing client isolation to help avoid opening those vectors up to attackers.</li></ol><h1 id="a3f4873e-7217-4945-af4a-e48810fa1b8b" class=""><strong>Wrap Up</strong></h1><p id="57d346ff-aec8-4d55-9df1-9b0f8c4fffe3" class="">Analyzing domain validation tokens found in DNS TXT records is far from a new concept, but I hope the library of fingerprints baked into Resolve-DnsDomainValidationToken will help save some time during your next red team, pentest,  or internal audit.  Good luck and hack responsibly!</p></div></article></body></html>
